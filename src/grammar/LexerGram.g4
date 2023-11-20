@@ -25,7 +25,7 @@ Multiply:                       '*';
 Divide:                         '/';
 Modulus:                        '%';
 
-///keywords
+///////keywords
 VOID: 'void';
 INT: 'int';
 DOUBLE: 'double';
