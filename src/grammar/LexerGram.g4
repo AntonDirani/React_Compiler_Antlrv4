@@ -1,5 +1,42 @@
 lexer grammar LexerGram;
 
+// JS keywords
+IMPORT: 'import';
+FROM: 'from';
+CLASS: 'class';
+EXTENDS: 'extends';
+SUPER: 'super';
+CONSTRUCTOR: 'constructor';
+RENDER: 'render';
+RETURN: 'return';
+EXPORT: 'export';
+DEFAULT: 'default';
+BREAK: 'break';
+CASE: 'case';
+CATCH: 'catch';
+CONST: 'const';
+CONTINUE: 'continue';
+DEBUGGER: 'debugger';
+DELETE: 'delete';
+DO: 'do';
+ELSE: 'else';
+FINALLY: 'finally';
+FOR: 'for';
+FUNCTION: 'function';
+IN: 'in';
+INSTANCEOF: 'instanceof';
+NEW: 'new';
+SWITCH: 'switch';
+THIS: 'this';
+THROW: 'throw';
+TRY: 'try';
+TYPEOF: 'typeof';
+VAR: 'var';
+VOID: 'void';
+WHILE: 'while';
+WITH: 'with';
+YIELD: 'yield';
+
 //symbols
 OpenBracket:                    '[';
 CloseBracket:                   ']';
@@ -26,7 +63,7 @@ Divide:                         '/';
 Modulus:                        '%';
 
 ///////keywords
-VOID: 'void';
+/*VOID: 'void';
 INT: 'int';
 DOUBLE: 'double';
 STRING: 'String';
@@ -46,9 +83,9 @@ THIS: 'this';
 OVERRIDE: 'override';
 EXTENDS: 'extends';
 IMPORT: 'import';
-FOR: 'for';
+FOR: 'for';*/
 
-NUMBER : DIGIT+ ( '.' DIGIT+ )? ;
+/*NUMBER : DIGIT+ ( '.' DIGIT+ )? ;
 
 SingleLineString : StringDQ | 'r\'' (~('\'' | '\n' | '\r'))* '\'' | 'r"' (~('"' | '\n' | '\r'))* '"' ;
 fragment StringDQ :
@@ -62,7 +99,7 @@ fragment IDENTIFIER_PART : IDENTIFIER_START | DIGIT ;
 
 
 fragment LETTER : [a-zA-Z] ;
-fragment DIGIT : [0-9] ;
+fragment DIGIT : [0-9] ;*/
 
 WHITESPACE : ('\t' | ' ')+ -> skip;
 NEWLINE : ('\n' | '\r' | '\r\n') -> skip ;
