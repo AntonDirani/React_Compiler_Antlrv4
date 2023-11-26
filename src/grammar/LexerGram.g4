@@ -74,13 +74,9 @@ FLOAT: INTEGER '.' [0-9]+;
 ID: [a-zA-Z_][a-zA-Z0-9_]*;
 
 // String literal rule
-
 StringLiteral : '\'' ( ~'\'' | '\'\'' )* '\''      // Single-quoted string
              | '"' ( ~'"' | '""' )* '"'           // Double-quoted string
              ;
-
-
-
 
 
 WS: [ \t\r\n]+ -> skip;
