@@ -38,69 +38,52 @@ WITH: 'with';
 YIELD: 'yield';
 
 //symbols
-OpenBracket:                    '[';
-CloseBracket:                   ']';
-OpenParen:                      '(';
-CloseParen:                     ')';
-OpenBrace:                      '{';
-CloseBrace:                     '}';
-SemiColon:                      ';';
-Comma:                          ',';
-Assign:                         '=';
-QuestionMark:                   '?';
-QuestionMarkDot:                '?.';
-Colon:                          ':';
-Ellipsis:                       '...';
-Dot:                            '.';
-PlusPlus:                       '++';
-MinusMinus:                     '--';
-Plus:                           '+';
-Minus:                          '-';
-BitNot:                         '~';
-Not:                            '!';
-Multiply:                       '*';
-Divide:                         '/';
-Modulus:                        '%';
-
-///////keywords
-/*VOID: 'void';
-INT: 'int';
-DOUBLE: 'double';
-STRING: 'String';
-BOOL: 'bool';
-TRUE_FALSE: 'true' | 'false';
-NULL: 'null';
-IF: 'if';
-ELSE: 'else';
-ELSEIF: 'else if';
-WHILE: 'while';
-CLASS: 'class';
-RETURN: 'return';
-NEW: 'new';
-CONTINUE: 'continue';
-BREAK: 'break';
-THIS: 'this';
-OVERRIDE: 'override';
-EXTENDS: 'extends';
-IMPORT: 'import';
-FOR: 'for';*/
-
-/*NUMBER : DIGIT+ ( '.' DIGIT+ )? ;
-
-SingleLineString : StringDQ | 'r\'' (~('\'' | '\n' | '\r'))* '\'' | 'r"' (~('"' | '\n' | '\r'))* '"' ;
-fragment StringDQ :
-                   ('"' | '\'') StringContentDQ*? ('"' | '\'') ;
-fragment StringContentDQ :
-         ~('\\' | '"' | '\n' | '\r' | '$') | '\\' ~('\n' | '\r') | StringDQ | '${' StringContentDQ*? '}';
-
-IDENTIFIER : IDENTIFIER_START IDENTIFIER_PART* ;
-fragment IDENTIFIER_START : LETTER | '_' ;
-fragment IDENTIFIER_PART : IDENTIFIER_START | DIGIT ;
+OPENBRACKET:                    '[';
+CLOSEBRACKET:                   ']';
+OPENPAREN:                      '(';
+CLOSEPAREN:                     ')';
+OPENBRACE:                      '{';
+CLOSEBRACE:                     '}';
+SEMICOLON:                      ';';
+COMMA:                          ',';
+ASSIGN:                         '=';
+QUESTIONMARK:                   '?';
+QUESTIONMARKDOT:                '?.';
+COLON:                          ':';
+ELLIPSIS:                       '...';
+DOT:                            '.';
+PLUSPLUS:                       '++';
+MINUSMINUS:                     '--';
+PLUS:                           '+';
+MINUS:                          '-';
+BITNOT:                         '~';
+NOT:                            '!';
+MULTIPLY:                       '*';
+DIVIDE:                         '/';
+MODULUS:                        '%';
+SINGLE_QUOTE: '\'';
+DOUBLE_QUOTE: '"';
 
 
-fragment LETTER : [a-zA-Z] ;
-fragment DIGIT : [0-9] ;*/
 
+// Numeric literals
+INTEGER: '0' | [1-9] [0-9]*;
+FLOAT: INTEGER '.' [0-9]+;
+
+//identifier
+ID: [a-zA-Z_][a-zA-Z0-9_]*;
+
+// String literal rule
+
+StringLiteral : '\'' ( ~'\'' | '\'\'' )* '\''      // Single-quoted string
+             | '"' ( ~'"' | '""' )* '"'           // Double-quoted string
+             ;
+
+
+
+
+
+WS: [ \t\r\n]+ -> skip;
 WHITESPACE : ('\t' | ' ')+ -> skip;
 NEWLINE : ('\n' | '\r' | '\r\n') -> skip ;
 COMMENT : '//'.*? '\n' -> skip;
