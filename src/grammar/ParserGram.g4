@@ -9,14 +9,16 @@ program:  statement* EOF;
 statement: varDeclaration | assignment ;
 
 // Variable declaration rule
-varDeclaration: VAR ID ASSIGN expression SEMICOLON;
+varDeclaration: VAR ID EQUAL expression SEMICOLON;
 
 // Assignment rule
-assignment: ID ASSIGN expression SEMICOLON;
+assignment: ID EQUAL expression SEMICOLON;
 
 
 // Expression can be a numeric literal or an identifier
-expression: INTEGER | FLOAT |  StringLiteral;
+expression: INTEGER | FLOAT |  StringLiteral | BOOL_TRUE_FALSE | ;
+
+forLoop: FOR OPENPAREN (varDeclaration | assignment ) SEMICOLON;
 
 
 

@@ -46,7 +46,7 @@ OPENBRACE:                      '{';
 CLOSEBRACE:                     '}';
 SEMICOLON:                      ';';
 COMMA:                          ',';
-ASSIGN:                         '=';
+EQUAL:                         '=';
 QUESTIONMARK:                   '?';
 QUESTIONMARKDOT:                '?.';
 COLON:                          ':';
@@ -63,8 +63,7 @@ DIVIDE:                         '/';
 MODULUS:                        '%';
 SINGLE_QUOTE: '\'';
 DOUBLE_QUOTE: '"';
-
-
+BOOL_TRUE_FALSE: 'true' | 'false';
 
 // Numeric literals
 INTEGER: '0' | [1-9] [0-9]*;
@@ -77,7 +76,7 @@ ID: [a-zA-Z_][a-zA-Z0-9_]*;
 StringLiteral : '\'' ( ~'\'' | '\'\'' )* '\''      // Single-quoted string
              | '"' ( ~'"' | '""' )* '"'           // Double-quoted string
              ;
-
+//Bool: TRUE | FALSE;
 
 WS: [ \t\r\n]+ -> skip;
 WHITESPACE : ('\t' | ' ')+ -> skip;
