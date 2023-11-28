@@ -5,10 +5,10 @@ options {tokenVocab = LexerGram;}
 program:  statement* EOF;
 
 
-// Statement can be a variable declaration, an assignment, or a string declaration
+//Statement can be a variable declaration, an assignment, or a string declaration
 statement: varDeclaration | assignment ;
 
-// Variable declaration rule
+//Variable declaration rule
 varDeclaration: VAR ID EQUAL expression SEMICOLON;
 
 // Assignment rule
