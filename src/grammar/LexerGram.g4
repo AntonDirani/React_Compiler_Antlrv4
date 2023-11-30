@@ -36,6 +36,11 @@ VOID: 'void';
 WHILE: 'while';
 WITH: 'with';
 YIELD: 'yield';
+LET: 'let';
+LOG: 'log';
+CONSOLE: 'console';
+IF: 'if';
+
 
 //symbols
 OPENBRACKET:                    '[';
@@ -46,7 +51,7 @@ OPENBRACE:                      '{';
 CLOSEBRACE:                     '}';
 SEMICOLON:                      ';';
 COMMA:                          ',';
-EQUAL:                         '=';
+EQUAL:                          '=';
 QUESTIONMARK:                   '?';
 QUESTIONMARKDOT:                '?.';
 COLON:                          ':';
@@ -65,6 +70,17 @@ SINGLE_QUOTE: '\'';
 DOUBLE_QUOTE: '"';
 BOOL_TRUE_FALSE: 'true' | 'false';
 
+//logical operators
+AND: '&&';
+OR: '||';
+EQUALEQUAL: '==';
+NOTEQUAL: '!=';
+
+// Comparison operators
+LT: '<';
+GT: '>';
+LTE: '<=';
+GTE: '>=';
 // Numeric literals
 INTEGER: '0' | [1-9] [0-9]*;
 FLOAT: INTEGER '.' [0-9]+;
