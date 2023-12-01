@@ -2,12 +2,11 @@ parser grammar ParserGram;
 
 options {tokenVocab = LexerGram;}
 
-program:  statement* EOF;
+program: classDeclaration |statement* EOF;
 
 
 //Statement can be a variable declaration, an assignment, or a string declaration
-statement: classDeclaration
-         | variableDeclaration
+statement: variableDeclaration
          | assignment
          | function
          | callStatement
@@ -17,7 +16,8 @@ statement: classDeclaration
          | whileStatement
          | counterStatement
          | ifElseStatement
-         | ifElseIfStatement;
+         | ifElseIfStatement
+         | returnStatement;
 
 
 
@@ -100,7 +100,6 @@ arrowFunction: dataType ID EQUAL OPENPAREN parameters CLOSEPAREN EQUAL GT block 
 
 };*/
 anonymousFunction:dataType ID EQUAL OPENPAREN functionDeclaration CLOSEPAREN OPENPAREN CLOSEPAREN SEMICOLON;
-
 /*const result = (function() {})();
 */
 parameters : ID (COMMA ID)* | /* Empty parameters */;
@@ -109,14 +108,21 @@ returnStatement : RETURN literal SEMICOLON;
 
 
 
-classDeclaration: simpleClass | inheritsClass ;
-simpleClass : CLASS ID OPENBRACE bodyOfClass CLOSEBRACE;
-inheritsClass : simpleClass EXTENDS simpleClass;
-bodyOfClass:  (statement | variableDeclaration | method)* ;
-method: (ID OPENPAREN  parameters CLOSEPAREN OPENBRACE CLOSEBRACE | constructorMethod | staticMethod)+;
+classDeclaration: class+ | class inheritsClass*;
+
+class : CLASS ID OPENBRACE bodyOfClass CLOSEBRACE ;
+inheritsClass : CLASS ID  EXTENDS class;
+bodyOfClass:  constructorMethod methodDeclaration* | statement*;
+
+methodDeclaration : method | staticMethod;
+method: ID OPENPAREN  parameters CLOSEPAREN  OPENBRACE bodyOfMethod CLOSEBRACE ;
+bodyOfMethod: statement*;
+
 staticMethod : STATIC method;
+
 callMethod: ID DOT callFunction;
 accessMethodInLogStatement: ID OPENPAREN parameters CLOSEPAREN  | ID DOT ID OPENPAREN parameters CLOSEPAREN;
 //callStaticMethod: ID DOT callMethod;
-constructorMethod: (ID | CONSTRUCTOR) OPENPAREN parameters CLOSEPAREN OPENBRACE bodyOfConstructor CLOSEBRACE;
+
+constructorMethod:  CONSTRUCTOR OPENPAREN parameters CLOSEPAREN OPENBRACE bodyOfConstructor CLOSEBRACE;
 bodyOfConstructor: (THIS DOT ID EQUAL ID SEMICOLON)*;
