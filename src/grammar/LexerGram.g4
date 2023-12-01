@@ -41,7 +41,11 @@ LOG: 'log';
 CONSOLE: 'console';
 IF: 'if';
 NULL: 'null';
-
+PUBLIC: 'public';
+PRIVATE: 'private';
+PROTECTED: 'protected';
+ABSTRACT: 'abstract';
+STATIC: 'static';
 
 //symbols
 OPENBRACKET:                    '[';

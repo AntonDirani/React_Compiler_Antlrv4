@@ -6,16 +6,20 @@ program:  statement* EOF;
 
 
 //Statement can be a variable declaration, an assignment, or a string declaration
-statement: variableDeclaration
+statement: classDeclaration
+         | variableDeclaration
          | assignment
          | function
+         | callStatement
          | ifStatement
-         |forStatement
-         |printStatement
-         |whileStatement
-         |counterStatement
-         |ifElseStatement
-         |ifElseIfStatement;
+         | forStatement
+         | printOrLogStatement
+         | whileStatement
+         | counterStatement
+         | ifElseStatement
+         | ifElseIfStatement;
+
+
 
 //Variable declaration rule
 variableDeclaration: dataType ID EQUAL literal SEMICOLON | letDecleration | varDeclaration;
@@ -27,34 +31,37 @@ varDeclaration: VAR ID (EQUAL literal) | VAR ID SEMICOLON;
 assignment: ID EQUAL literal SEMICOLON;
 
 // Expression can be a numeric literal or an identifier
-literal: INTEGER | FLOAT |  StringLiteral | BOOL_TRUE_FALSE | NULL;
+literal: INTEGER | FLOAT |  StringLiteral | BOOL_TRUE_FALSE | NULL |;
 
 //forLoop: FOR OPENPAREN (varDeclaration | assignment ) SEMICOLON;
 
 ///for statement
 forStatement: FOR OPENPAREN letDecleration SEMICOLON comparisonExpr SEMICOLON counterStatement CLOSEPAREN forBodyStatement;
-
 expr: ID | INTEGER | FLOAT ;
-
-
 comparisonExpr: expr LT expr
-                  | expr GT expr
-                  | expr LTE expr
-                  | expr GTE expr;
-forBodyStatement: OPENBRACE (forStatement | printStatement | ifStatement) CLOSEBRACE;
-printStatement: CONSOLE DOT LOG OPENPAREN (expr | StringLiteral) CLOSEPAREN SEMICOLON;
+              | expr GT expr
+              | expr LTE expr
+              | expr GTE expr;
+
+forBodyStatement: OPENBRACE (forStatement | printOrLogStatement | ifStatement) CLOSEBRACE;
+
+printOrLogStatement: CONSOLE DOT LOG OPENPAREN (expr | StringLiteral | accessMethodInLogStatement) CLOSEPAREN SEMICOLON;
 
 whileStatement: WHILE OPENPAREN (comparisonExpr | BOOL_TRUE_FALSE ) CLOSEPAREN OPENBRACE (statement |counterStatement SEMICOLON)+ CLOSEBRACE;
+
 counterStatement: expr((PLUS expr| MINUS expr| MULTIPLY expr | DIVIDE expr | PLUSPLUS | MINUSMINUS) |expr)+;
 
 logicalExpr: AND | OR | EQUALEQUAL | NOTEQUAL;
+
 ifStatement: IF OPENPAREN((comparisonExpr | (comparisonExpr logicalExpr)* comparisonExpr) | BOOL_TRUE_FALSE )CLOSEPAREN OPENBRACE statement CLOSEBRACE;
 
 ifElseStatement:ifStatement elseStatemetn;// ELSE OPENBRACE statement CLOSEBRACE;
+
 elseStatemetn:ELSE OPENBRACE statement CLOSEBRACE;
 
 ifElseIfStatement: ifStatement (ELSE ifStatement)+ elseStatemetn;
 
+ callStatement: callMethod | callFunction;
 /*while (i <= 5)
   {
     for(let i =0; i< 5;i++)
@@ -82,6 +89,7 @@ function: functionDeclaration
         | anonymousFunction
         ;
 functionDeclaration: FUNCTION (ID)* OPENPAREN parameters CLOSEPAREN block;
+callFunction: ID OPENPAREN parameters CLOSEPAREN SEMICOLON;
 functionExpr: dataType ID EQUAL functionDeclaration SEMICOLON;
 /*const myFunction = function() {
 
@@ -96,7 +104,19 @@ anonymousFunction:dataType ID EQUAL OPENPAREN functionDeclaration CLOSEPAREN OPE
 /*const result = (function() {})();
 */
 parameters : ID (COMMA ID)* | /* Empty parameters */;
-
 block: OPENBRACE statement* returnStatement* CLOSEBRACE;
-
 returnStatement : RETURN literal SEMICOLON;
+
+
+
+classDeclaration: simpleClass | inheritsClass ;
+simpleClass : CLASS ID OPENBRACE bodyOfClass CLOSEBRACE;
+inheritsClass : simpleClass EXTENDS simpleClass;
+bodyOfClass:  (statement | variableDeclaration | method)* ;
+method: (ID OPENPAREN  parameters CLOSEPAREN OPENBRACE CLOSEBRACE | constructorMethod | staticMethod)+;
+staticMethod : STATIC method;
+callMethod: ID DOT callFunction;
+accessMethodInLogStatement: ID OPENPAREN parameters CLOSEPAREN  | ID DOT ID OPENPAREN parameters CLOSEPAREN;
+//callStaticMethod: ID DOT callMethod;
+constructorMethod: (ID | CONSTRUCTOR) OPENPAREN parameters CLOSEPAREN OPENBRACE bodyOfConstructor CLOSEBRACE;
+bodyOfConstructor: (THIS DOT ID EQUAL ID SEMICOLON)*;
