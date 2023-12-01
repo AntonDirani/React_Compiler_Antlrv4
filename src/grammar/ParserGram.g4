@@ -17,7 +17,9 @@ statement: variableDeclaration
          | counterStatement
          | ifElseStatement
          | ifElseIfStatement
-         | returnStatement;
+         | returnStatement
+         | createAnObjectStatement
+         | stringInterpolationStatement;
 
 
 
@@ -111,7 +113,7 @@ returnStatement : RETURN literal SEMICOLON;
 classDeclaration: class+ | class inheritsClass*;
 
 class : CLASS ID OPENBRACE bodyOfClass CLOSEBRACE ;
-inheritsClass : CLASS ID  EXTENDS class;
+inheritsClass : CLASS ID  EXTENDS ID OPENBRACE bodyOfClass CLOSEBRACE ;
 bodyOfClass:  constructorMethod methodDeclaration* | statement*;
 
 methodDeclaration : method | staticMethod;
@@ -126,3 +128,29 @@ accessMethodInLogStatement: ID OPENPAREN parameters CLOSEPAREN  | ID DOT ID OPEN
 
 constructorMethod:  CONSTRUCTOR OPENPAREN parameters CLOSEPAREN OPENBRACE bodyOfConstructor CLOSEBRACE;
 bodyOfConstructor: (THIS DOT ID EQUAL ID SEMICOLON)*;
+createAnObjectStatement: dataType ID EQUAL NEW ID OPENPAREN (literal (COMMA literal)*) CLOSEPAREN SEMICOLON;  ///const myAnimal = new Animal("333",3);
+
+stringInterpolationStatement: SDOLLAR OPENBRACE THIS DOT ID CLOSEBRACE; //${}
+
+/*
+class Animal {
+  constructor(name, age) {
+    this.name = name;
+    this.age = age;
+  }
+
+  getInfo() {
+   return `${this.name} is ${this.age} years old.`;
+  }
+
+  static greet() {
+    console.log("Hello from the Animal class!");
+  }
+}
+*/
+
+//const myAnimal = new Animal("Buddy", 3);
+
+//console.log(myAnimal.getInfo());
+
+//Animal.greet();

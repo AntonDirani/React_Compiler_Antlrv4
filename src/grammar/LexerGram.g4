@@ -71,6 +71,7 @@ NOT:                            '!';
 MULTIPLY:                       '*';
 DIVIDE:                         '/';
 MODULUS:                        '%';
+SDOLLAR:                        '$';
 SINGLE_QUOTE: '\'';
 DOUBLE_QUOTE: '"';
 BOOL_TRUE_FALSE: 'true' | 'false';
