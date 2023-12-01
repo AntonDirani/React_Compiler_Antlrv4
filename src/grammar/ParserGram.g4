@@ -6,9 +6,9 @@ program:  statement* EOF;
 
 
 //Statement can be a variable declaration, an assignment, or a string declaration
-statement: varDeclaration
+statement: variableDeclaration
          | assignment
-         | functionDeclaration
+         | function
          | ifStatement
          |forStatement
          |printStatement
@@ -18,30 +18,25 @@ statement: varDeclaration
          |ifElseIfStatement;
 
 //Variable declaration rule
-varDeclaration: (VAR |LET)ID EQUAL literal SEMICOLON;
+variableDeclaration: dataType ID EQUAL literal SEMICOLON | letDecleration | varDeclaration;
+dataType: (VAR | LET | CONST);
+letDecleration: LET ID (EQUAL literal) | LET ID SEMICOLON;
+varDeclaration: VAR ID (EQUAL literal) | VAR ID SEMICOLON;
 
 // Assignment rule
 assignment: ID EQUAL literal SEMICOLON;
 
 // Expression can be a numeric literal or an identifier
-literal: INTEGER | FLOAT |  StringLiteral | BOOL_TRUE_FALSE | ;
+literal: INTEGER | FLOAT |  StringLiteral | BOOL_TRUE_FALSE | NULL;
 
 //forLoop: FOR OPENPAREN (varDeclaration | assignment ) SEMICOLON;
 
-functionDeclaration: FUNCTION ID OPENPAREN parameters CLOSEPAREN block;
-
-parameters : ID (COMMA ID)* | /* Empty parameters */;
-
-block: OPENBRACE statement* returnStatement CLOSEBRACE;
-
-returnStatement : RETURN literal SEMICOLON;
-
-///for statement in js
+///for statement
 forStatement: FOR OPENPAREN letDecleration SEMICOLON comparisonExpr SEMICOLON counterStatement CLOSEPAREN forBodyStatement;
 
 expr: ID | INTEGER | FLOAT ;
 
-letDecleration: LET ID (EQUAL expr);
+
 comparisonExpr: expr LT expr
                   | expr GT expr
                   | expr LTE expr
@@ -60,8 +55,6 @@ elseStatemetn:ELSE OPENBRACE statement CLOSEBRACE;
 
 ifElseIfStatement: ifStatement (ELSE ifStatement)+ elseStatemetn;
 
-
-
 /*while (i <= 5)
   {
     for(let i =0; i< 5;i++)
@@ -70,8 +63,6 @@ ifElseIfStatement: ifStatement (ELSE ifStatement)+ elseStatemetn;
      }
     i++;
   }*/
-
-
 
 /*
 if (true) {
@@ -84,3 +75,28 @@ if (true) {
 } else {
   console.log("You are a senior citizen.");
 }*/
+
+function: functionDeclaration
+        | functionExpr
+        | arrowFunction
+        | anonymousFunction
+        ;
+functionDeclaration: FUNCTION (ID)* OPENPAREN parameters CLOSEPAREN block;
+functionExpr: dataType ID EQUAL functionDeclaration SEMICOLON;
+/*const myFunction = function() {
+
+  return ;
+};*/
+arrowFunction: dataType ID EQUAL OPENPAREN parameters CLOSEPAREN EQUAL GT block SEMICOLON;
+/*const myFunction = () => {
+
+};*/
+anonymousFunction:dataType ID EQUAL OPENPAREN functionDeclaration CLOSEPAREN OPENPAREN CLOSEPAREN SEMICOLON;
+
+/*const result = (function() {})();
+*/
+parameters : ID (COMMA ID)* | /* Empty parameters */;
+
+block: OPENBRACE statement* returnStatement* CLOSEBRACE;
+
+returnStatement : RETURN literal SEMICOLON;

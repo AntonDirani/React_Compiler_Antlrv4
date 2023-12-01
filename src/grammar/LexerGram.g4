@@ -40,6 +40,7 @@ LET: 'let';
 LOG: 'log';
 CONSOLE: 'console';
 IF: 'if';
+NULL: 'null';
 
 
 //symbols
