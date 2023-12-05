@@ -21,7 +21,7 @@ statement: importStatement
          | returnStatement
          | createAnObjectStatement
          | stringInterpolationStatement
-         | reacctDotHooks;
+         ;
 
 importStatement: IMPORT OPENBRACE? (ID | REACT_HOOKS)? CLOSEBRACE? FROM? StringLiteral  SEMICOLON ;
 
@@ -99,7 +99,7 @@ functionExpr: dataType ID EQUAL functionDeclaration SEMICOLON;
 
   return ;
 };*/
-arrowFunction: dataType ID EQUAL OPENPAREN parameters CLOSEPAREN EQUAL GT block SEMICOLON;
+arrowFunction: (dataType ID EQUAL)? OPENPAREN parameters CLOSEPAREN EQUAL GT block SEMICOLON;
 /*const myFunction = () => {
 
 };*/
@@ -107,7 +107,7 @@ anonymousFunction:dataType ID EQUAL OPENPAREN functionDeclaration CLOSEPAREN OPE
 /*const result = (function() {})();
 */
 parameters : ID (COMMA ID)* | /* Empty parameters */;
-block: OPENBRACE statement* returnStatement* CLOSEBRACE;
+block: OPENBRACE reacctDotHooks* statement* returnStatement* CLOSEBRACE;
 returnStatement : RETURN (literal | jsxBlock ) SEMICOLON;
 jsxBlock: OPENPAREN jsx_element CLOSEPAREN;
 
@@ -159,7 +159,7 @@ class Animal {
 //Animal.greet();
 
 reacctDotHooks: REACT DOT reactHooks SEMICOLON;
-reactHooks: REACT_HOOKS OPENPAREN (INTEGER | parameters) CLOSEPAREN;
+reactHooks: REACT_HOOKS OPENPAREN (INTEGER | parameters | arrowFunction) CLOSEPAREN;
 
 
 
