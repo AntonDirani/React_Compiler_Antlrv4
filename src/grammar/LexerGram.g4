@@ -48,6 +48,8 @@ ABSTRACT: 'abstract';
 STATIC: 'static';
 REACT: 'react';
 REACT_HOOKS: 'useState' | 'useEffect' | 'useContext' | 'useRef';
+JSX_CLASS:'className';
+ON_CLICK:'onClick';
 
 //symbols
 OPENBRACKET:                    '[';
@@ -103,17 +105,21 @@ StringLiteral : '\'' ( ~'\'' | '\'\'' )* '\''      // Single-quoted string
              ;
 //Bool: TRUE | FALSE;
 
-OPEN_TAG:LT HTML_TAGS;
-OPEN_TAG_SELF:LT HTML_TAGS_SPECIAL;
-OPEN_TAG_ATT:LT HTML_TAG_SPECIAL;
+OPEN_TAG:LT HTML_TAGS ;
+
+OPEN_TAG_SELF:LT HTML_TAGS_SPECIAL ;
+
 CLOSE_TAG:LT DIVIDE HTML_TAGS GT;
 //HTML_TAGS:ID;
 
-HTML_TAGS: WS* ('h1' | 'h2' | 'h3' | 'p' | 'span' | 'div') WS*;
-HTML_TAGS_SPECIAL:'img'|'src'|'alt';
-HTML_TAG_SPECIAL:'div';
+HTML_TAGS: WS* ('h1' | 'h2' | 'h3' | 'p' | 'span' | 'div' | 'button') WS*;
 
-ATTRIBUTES_JSX:  ('className') ;
+
+HTML_TAGS_SPECIAL:'img';
+
+ATRRIBUTE_SPECIAL:'src'|'alt';
+
+//ATTRIBUTES_JSX:  ('className') ;
 
 WS: [ \t\r\n]+ -> skip;
 WHITESPACE : ('\t' | ' ')+ -> skip;

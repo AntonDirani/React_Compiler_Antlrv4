@@ -163,10 +163,20 @@ reactHooks: REACT_HOOKS OPENPAREN (INTEGER | parameters | arrowFunction) CLOSEPA
 
 
 
-jsx_element:jsx_open_tag (jsx_element|jsx_openSelf_close|jsx_text) * CLOSE_TAG;
-jsx_open_tag: OPEN_TAG  GT;
-attribute: ATTRIBUTES_JSX '=' StringLiteral;
-jsx_openSelf_close:OPEN_TAG_SELF attribute* '/' GT;
-jsx_open_clos:OPEN_TAG_ATT attribute*;
+jsx_element:jsx_open_tag  (jsx_element|jsx_openSelf_close|jsx_Expreeion|jsx_text) * CLOSE_TAG;
 
-jsx_text: ~'<'+;
+jsx_open_tag:OPEN_TAG attribute* jsx_class* attribute_click* GT;
+
+jsx_class:JSX_CLASS '=' StringLiteral ;
+
+attribute:ID '=' StringLiteral;
+
+jsx_openSelf_close:OPEN_TAG_SELF attribute_self* '/' GT;
+
+attribute_self:ATRRIBUTE_SPECIAL '=' StringLiteral;
+
+attribute_click:ON_CLICK '='jsx_Expreeion ;
+
+jsx_Expreeion:OPENBRACE ID CLOSEBRACE;
+
+jsx_text: ~'<' ~'{'+;
