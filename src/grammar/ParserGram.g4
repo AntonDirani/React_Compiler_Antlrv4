@@ -85,10 +85,10 @@ if (true) {
   console.log("You are a senior citizen.");
 }*/
 
-function: functionDeclaration
-        | functionExpr
-        | arrowFunction
-        | anonymousFunction
+function: EXPORT* (functionDeclaration
+                          | functionExpr
+                          | arrowFunction
+                          | anonymousFunction)
         ;
 functionDeclaration: FUNCTION (ID)* OPENPAREN parameters CLOSEPAREN block;
 callFunction: ID OPENPAREN parameters CLOSEPAREN SEMICOLON;
@@ -106,7 +106,8 @@ anonymousFunction:dataType ID EQUAL OPENPAREN functionDeclaration CLOSEPAREN OPE
 */
 parameters : ID (COMMA ID)* | /* Empty parameters */;
 block: OPENBRACE statement* returnStatement* CLOSEBRACE;
-returnStatement : RETURN literal SEMICOLON;
+returnStatement : RETURN (literal | jsxBlock ) SEMICOLON;
+jsxBlock: OPENPAREN jsx_element CLOSEPAREN;
 
 
 
@@ -155,11 +156,10 @@ class Animal {
 
 //Animal.greet();
 
-
-
 jsx_element:jsx_open_tag (jsx_element|jsx_openSelf_close|jsx_text) * CLOSE_TAG;
-jsx_open_tag:OPEN_TAG GT;
-attribute:ID '=' StringLiteral;
+jsx_open_tag: OPEN_TAG  GT;
+attribute: ATTRIBUTES_JSX '=' StringLiteral;
 jsx_openSelf_close:OPEN_TAG_SELF attribute* '/' GT;
+jsx_open_clos:OPEN_TAG_ATT attribute*;
 
 jsx_text: ~'<'+;

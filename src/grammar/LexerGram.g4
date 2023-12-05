@@ -102,12 +102,15 @@ StringLiteral : '\'' ( ~'\'' | '\'\'' )* '\''      // Single-quoted string
 
 OPEN_TAG:LT HTML_TAGS;
 OPEN_TAG_SELF:LT HTML_TAGS_SPECIAL;
+OPEN_TAG_ATT:LT HTML_TAG_SPECIAL;
 CLOSE_TAG:LT DIVIDE HTML_TAGS GT;
 //HTML_TAGS:ID;
 
-HTML_TAGS:'h1'|'h2'|'h3'|'p'|'span' ;
+HTML_TAGS: WS* ('h1' | 'h2' | 'h3' | 'p' | 'span' | 'div') WS*;
 HTML_TAGS_SPECIAL:'img'|'src'|'alt';
+HTML_TAG_SPECIAL:'div';
 
+ATTRIBUTES_JSX:  ('className') ;
 
 WS: [ \t\r\n]+ -> skip;
 WHITESPACE : ('\t' | ' ')+ -> skip;
