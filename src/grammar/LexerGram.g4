@@ -47,8 +47,7 @@ PROTECTED: 'protected';
 ABSTRACT: 'abstract';
 STATIC: 'static';
 REACT: 'react';
-USE_STATE: 'useState';
-
+REACT_HOOKS: 'useState' | 'useEffect' | 'useContext' | 'useRef';
 
 //symbols
 OPENBRACKET:                    '[';

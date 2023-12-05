@@ -20,10 +20,11 @@ statement: importStatement
          | ifElseIfStatement
          | returnStatement
          | createAnObjectStatement
-         | stringInterpolationStatement;
+         | stringInterpolationStatement
+         | reacctDotHooks;
 
-importStatement: IMPORT OPENBRACE? (ID | USE_STATE)? CLOSEBRACE? FROM? StringLiteral  SEMICOLON ;
-useState: USE_STATE OPENPAREN INTEGER CLOSEPAREN;
+importStatement: IMPORT OPENBRACE? (ID | REACT_HOOKS)? CLOSEBRACE? FROM? StringLiteral  SEMICOLON ;
+
 //Variable declaration rule
 variableDeclaration: dataType ID EQUAL literal SEMICOLON | letDecleration | varDeclaration;
 dataType: (VAR | LET | CONST);
@@ -34,7 +35,7 @@ varDeclaration: VAR ID (EQUAL literal) | VAR ID SEMICOLON;
 assignment: ID EQUAL literal SEMICOLON;
 
 // Expression can be a numeric literal or an identifier
-literal: INTEGER | FLOAT |  StringLiteral | BOOL_TRUE_FALSE | NULL | useState ;
+literal: INTEGER | FLOAT |  StringLiteral | BOOL_TRUE_FALSE | NULL | reactHooks ;
 
 //forLoop: FOR OPENPAREN (varDeclaration | assignment ) SEMICOLON;
 
@@ -156,6 +157,11 @@ class Animal {
 //console.log(myAnimal.getInfo());
 
 //Animal.greet();
+
+reacctDotHooks: REACT DOT reactHooks SEMICOLON;
+reactHooks: REACT_HOOKS OPENPAREN (INTEGER | parameters) CLOSEPAREN;
+
+
 
 jsx_element:jsx_open_tag (jsx_element|jsx_openSelf_close|jsx_text) * CLOSE_TAG;
 jsx_open_tag: OPEN_TAG  GT;
