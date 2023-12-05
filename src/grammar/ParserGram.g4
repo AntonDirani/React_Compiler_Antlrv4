@@ -6,7 +6,8 @@ program: classDeclaration |statement* EOF;
 
 
 //Statement can be a variable declaration, an assignment, or a string declaration
-statement: variableDeclaration
+statement: importStatement
+         | variableDeclaration
          | assignment
          | function
          | callStatement
@@ -21,8 +22,8 @@ statement: variableDeclaration
          | createAnObjectStatement
          | stringInterpolationStatement;
 
-
-
+importStatement: IMPORT OPENBRACE? (ID | USE_STATE)? CLOSEBRACE? FROM? StringLiteral  SEMICOLON ;
+useState: USE_STATE OPENPAREN INTEGER CLOSEPAREN;
 //Variable declaration rule
 variableDeclaration: dataType ID EQUAL literal SEMICOLON | letDecleration | varDeclaration;
 dataType: (VAR | LET | CONST);
@@ -33,7 +34,7 @@ varDeclaration: VAR ID (EQUAL literal) | VAR ID SEMICOLON;
 assignment: ID EQUAL literal SEMICOLON;
 
 // Expression can be a numeric literal or an identifier
-literal: INTEGER | FLOAT |  StringLiteral | BOOL_TRUE_FALSE | NULL |;
+literal: INTEGER | FLOAT |  StringLiteral | BOOL_TRUE_FALSE | NULL | useState ;
 
 //forLoop: FOR OPENPAREN (varDeclaration | assignment ) SEMICOLON;
 

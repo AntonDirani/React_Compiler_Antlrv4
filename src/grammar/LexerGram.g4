@@ -46,6 +46,9 @@ PRIVATE: 'private';
 PROTECTED: 'protected';
 ABSTRACT: 'abstract';
 STATIC: 'static';
+REACT: 'react';
+USE_STATE: 'useState';
+
 
 //symbols
 OPENBRACKET:                    '[';
@@ -96,7 +99,8 @@ ID: [a-zA-Z_][a-zA-Z0-9_]*;
 
 // String literal rule
 StringLiteral : '\'' ( ~'\'' | '\'\'' )* '\''      // Single-quoted string
-             | '"' ( ~'"' | '""' )* '"'           // Double-quoted string
+             | '"' ( ~'"' | '""' )* '"'
+             | '\'' REACT '\'' // Double-quoted string
              ;
 //Bool: TRUE | FALSE;
 
