@@ -154,3 +154,12 @@ class Animal {
 //console.log(myAnimal.getInfo());
 
 //Animal.greet();
+
+
+
+jsx_element:jsx_open_tag (jsx_element|jsx_openSelf_close|jsx_text) * CLOSE_TAG;
+jsx_open_tag:OPEN_TAG GT;
+attribute:ID '=' StringLiteral;
+jsx_openSelf_close:OPEN_TAG_SELF attribute* '/' GT;
+
+jsx_text: ~'<'+;

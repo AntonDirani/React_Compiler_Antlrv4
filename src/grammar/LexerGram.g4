@@ -100,6 +100,15 @@ StringLiteral : '\'' ( ~'\'' | '\'\'' )* '\''      // Single-quoted string
              ;
 //Bool: TRUE | FALSE;
 
+OPEN_TAG:LT HTML_TAGS;
+OPEN_TAG_SELF:LT HTML_TAGS_SPECIAL;
+CLOSE_TAG:LT DIVIDE HTML_TAGS GT;
+//HTML_TAGS:ID;
+
+HTML_TAGS:'h1'|'h2'|'h3'|'p'|'span' ;
+HTML_TAGS_SPECIAL:'img'|'src'|'alt';
+
+
 WS: [ \t\r\n]+ -> skip;
 WHITESPACE : ('\t' | ' ')+ -> skip;
 NEWLINE : ('\n' | '\r' | '\r\n') -> skip ;
