@@ -66,26 +66,7 @@ elseStatemetn:ELSE OPENBRACE statement CLOSEBRACE;
 ifElseIfStatement: ifStatement (ELSE ifStatement)+ elseStatemetn;
 
  callStatement: callMethod | callFunction;
-/*while (i <= 5)
-  {
-    for(let i =0; i< 5;i++)
-    {
-     console.log(i);
-     }
-    i++;
-  }*/
 
-/*
-if (true) {
-  console.log("You are a minor.");
-} else if (age >= 18 && age <= 24 && age <= 2)
-{
-  console.log("You are a student.");
-}  else if (age >= 25 && age <= 60) {
-  console.log("You are an adult.");
-} else {
-  console.log("You are a senior citizen.");
-}*/
 
 function: EXPORT* (functionDeclaration
                           | functionExpr
@@ -95,17 +76,11 @@ function: EXPORT* (functionDeclaration
 functionDeclaration: FUNCTION (ID)* OPENPAREN parameters CLOSEPAREN block;
 callFunction: ID OPENPAREN parameters CLOSEPAREN SEMICOLON;
 functionExpr: dataType ID EQUAL functionDeclaration SEMICOLON;
-/*const myFunction = function() {
 
-  return ;
-};*/
 arrowFunction: (dataType ID EQUAL)? OPENPAREN parameters CLOSEPAREN EQUAL GT block SEMICOLON;
-/*const myFunction = () => {
 
-};*/
 anonymousFunction:dataType ID EQUAL OPENPAREN functionDeclaration CLOSEPAREN OPENPAREN CLOSEPAREN SEMICOLON;
-/*const result = (function() {})();
-*/
+
 parameters : ID (COMMA ID)* | /* Empty parameters */;
 block: OPENBRACE reacctDotHooks* statement* returnStatement* CLOSEBRACE;
 returnStatement : RETURN (literal | jsxBlock ) SEMICOLON;
@@ -134,29 +109,6 @@ bodyOfConstructor: (THIS DOT ID EQUAL ID SEMICOLON)*;
 createAnObjectStatement: dataType ID EQUAL NEW ID OPENPAREN (literal (COMMA literal)*) CLOSEPAREN SEMICOLON;  ///const myAnimal = new Animal("333",3);
 
 stringInterpolationStatement: SDOLLAR OPENBRACE THIS DOT ID CLOSEBRACE; //${}
-
-/*
-class Animal {
-  constructor(name, age) {
-    this.name = name;
-    this.age = age;
-  }
-
-  getInfo() {
-   return `${this.name} is ${this.age} years old.`;
-  }
-
-  static greet() {
-    console.log("Hello from the Animal class!");
-  }
-}
-*/
-
-//const myAnimal = new Animal("Buddy", 3);
-
-//console.log(myAnimal.getInfo());
-
-//Animal.greet();
 
 reacctDotHooks: REACT DOT reactHooks SEMICOLON;
 reactHooks: REACT_HOOKS OPENPAREN (INTEGER | parameters | arrowFunction) CLOSEPAREN;
