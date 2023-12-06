@@ -167,16 +167,16 @@ jsx_element:jsx_open_tag  (jsx_element|jsx_openSelf_close|jsx_Expreeion|jsx_text
 
 jsx_open_tag:OPEN_TAG attribute* jsx_class* attribute_click* GT;
 
-jsx_class:JSX_CLASS '=' StringLiteral ;
+jsx_class:JSX_CLASS EQUAL StringLiteral ;
 
-attribute:ID '=' StringLiteral;
+attribute:ID EQUAL StringLiteral;
 
-jsx_openSelf_close:OPEN_TAG_SELF attribute_self* '/' GT;
+jsx_openSelf_close:OPEN_TAG_SELF attribute_self* DIVIDE GT;
 
-attribute_self:ATRRIBUTE_SPECIAL '=' StringLiteral;
+attribute_self:ATRRIBUTE_SPECIAL EQUAL StringLiteral;
 
-attribute_click:ON_CLICK '='jsx_Expreeion ;
+attribute_click:ON_CLICK EQUAL jsx_Expreeion ;
 
 jsx_Expreeion:OPENBRACE ID CLOSEBRACE;
 
-jsx_text: ~'<' ~'{'+;
+jsx_text: ~ LT ~ OPENBRACE +;
