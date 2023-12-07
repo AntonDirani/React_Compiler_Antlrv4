@@ -117,7 +117,6 @@ HTML_TAGS: WS* ('h1' | 'h2' | 'h3' | 'p' | 'span' | 'div' | 'button') WS*;
 
 HTML_TAGS_SPECIAL:'img';
 
-ATRRIBUTE_SPECIAL:'src'|'alt';
 
 //ATTRIBUTES_JSX:  ('className') ;
 

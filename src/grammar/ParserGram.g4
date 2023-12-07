@@ -123,12 +123,11 @@ jsx_class:JSX_CLASS EQUAL StringLiteral ;
 
 attribute:ID EQUAL StringLiteral;
 
-jsx_openSelf_close:OPEN_TAG_SELF attribute_self* DIVIDE GT;
+jsx_openSelf_close:OPEN_TAG_SELF attribute* DIVIDE GT;
 
-attribute_self:ATRRIBUTE_SPECIAL EQUAL StringLiteral;
 
 attribute_click:ON_CLICK EQUAL jsx_Expreeion ;
 
 jsx_Expreeion:OPENBRACE ID CLOSEBRACE;
 
-jsx_text: ~ LT ~ OPENBRACE +;
+jsx_text: ~('<'|'>'|'{'|'}' )+;
