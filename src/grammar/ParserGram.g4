@@ -21,10 +21,11 @@ statement: importStatement
          | returnStatement
          | createAnObjectStatement
          | stringInterpolationStatement
+         | exportDefault
          ;
 
 importStatement: IMPORT OPENBRACE? (ID | REACT_HOOKS)? CLOSEBRACE? FROM? StringLiteral  SEMICOLON ;
-
+exportDefault: EXPORT DEFAULT ID SEMICOLON;
 //Variable declaration rule
 variableDeclaration: dataType ID EQUAL literal SEMICOLON | letDecleration | varDeclaration;
 dataType: (VAR | LET | CONST);
@@ -123,11 +124,11 @@ jsx_class:JSX_CLASS EQUAL StringLiteral ;
 
 attribute:ID EQUAL StringLiteral;
 
-jsx_openSelf_close:OPEN_TAG_SELF attribute* DIVIDE GT;
+jsx_openSelf_close:OPEN_TAG_SELF attribute* ID? DIVIDE GT;
 
 
 attribute_click:ON_CLICK EQUAL jsx_Expreeion ;
 
-jsx_Expreeion:OPENBRACE ID CLOSEBRACE;
+jsx_Expreeion:OPENBRACE ID CLOSEBRACE DIVIDE CLOSEBRACE;
 
 jsx_text: ~('<'|'>'|'{'|'}' )+;
