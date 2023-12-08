@@ -87,7 +87,13 @@ block: OPENBRACE reacctDotHooks* statement* returnStatement* CLOSEBRACE;
 returnStatement : RETURN (literal | jsxBlock ) SEMICOLON;
 jsxBlock: OPENPAREN jsx_element CLOSEPAREN;
 
+createElement: CREATE_ELEMENT OPENPAREN ( HTML_TAGS_ELEMENT | callFunction | ID) COMMA ( NULL  | props  )? COMMA children? CLOSEPAREN ;
 
+props: OPENBRACE prop (COMMA prop)* CLOSEBRACE;
+
+prop: JSX_CLASS COLON literal;
+children: (OPENBRACE createElement (COMMA createElement)* CLOSEBRACE | StringLiteral);
+/*createElement*/
 
 classDeclaration: class+ | class inheritsClass*;
 
@@ -111,7 +117,7 @@ createAnObjectStatement: dataType ID EQUAL NEW ID OPENPAREN (literal (COMMA lite
 
 stringInterpolationStatement: SDOLLAR OPENBRACE THIS DOT ID CLOSEBRACE; //${}
 
-reacctDotHooks: REACT DOT reactHooks SEMICOLON;
+reacctDotHooks: REACT DOT (reactHooks | createElement)  SEMICOLON;
 reactHooks: REACT_HOOKS OPENPAREN (INTEGER | parameters | arrowFunction) CLOSEPAREN;
 
 

@@ -46,7 +46,7 @@ PRIVATE: 'private';
 PROTECTED: 'protected';
 ABSTRACT: 'abstract';
 STATIC: 'static';
-REACT: 'react';
+REACT: 'react' | 'React';
 REACT_HOOKS: 'useState' | 'useEffect' | 'useContext' | 'useRef';
 JSX_CLASS:'className';
 ON_CLICK:'onClick';
@@ -79,6 +79,7 @@ SDOLLAR:                        '$';
 SINGLE_QUOTE: '\'';
 DOUBLE_QUOTE: '"';
 BOOL_TRUE_FALSE: 'true' | 'false';
+CREATE_ELEMENT: 'createElement';
 
 //logical operators
 AND: '&&';
@@ -114,7 +115,7 @@ CLOSE_TAG:LT DIVIDE HTML_TAGS GT;
 
 HTML_TAGS: WS* ('h1' | 'h2' | 'h3' | 'p' | 'span' | 'div' | 'button') WS*;
 
-
+HTML_TAGS_ELEMENT: WS* ('\'h1\'' | '\'h2\'' | '\'h3\'' | '\'p\'' | '\'span\'' | '\'div\'' | '\'button\'') WS*;
 HTML_TAGS_SPECIAL:'img'| 'link';
 
 
