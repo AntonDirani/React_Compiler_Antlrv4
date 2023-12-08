@@ -115,7 +115,7 @@ CLOSE_TAG:LT DIVIDE HTML_TAGS GT;
 HTML_TAGS: WS* ('h1' | 'h2' | 'h3' | 'p' | 'span' | 'div' | 'button') WS*;
 
 
-HTML_TAGS_SPECIAL:'img';
+HTML_TAGS_SPECIAL:'img'| 'link';
 
 
 //ATTRIBUTES_JSX:  ('className') ;
