@@ -46,7 +46,7 @@ PRIVATE: 'private';
 PROTECTED: 'protected';
 ABSTRACT: 'abstract';
 STATIC: 'static';
-REACT: 'react' | 'React';
+REACT:  'React';
 //REACT_HOOKS: 'useState' | 'useEffect' | 'useContext' | 'useRef';
 USE_STATE          : 'useState';
 USE_EFFECT         : 'useEffect';
@@ -55,6 +55,8 @@ USE_CONTEXT        : 'useContext';
 USE_REF            : 'useRef';
 JSX_CLASS:'className';
 ON_CLICK:'onClick';
+SRC : 'src';
+ALT: 'alt';
 CONSOLE_LOG        : 'console.log';
 CLICK_HANDLER: 'clickHandler';
 
@@ -106,10 +108,12 @@ FLOAT: INTEGER '.' [0-9]+;
 //identifier
 ID: [a-zA-Z_][a-zA-Z0-9_]*;
 
+
+HTML_TAGS_ELEMENT: WS* ('\'h1\'' | '\'h2\'' | '\'h3\'' | '\'p\'' | '\'span\'' | '\'div\'' | '\'button\'' | '\'img\'') WS*;
+
 // String literal rule
 StringLiteral : '\'' ( ~'\'' | '\'\'' )* '\''      // Single-quoted string
-             | '"' ( ~'"' | '""' )* '"'
-             | '\'' REACT '\'' // Double-quoted string
+             | '"' ( ~'"' | '""' )* '"' // Double-quoted string
              ;
 //Bool: TRUE | FALSE;
 
@@ -118,11 +122,12 @@ OPEN_TAG:LT HTML_TAGS ;
 OPEN_TAG_SELF:LT HTML_TAGS_SPECIAL ;
 
 CLOSE_TAG:LT DIVIDE HTML_TAGS GT;
+CLOSE_TAG_SELF: DIVIDE GT;
 //HTML_TAGS:ID;
 
 HTML_TAGS: WS* ('h1' | 'h2' | 'h3' | 'p' | 'span' | 'div' | 'button') WS*;
 
-HTML_TAGS_ELEMENT: WS* ('\'h1\'' | '\'h2\'' | '\'h3\'' | '\'p\'' | '\'span\'' | '\'div\'' | '\'button\'') WS*;
+
 HTML_TAGS_SPECIAL:'img'| 'link';
 
 

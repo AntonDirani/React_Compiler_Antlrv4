@@ -25,7 +25,7 @@ statement: importStatement
 
          ;
 
-importStatement: IMPORT OPENBRACE? (ID | hook)? CLOSEBRACE? FROM? StringLiteral  SEMICOLON ;
+importStatement: IMPORT OPENBRACE? (ID | hook | REACT)? CLOSEBRACE? FROM? StringLiteral  SEMICOLON ;
 exportDefault: EXPORT DEFAULT ID SEMICOLON;
 //Variable declaration rule
 variableDeclaration: dataType ID EQUAL (literal | hook) SEMICOLON | letDecleration | varDeclaration;
@@ -86,15 +86,16 @@ anonymousFunction:dataType ID EQUAL OPENPAREN functionDeclaration CLOSEPAREN OPE
 
 parameters : ID (COMMA ID)* | /* Empty parameters */;
 block: OPENBRACE reacctDotHooks* statement* hook* returnStatement* CLOSEBRACE;
-returnStatement : RETURN (literal | jsxBlock | arrowFunction ) SEMICOLON;
+returnStatement : RETURN (literal | jsxBlock | arrowFunction |  reactDotCreateElement) SEMICOLON;
 jsxBlock: OPENPAREN jsx_element CLOSEPAREN;
 
-createElement: CREATE_ELEMENT OPENPAREN ( HTML_TAGS_ELEMENT | callFunction | ID) COMMA ( NULL  | props  )? COMMA children? CLOSEPAREN ;
+reactDotCreateElement: REACT DOT createElement;
+createElement: CREATE_ELEMENT OPENPAREN ( WS* HTML_TAGS_ELEMENT  | callFunction | ID) COMMA ( NULL  | props  )? (COMMA children)? CLOSEPAREN ;
 
 props: OPENBRACE prop (COMMA prop)* CLOSEBRACE;
 
-prop: JSX_CLASS COLON literal;
-children: (OPENBRACE createElement (COMMA createElement)* CLOSEBRACE | StringLiteral);
+prop: (JSX_CLASS | ON_CLICK | SRC | ALT) COLON (literal | ID);
+children: (OPENBRACE? (REACT DOT)? createElement (COMMA (REACT DOT)? createElement)* COMMA? CLOSEBRACE? | StringLiteral  );
 /*createElement*/
 
 classDeclaration: class+ | class inheritsClass*;
@@ -119,7 +120,7 @@ createAnObjectStatement: dataType ID EQUAL NEW ID OPENPAREN (literal (COMMA lite
 
 stringInterpolationStatement: SDOLLAR OPENBRACE THIS DOT ID CLOSEBRACE; //${}
 
-reacctDotHooks: REACT DOT (hook | createElement)  SEMICOLON;
+reacctDotHooks: REACT DOT hook  SEMICOLON;
 //reactHooks: REACT_HOOKS OPENPAREN (INTEGER | parameters | arrowFunction) CLOSEPAREN;
 //hook: USE_STATE | USE_EFFECT | USE_CALLBACK 3 | USE_CONTEXT | USE_REF;
 
@@ -151,4 +152,4 @@ jsx_Expreeion:OPENBRACE .*? CLOSEBRACE ;
 
 element_js:LT .*? DIVIDE GT;
 
-jsx_text: ~('<'|'>'|'{'|'}' )+;
+jsx_text: ~('<'|'>'|'{'|'}' | ')' | '(' )+;
