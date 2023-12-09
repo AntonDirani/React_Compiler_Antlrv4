@@ -18,25 +18,27 @@ statement: importStatement
          | counterStatement
          | ifElseStatement
          | ifElseIfStatement
-         | returnStatement
          | createAnObjectStatement
          | stringInterpolationStatement
          | exportDefault
+         | consoleLog
+
          ;
 
-importStatement: IMPORT OPENBRACE? (ID | REACT_HOOKS)? CLOSEBRACE? FROM? StringLiteral  SEMICOLON ;
+importStatement: IMPORT OPENBRACE? (ID | hook)? CLOSEBRACE? FROM? StringLiteral  SEMICOLON ;
 exportDefault: EXPORT DEFAULT ID SEMICOLON;
 //Variable declaration rule
-variableDeclaration: dataType ID EQUAL literal SEMICOLON | letDecleration | varDeclaration;
-dataType: (VAR | LET | CONST);
+variableDeclaration: dataType ID EQUAL (literal | hook) SEMICOLON | letDecleration | varDeclaration;
+dataType: (VAR | LET | CONST );
 letDecleration: LET ID (EQUAL literal) | LET ID SEMICOLON;
 varDeclaration: VAR ID (EQUAL literal) | VAR ID SEMICOLON;
 
+consoleLog: CONSOLE_LOG OPENPAREN StringLiteral CLOSEPAREN SEMICOLON;
 // Assignment rule
 assignment: ID EQUAL literal SEMICOLON;
 
 // Expression can be a numeric literal or an identifier
-literal: INTEGER | FLOAT |  StringLiteral | BOOL_TRUE_FALSE | NULL | reactHooks ;
+literal: INTEGER | FLOAT |  StringLiteral | BOOL_TRUE_FALSE | NULL |  useCallback | useContext | useRef ;
 
 //forLoop: FOR OPENPAREN (varDeclaration | assignment ) SEMICOLON;
 
@@ -83,8 +85,8 @@ arrowFunction: (dataType ID EQUAL)? OPENPAREN parameters CLOSEPAREN EQUAL GT blo
 anonymousFunction:dataType ID EQUAL OPENPAREN functionDeclaration CLOSEPAREN OPENPAREN CLOSEPAREN SEMICOLON;
 
 parameters : ID (COMMA ID)* | /* Empty parameters */;
-block: OPENBRACE reacctDotHooks* statement* returnStatement* CLOSEBRACE;
-returnStatement : RETURN (literal | jsxBlock ) SEMICOLON;
+block: OPENBRACE reacctDotHooks* statement* hook* returnStatement* CLOSEBRACE;
+returnStatement : RETURN (literal | jsxBlock | arrowFunction ) SEMICOLON;
 jsxBlock: OPENPAREN jsx_element CLOSEPAREN;
 
 createElement: CREATE_ELEMENT OPENPAREN ( HTML_TAGS_ELEMENT | callFunction | ID) COMMA ( NULL  | props  )? COMMA children? CLOSEPAREN ;
@@ -117,9 +119,19 @@ createAnObjectStatement: dataType ID EQUAL NEW ID OPENPAREN (literal (COMMA lite
 
 stringInterpolationStatement: SDOLLAR OPENBRACE THIS DOT ID CLOSEBRACE; //${}
 
-reacctDotHooks: REACT DOT (reactHooks | createElement)  SEMICOLON;
-reactHooks: REACT_HOOKS OPENPAREN (INTEGER | parameters | arrowFunction) CLOSEPAREN;
+reacctDotHooks: REACT DOT (hook | createElement)  SEMICOLON;
+//reactHooks: REACT_HOOKS OPENPAREN (INTEGER | parameters | arrowFunction) CLOSEPAREN;
+//hook: USE_STATE | USE_EFFECT | USE_CALLBACK 3 | USE_CONTEXT | USE_REF;
 
+hook: useState | useEffect | useCallback | useContext | useRef;
+useState: (CONST? OPENBRACKET ID COMMA ID CLOSEBRACKET EQUAL USE_STATE OPENPAREN ID? CLOSEPAREN  | USE_STATE OPENPAREN (INTEGER | parameters | arrowFunction) CLOSEPAREN) ;
+useEffect: USE_EFFECT OPENPAREN arrowFunction? block? CLOSEPAREN ;
+clickHandler: CONST CLICK_HANDLER EQUAL arrowFunction;
+useCallback: USE_CALLBACK OPENPAREN parameters COMMA block CLOSEPAREN ;
+
+useContext:  USE_CONTEXT OPENPAREN CLOSEPAREN ;
+
+useRef: USE_REF OPENPAREN INTEGER? CLOSEPAREN ;
 
 
 jsx_element:jsx_open_tag  (jsx_element|jsx_openSelf_close|jsx_Expreeion|element_js|jsx_text) * CLOSE_TAG;

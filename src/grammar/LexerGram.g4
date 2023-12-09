@@ -47,9 +47,16 @@ PROTECTED: 'protected';
 ABSTRACT: 'abstract';
 STATIC: 'static';
 REACT: 'react' | 'React';
-REACT_HOOKS: 'useState' | 'useEffect' | 'useContext' | 'useRef';
+//REACT_HOOKS: 'useState' | 'useEffect' | 'useContext' | 'useRef';
+USE_STATE          : 'useState';
+USE_EFFECT         : 'useEffect';
+USE_CALLBACK       : 'useCallback';
+USE_CONTEXT        : 'useContext';
+USE_REF            : 'useRef';
 JSX_CLASS:'className';
 ON_CLICK:'onClick';
+CONSOLE_LOG        : 'console.log';
+CLICK_HANDLER: 'clickHandler';
 
 //symbols
 OPENBRACKET:                    '[';
