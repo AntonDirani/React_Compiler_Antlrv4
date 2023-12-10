@@ -59,6 +59,13 @@ SRC : 'src';
 ALT: 'alt';
 CONSOLE_LOG        : 'console.log';
 CLICK_HANDLER: 'clickHandler';
+PROP: 'prop';
+STYLE: 'style';
+DISPLAY: 'display';
+FLEX_FLOW: 'flexFlow';
+JUSTIFY: 'justifyContent';
+ALIGN_CONTENT: 'alignContent';
+//APP: 'App';
 
 //symbols
 OPENBRACKET:                    '[';
