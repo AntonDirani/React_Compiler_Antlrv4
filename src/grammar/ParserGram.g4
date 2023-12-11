@@ -105,7 +105,7 @@ parameters : OPENBRACE? ID (COMMA ID)* OPENBRACE? | /* Empty parameters */;
 
 block: OPENBRACE (reacctDotHooks| statement| hook |returnStatement| printOrLogStatement)* CLOSEBRACE;
 
-returnStatement : RETURN (literal | jsxBlock | arrowFunction |  reactDotCreateElement) SEMICOLON;
+returnStatement : RETURN (ID | literal | jsxBlock | arrowFunction |  reactDotCreateElement)? SEMICOLON;
 
 ////class
 
