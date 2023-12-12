@@ -57,7 +57,7 @@ JSX_CLASS:'className';
 ON_CLICK:'onClick';
 SRC : 'src';
 ALT: 'alt';
-CONSOLE_LOG        : 'console.log';
+//CONSOLE_LOG        : 'console.log';
 CLICK_HANDLER: 'clickHandler';
 PROP: 'prop';
 STYLE: 'style';

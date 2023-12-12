@@ -2,11 +2,12 @@ parser grammar ParserGram;
 
 options {tokenVocab = LexerGram;}
 
-program: classDeclaration |statement* EOF;
+program:statement* EOF;
 
 
 //Statement can be a variable declaration, an assignment, or a string declaration
-statement: importStatement
+statement: classDeclaration
+         | importStatement
          | variableDeclaration
          | assignment
          | function
@@ -21,30 +22,40 @@ statement: importStatement
          | createAnObjectStatement
          | stringInterpolationStatement
          | exportDefault
-         | consoleLog
-
+         | returnStatement //consoleLog
          ;
+
+
+//accessModifiers: PUBLIC|PRIVATE|PROTECTED;
 
 importStatement: IMPORT OPENBRACE? (ID | hook | REACT)? CLOSEBRACE? FROM? StringLiteral  SEMICOLON? ;
 exportDefault: EXPORT DEFAULT ID SEMICOLON;
+
 //Variable declaration rule
-variableDeclaration: dataType ID EQUAL (literal | hook | ID (DOT ID)?) SEMICOLON | letDecleration | varDeclaration;
+variableDeclaration: dataType ID EQUAL variableValues SEMICOLON | letDecleration | varDeclaration;
 dataType: (VAR | LET | CONST );
+variableValues: (literal | hook | ID (DOT ID)?);
+
 letDecleration: LET ID (EQUAL literal) | LET ID SEMICOLON;
+
 varDeclaration: VAR ID (EQUAL literal) | VAR ID SEMICOLON;
 
-consoleLog: CONSOLE_LOG OPENPAREN StringLiteral CLOSEPAREN SEMICOLON;
+//consoleLog: CONSOLE_LOG OPENPAREN StringLiteral CLOSEPAREN SEMICOLON;
+
 // Assignment rule
-assignment: ID EQUAL literal SEMICOLON;
+assignment: ID EQUAL variableValues SEMICOLON;
 
 // Expression can be a numeric literal or an identifier
 literal: INTEGER | FLOAT |  StringLiteral | BOOL_TRUE_FALSE | NULL |  useCallback | useContext | useRef ;
 
 //forLoop: FOR OPENPAREN (varDeclaration | assignment ) SEMICOLON;
 
+
 ///for statement
 forStatement: FOR OPENPAREN letDecleration SEMICOLON comparisonExpr SEMICOLON counterStatement CLOSEPAREN forBodyStatement;
+
 expr: ID | INTEGER | FLOAT ;
+
 comparisonExpr: expr LT expr
               | expr GT expr
               | expr LTE expr
@@ -52,7 +63,7 @@ comparisonExpr: expr LT expr
 
 forBodyStatement: OPENBRACE (forStatement | printOrLogStatement | ifStatement) CLOSEBRACE;
 
-printOrLogStatement: CONSOLE DOT LOG OPENPAREN (expr | StringLiteral | accessMethodInLogStatement) CLOSEPAREN SEMICOLON;
+printOrLogStatement: CONSOLE DOT LOG OPENPAREN (expr | StringLiteral | accessMethodInLogStatement)? CLOSEPAREN SEMICOLON;
 
 whileStatement: WHILE OPENPAREN (comparisonExpr | BOOL_TRUE_FALSE ) CLOSEPAREN OPENBRACE (statement |counterStatement SEMICOLON)+ CLOSEBRACE;
 
@@ -71,24 +82,63 @@ ifElseIfStatement: ifStatement (ELSE ifStatement)+ elseStatemetn;
  callStatement: callMethod | callFunction;
 
 
+////function
+
 function: EXPORT* (functionDeclaration
                           | functionExpr
                           | arrowFunction
                           | anonymousFunction)
-        ;
+                          ;
 functionDeclaration: FUNCTION (ID)? OPENPAREN parameters CLOSEPAREN block;
+
 callFunction: ID OPENPAREN parameters CLOSEPAREN SEMICOLON;
+
 functionExpr: dataType ID EQUAL functionDeclaration SEMICOLON;
+
+////type of function
 
 arrowFunction: (dataType ID EQUAL)? OPENPAREN parameters CLOSEPAREN EQUAL GT block SEMICOLON;
 
 anonymousFunction:dataType ID EQUAL OPENPAREN functionDeclaration CLOSEPAREN OPENPAREN CLOSEPAREN SEMICOLON;
 
 parameters : OPENBRACE? ID (COMMA ID)* OPENBRACE? | /* Empty parameters */;
-block: OPENBRACE (reacctDotHooks| statement| hook |returnStatement)* CLOSEBRACE;
-returnStatement : RETURN (literal | jsxBlock | arrowFunction |  reactDotCreateElement) SEMICOLON;
-jsxBlock: OPENPAREN jsx_element CLOSEPAREN;
 
+block: OPENBRACE (reacctDotHooks| statement| hook |returnStatement| printOrLogStatement)* CLOSEBRACE;
+
+returnStatement : RETURN (ID | literal | jsxBlock | arrowFunction |  reactDotCreateElement)? SEMICOLON;
+
+////class
+
+classDeclaration: class+ | class inheritsClass*;
+
+class : CLASS ID OPENBRACE bodyOfClass CLOSEBRACE ;
+
+inheritsClass : CLASS ID  EXTENDS ID OPENBRACE bodyOfClass CLOSEBRACE ;
+
+bodyOfClass:  constructorMethod methodDeclaration* | statement*;
+////method in class
+methodDeclaration : method | staticMethod;
+
+method: ID OPENPAREN  parameters CLOSEPAREN  OPENBRACE bodyOfMethod CLOSEBRACE ;
+
+bodyOfMethod: statement*;//////////////////////////////////////////////////
+
+////type of method
+staticMethod : STATIC method;
+
+constructorMethod:  CONSTRUCTOR OPENPAREN parameters CLOSEPAREN OPENBRACE bodyOfConstructor CLOSEBRACE;
+
+bodyOfConstructor: (THIS DOT ID EQUAL ID SEMICOLON)*;
+
+callMethod: ID DOT callFunction;
+
+accessMethodInLogStatement: ID OPENPAREN parameters CLOSEPAREN  | ID DOT ID OPENPAREN parameters CLOSEPAREN;
+
+createAnObjectStatement: dataType ID EQUAL NEW ID OPENPAREN (literal (COMMA literal)*) CLOSEPAREN SEMICOLON;  ///const myAnimal = new Animal("333",3);
+
+stringInterpolationStatement: SDOLLAR OPENBRACE THIS DOT ID CLOSEBRACE; //${}
+
+////react
 reactDotCreateElement: REACT DOT createElement;
 createElement: CREATE_ELEMENT OPENPAREN ( WS* HTML_TAGS_ELEMENT  | callFunction | ID) COMMA ( NULL  | props  )? (COMMA children)? CLOSEPAREN ;
 
@@ -98,27 +148,6 @@ prop: (JSX_CLASS | ON_CLICK | SRC | ALT | DISPLAY | FLEX_FLOW | JUSTIFY | ALIGN_
 children: (OPENBRACE? (REACT DOT)? createElement (COMMA (REACT DOT)? createElement)* COMMA? CLOSEBRACE? | StringLiteral  );
 /*createElement*/
 
-classDeclaration: class+ | class inheritsClass*;
-
-class : CLASS ID OPENBRACE bodyOfClass CLOSEBRACE ;
-inheritsClass : CLASS ID  EXTENDS ID OPENBRACE bodyOfClass CLOSEBRACE ;
-bodyOfClass:  constructorMethod methodDeclaration* | statement*;
-
-methodDeclaration : method | staticMethod;
-method: ID OPENPAREN  parameters CLOSEPAREN  OPENBRACE bodyOfMethod CLOSEBRACE ;
-bodyOfMethod: statement*;
-
-staticMethod : STATIC method;
-
-callMethod: ID DOT callFunction;
-accessMethodInLogStatement: ID OPENPAREN parameters CLOSEPAREN  | ID DOT ID OPENPAREN parameters CLOSEPAREN;
-//callStaticMethod: ID DOT callMethod;
-
-constructorMethod:  CONSTRUCTOR OPENPAREN parameters CLOSEPAREN OPENBRACE bodyOfConstructor CLOSEBRACE;
-bodyOfConstructor: (THIS DOT ID EQUAL ID SEMICOLON)*;
-createAnObjectStatement: dataType ID EQUAL NEW ID OPENPAREN (literal (COMMA literal)*) CLOSEPAREN SEMICOLON;  ///const myAnimal = new Animal("333",3);
-
-stringInterpolationStatement: SDOLLAR OPENBRACE THIS DOT ID CLOSEBRACE; //${}
 
 reacctDotHooks: REACT DOT hook  SEMICOLON;
 //reactHooks: REACT_HOOKS OPENPAREN (INTEGER | parameters | arrowFunction) CLOSEPAREN;
@@ -134,6 +163,9 @@ useContext:  USE_CONTEXT OPENPAREN CLOSEPAREN ;
 
 useRef: USE_REF OPENPAREN INTEGER? CLOSEPAREN ;
 
+////jsx
+
+jsxBlock: OPENPAREN jsx_element CLOSEPAREN;
 
 jsx_element:jsx_open_tag  (jsx_element|jsx_openSelf_close|jsx_Expreeion|element_js|jsx_text) * CLOSE_TAG;
 
