@@ -1,7 +1,6 @@
-import AST.Node;
+
 import AST.ProgramNode;
-import grammar.LexerGram;
-import grammar.ParserGram;
+import grammar.*;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
