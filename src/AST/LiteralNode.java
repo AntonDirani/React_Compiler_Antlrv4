@@ -1,3 +1,4 @@
+/*
 package AST;
 
 public class LiteralNode extends ExpressionNode {
@@ -14,3 +15,4 @@ public class LiteralNode extends ExpressionNode {
     }
 
 }
+*/

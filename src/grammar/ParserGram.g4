@@ -32,13 +32,13 @@ importStatement: IMPORT OPENBRACE? (ID | hook | REACT)? CLOSEBRACE? FROM? String
 exportDefault: EXPORT DEFAULT ID SEMICOLON;
 
 //Variable declaration rule
-variableDeclaration: dataType ID EQUAL variableValues SEMICOLON | letDecleration | varDeclaration;
+variableDeclaration: dataType ID (EQUAL variableValues )? SEMICOLON | letDecleration | varDeclaration;
 dataType: (VAR | LET | CONST );
-variableValues: (literal | hook | ID (DOT ID)?);
+variableValues:(literal | hook | ID (DOT ID)?);
 
-letDecleration: LET ID (EQUAL literal) | LET ID SEMICOLON;
+letDecleration: LET ID (EQUAL literal)? SEMICOLON;
 
-varDeclaration: VAR ID (EQUAL literal) | VAR ID SEMICOLON;
+varDeclaration: VAR ID (EQUAL literal)? SEMICOLON;
 
 //consoleLog: CONSOLE_LOG OPENPAREN StringLiteral CLOSEPAREN SEMICOLON;
 
@@ -46,7 +46,15 @@ varDeclaration: VAR ID (EQUAL literal) | VAR ID SEMICOLON;
 assignment: ID EQUAL variableValues SEMICOLON;
 
 // Expression can be a numeric literal or an identifier
-literal: INTEGER | FLOAT |  StringLiteral | BOOL_TRUE_FALSE | NULL |  useCallback | useContext | useRef ;
+literal: INTEGER #integerLiteral
+       | FLOAT   #floatLiteral
+       | StringLiteral #stringLiteral
+       | BOOL    #boolLiteral
+       | NULL    #null
+       | useCallback #uCallback
+       | useContext  #uContext
+       | useRef      #uRef
+       ;
 
 //forLoop: FOR OPENPAREN (varDeclaration | assignment ) SEMICOLON;
 
@@ -54,7 +62,10 @@ literal: INTEGER | FLOAT |  StringLiteral | BOOL_TRUE_FALSE | NULL |  useCallbac
 ///for statement
 forStatement: FOR OPENPAREN letDecleration SEMICOLON comparisonExpr SEMICOLON counterStatement CLOSEPAREN forBodyStatement;
 
-expr: ID | INTEGER | FLOAT ;
+expr: ID      #idExpr
+    | INTEGER #intExpr
+    | FLOAT   #floatExpr
+     ;
 
 comparisonExpr: expr LT expr
               | expr GT expr
@@ -69,7 +80,11 @@ whileStatement: WHILE OPENPAREN (comparisonExpr | BOOL_TRUE_FALSE ) CLOSEPAREN O
 
 counterStatement: expr((PLUS expr| MINUS expr| MULTIPLY expr | DIVIDE expr | PLUSPLUS | MINUSMINUS) |expr)+;
 
-logicalExpr: AND | OR | EQUALEQUAL | NOTEQUAL;
+logicalExpr: AND
+           | OR
+           | EQUALEQUAL
+           | NOTEQUAL
+           ;
 
 ifStatement: IF OPENPAREN((comparisonExpr | (comparisonExpr logicalExpr)* comparisonExpr) | BOOL_TRUE_FALSE )CLOSEPAREN OPENBRACE statement CLOSEBRACE;
 
@@ -84,7 +99,7 @@ ifElseIfStatement: ifStatement (ELSE ifStatement)+ elseStatemetn;
 
 ////function
 
-function: EXPORT* (functionDeclaration
+function: EXPORT* (       functionDeclaration
                           | functionExpr
                           | arrowFunction
                           | anonymousFunction)
@@ -103,7 +118,7 @@ anonymousFunction:dataType ID EQUAL OPENPAREN functionDeclaration CLOSEPAREN OPE
 
 parameters : OPENBRACE? ID (COMMA ID)* OPENBRACE? | /* Empty parameters */;
 
-block: OPENBRACE (reacctDotHooks| statement| hook |returnStatement| printOrLogStatement)* CLOSEBRACE;
+block: OPENBRACE (reacctDotHooks| hook |returnStatement| printOrLogStatement)? CLOSEBRACE;
 
 returnStatement : RETURN (ID | literal | jsxBlock | arrowFunction |  reactDotCreateElement)? SEMICOLON;
 

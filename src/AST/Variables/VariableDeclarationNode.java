@@ -1,3 +1,4 @@
+/*
 package AST.Variables;
 
 import AST.Node;
@@ -29,4 +30,4 @@ public class VariableDeclarationNode extends Node {
     public String toString() {
         return String.format("%s|{%s|%s|%s}", this.getClass().getSimpleName(), "Variabel Type: " + type, "Name: " + variableName, "Position: " + lineNum);
     }
-}
+}*/

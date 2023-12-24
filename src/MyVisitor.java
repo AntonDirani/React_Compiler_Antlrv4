@@ -1,3 +1,4 @@
+/*
 import  AST.*;
 
 import AST.Variables.VariableAssignmentNode;
@@ -12,20 +13,24 @@ public  class MyVisitor extends ParserGramBaseVisitor {
 
         ProgramNode programNode = new ProgramNode();
         //System.out.println(ctx.importStatement().size());
-       /* for (int i = 0; i < ctx.importStatement().size(); i++) {
+       */
+/* for (int i = 0; i < ctx.importStatement().size(); i++) {
             programNode.addChild((Node) visitImportStatement(ctx.importStatement(i)));
-        }*/
+        }*//*
+
 
             for (int i = 0; i < ctx.statement().size(); i++) {
                 Node node = (Node) visitStatement(ctx.statement(i));
                 programNode.addChild(node);
-                /*if (ctx.statement(i).variableDeclaration() != null) {
+                */
+/*if (ctx.statement(i).variableDeclaration() != null) {
                     LinkedList<Node> listnode = (LinkedList<Node>) visitStatement(ctx.statement(i));
                     programNode.addChildren(listnode);
                 } else {
                     Node node = (Node) visitStatement(ctx.statement(i));
                     programNode.addChild(node);
-                }*/
+                }*//*
+
             }
 
         return programNode;
@@ -88,19 +93,23 @@ public  class MyVisitor extends ParserGramBaseVisitor {
          Node value = null;
         if (ctx.literal() != null) {
             value= visitLiteral(ctx.literal());
-        }/* else if (ctx.hook() != null) {
+        }*/
+/* else if (ctx.hook() != null) {
             value= visitHook(ctx.hook());
-        }*/ else if (ctx.ID()!= null) {
+        }*//*
+ else if (ctx.ID()!= null) {
             value= new LiteralNode(ctx.ID(0).getText()) ;
         }
         return value;
     }
 
-    /*@Override
+    */
+/*@Override
     public Node visitHook(ParserGram.HookContext ctx) {
        // return super.visitHook(ctx);
         return Nod;
-    }*/
+    }*//*
+
 
     public Node visitVariableDeclaration(ParserGram.VariableDeclarationContext ctx ){
 
@@ -119,4 +128,4 @@ public  class MyVisitor extends ParserGramBaseVisitor {
 
 
 
-}
+}*/

@@ -1,4 +1,95 @@
 
+import AST.Program;
+
+import Visitor.MyVisitor;
+import grammar.LexerGram;
+import grammar.ParserGram;
+
+import org.antlr.v4.runtime.CharStream;
+
+import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.tree.ParseTree;
+
+
+import static org.antlr.v4.runtime.CharStreams.fromFileName;
+
+public class Main {
+    public static void main(String []args) throws Exception {
+        String source = "Files/test.txt";
+        CharStream charStream = fromFileName(source);
+        LexerGram lexer = new LexerGram(charStream);
+        CommonTokenStream tokens = new CommonTokenStream(lexer);
+        ParserGram parser = new ParserGram(tokens);
+        ParseTree ast = parser.program();
+        MyVisitor visitor = new MyVisitor();
+        Program program = (Program) visitor.visit(ast);
+        System.out.println(program);
+
+
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+import AST.Node;
 import AST.ProgramNode;
 import grammar.*;
 import org.antlr.v4.runtime.CharStream;
@@ -13,7 +104,7 @@ import static org.antlr.v4.runtime.CharStreams.fromFileName;
 
 public class Main {
     public static void main(String []args) throws Exception {
-       /* String source = "Files/test.txt";
+        String source = "Files/test.txt";
         CharStream charStream = fromFileName(source);
         LexerGram lexer = new LexerGram(charStream);
         CommonTokenStream tokens = new CommonTokenStream(lexer);
@@ -21,10 +112,10 @@ public class Main {
         ParseTree ast = parser.program();
         MyVisitor example1Visitor = new MyVisitor();
         Node program = (Node) example1Visitor.visit(ast);
-        System.out.println(program);*/
+        System.out.println(program);
 
 
-        String testFilepath = "Files/test.txt";
+        *//*String testFilepath = "Files/test.txt";
 
         // Initialize streams and parser
         CharStream charStream = CharStreams.fromFileName(testFilepath);
@@ -46,6 +137,6 @@ public class Main {
 
 
         writer.close();
-
+*//*
     }
-}
+}*/

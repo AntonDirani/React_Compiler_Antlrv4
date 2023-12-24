@@ -1,8 +1,6 @@
-import  React './App.css';
-import Flutter from 'Uikdsdsad';
 
 
-var tony = 5;
-let jamil = 'sdasd';
 
-anas = false;
+const myFunction = function(i) {
+    return 9;
+                               };

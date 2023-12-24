@@ -94,7 +94,7 @@ MODULUS:                        '%';
 SDOLLAR:                        '$';
 SINGLE_QUOTE: '\'';
 DOUBLE_QUOTE: '"';
-BOOL_TRUE_FALSE: 'true' | 'false';
+BOOL: 'true' | 'false';
 CREATE_ELEMENT: 'createElement';
 
 //logical operators

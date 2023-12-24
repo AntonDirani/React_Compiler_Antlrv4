@@ -1,3 +1,4 @@
+/*
 package AST;
 
 public class ParamterNode extends Node {
@@ -14,3 +15,4 @@ public class ParamterNode extends Node {
 
     }
 }
+*/

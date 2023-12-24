@@ -1,3 +1,4 @@
+/*
 package AST.Variables;
 import AST.Node;
 
@@ -23,3 +24,4 @@ public class VariableAssignmentNode extends ExpressionNode {
         return String.format("%s|%s", this.getClass().getSimpleName(),"Var Name: " + varName);
     }
 }
+*/
