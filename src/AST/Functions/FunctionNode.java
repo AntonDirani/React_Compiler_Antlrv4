@@ -1,4 +1,4 @@
-package AST.Functions;
+package AST.Function;
 
 public abstract class FunctionNode {
 }
