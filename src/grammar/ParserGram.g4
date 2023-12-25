@@ -74,7 +74,7 @@ comparisonExpr: expr LT expr
 
 forBodyStatement: OPENBRACE (forStatement | printOrLogStatement | ifStatement) CLOSEBRACE;
 
-printOrLogStatement: CONSOLE DOT LOG OPENPAREN (expr | StringLiteral | accessMethodInLogStatement)? CLOSEPAREN SEMICOLON;
+printOrLogStatement: CONSOLE DOT LOG OPENPAREN (expr | literal | accessMethodInLogStatement)? CLOSEPAREN SEMICOLON;
 
 whileStatement: WHILE OPENPAREN (comparisonExpr | BOOL_TRUE_FALSE ) CLOSEPAREN OPENBRACE (statement |counterStatement SEMICOLON)+ CLOSEBRACE;
 

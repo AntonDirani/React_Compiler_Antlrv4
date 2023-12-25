@@ -1,6 +1,8 @@
 
 
-
+var i  = 10;
 const myFunction = function(i) {
     return 9;
                                };
+
+console.log(9);

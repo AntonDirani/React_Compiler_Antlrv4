@@ -1,4 +1,5 @@
 package Visitor;
+import AST.*;
 import AST.Expr.Expr;
 import AST.Expr.FloatExpr;
 import AST.Expr.IdExpr;
@@ -7,10 +8,6 @@ import AST.Function.BlockOfFunction;
 import AST.Function.FunctionDeclaration;
 import AST.Function.ParametersOfFunction;
 import AST.Literal.*;
-import AST.Program;
-import AST.ReturnStatement;
-import AST.Statement;
-import AST.VariableDeclarationStatement;
 import grammar.ParserGram;
 import grammar.ParserGramBaseVisitor;
 
@@ -34,10 +31,29 @@ public class MyVisitor extends ParserGramBaseVisitor
 
 
     @Override
-    public Object visitStatement(ParserGram.StatementContext ctx) {
+    public Statement visitStatement(ParserGram.StatementContext ctx)
+    {
+
+        Statement statement;
+        if(ctx.variableDeclaration() != null)
+        {
+            statement = (Statement) visit(ctx.variableDeclaration());
+        }
+        else if(ctx.function() != null)
+        {
+            statement = (Statement) visit(ctx.function());
+        }else if(ctx.returnStatement()!= null)
+        {
+            statement = (Statement) visit(ctx.returnStatement());
+        }
+        else
+        {
+            statement = (Statement) visit(ctx.printOrLogStatement());
+        }
         //return super.visitStatement(ctx);
         //  return visit(ctx.variableDeclaration());
-        return visit(ctx.function());
+        // return visit(ctx.function());
+        return statement;
     }
 
     @Override
@@ -119,39 +135,7 @@ public class MyVisitor extends ParserGramBaseVisitor
         return super.visitNull(ctx);
     }
 
-    //Expr
-    @Override
-    public Expr visitIdExpr(ParserGram.IdExprContext ctx)
-    {
-        IdExpr idExpr = new IdExpr();
-        for( int i = 0 ; i < ctx.children.size();i++)
-        {
-            idExpr.addChild(ctx.ID().getText());
 
-        }
-        return idExpr;
-    }
-    @Override
-    public Expr visitIntExpr(ParserGram.IntExprContext ctx)
-    {
-        IntExpr intExpr = new IntExpr();
-        for( int i = 0 ; i < ctx.children.size();i++)
-        {
-            intExpr.addChild(Integer.parseInt(ctx.INTEGER().getText()));
-        }
-        return intExpr;
-    }
-    @Override
-
-    public Expr visitFloatExpr(ParserGram.FloatExprContext ctx) {
-        FloatExpr floatExpr = new FloatExpr();
-
-        for( int i = 0 ; i < ctx.children.size();i++)
-        {
-            floatExpr.addChild(Float.parseFloat(ctx.FLOAT().getText()));
-        }
-        return floatExpr;
-    }
     @Override
     public Statement visitFunction(ParserGram.FunctionContext ctx)
     {
@@ -209,6 +193,66 @@ public class MyVisitor extends ParserGramBaseVisitor
         }
 
         return returnStatement;
+    }
+
+    @Override
+    public Statement visitPrintOrLogStatement(ParserGram.PrintOrLogStatementContext ctx) {
+        // return (Statement) visit(ctx.expr()); // will return the expr
+        String consoleKeyWord = ctx.CONSOLE().getText();
+        String logKeyWord = ctx.LOG().getText();
+        //Statement expr = (Statement) visit(ctx.expr());
+        //Statement StringLiteral = (Statement) visit(ctx.StringLiteral());
+        Statement value;
+        if(ctx.expr() != null)
+        {
+            value = (Statement) visit(ctx.expr());
+        }
+        else if(ctx.literal() != null)
+        {
+            value = (Statement) visit(ctx.literal());
+        }
+        else
+        {
+            value = (Statement) visit(ctx.accessMethodInLogStatement());
+        }
+
+        return new PrintOrLogStatement(consoleKeyWord,logKeyWord,value);
+
+    }
+
+
+    //Expr
+    @Override
+    public Expr visitIdExpr(ParserGram.IdExprContext ctx)
+    {
+        IdExpr idExpr = new IdExpr();
+        for( int i = 0 ; i < ctx.children.size();i++)
+        {
+            idExpr.addChild(ctx.ID().getText());
+
+        }
+        return idExpr;
+    }
+    @Override
+    public Expr visitIntExpr(ParserGram.IntExprContext ctx)
+    {
+        IntExpr intExpr = new IntExpr();
+        for( int i = 0 ; i < ctx.children.size();i++)
+        {
+            intExpr.addChild(Integer.parseInt(ctx.INTEGER().getText()));
+        }
+        return intExpr;
+    }
+    @Override
+
+    public Expr visitFloatExpr(ParserGram.FloatExprContext ctx) {
+        FloatExpr floatExpr = new FloatExpr();
+
+        for( int i = 0 ; i < ctx.children.size();i++)
+        {
+            floatExpr.addChild(Float.parseFloat(ctx.FLOAT().getText()));
+        }
+        return floatExpr;
     }
 
 }
