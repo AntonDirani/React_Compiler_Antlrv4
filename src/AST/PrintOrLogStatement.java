@@ -15,6 +15,6 @@ public class PrintOrLogStatement extends Statement
 
     @Override
     public String toString() {
-        return String.format("Statement: %s , %s.%s(%s)", this.getClass().getSimpleName(), consoleKeyWord, logKeyWord,expr);
+        return String.format("%s : %s.%s(%s)", this.getClass().getSimpleName(), consoleKeyWord, logKeyWord,expr);
     }
 }

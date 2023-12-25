@@ -6,6 +6,15 @@ const myFunction = function(i) {
                                };
 
 console.log(9);
-
    i = 9;
    i = i;
+
+   var anonymousFunction = () =>
+   {
+    console.log("jjjj");
+   };
+
+   var anonymousFunction = function() {
+   return 9;
+
+   };

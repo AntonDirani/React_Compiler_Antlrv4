@@ -4,9 +4,7 @@ import AST.Expr.Expr;
 import AST.Expr.FloatExpr;
 import AST.Expr.IdExpr;
 import AST.Expr.IntExpr;
-import AST.Function.BlockOfFunction;
-import AST.Function.FunctionDeclaration;
-import AST.Function.ParametersOfFunction;
+import AST.Function.*;
 import AST.Literal.*;
 import grammar.ParserGram;
 import grammar.ParserGramBaseVisitor;
@@ -50,8 +48,8 @@ public class MyVisitor extends ParserGramBaseVisitor
         {
             statement = (Statement) visit(ctx.printOrLogStatement());
         }
-        //return super.visitStatement(ctx);
-        //  return visit(ctx.variableDeclaration());
+        // return super.visitStatement(ctx);
+        // return visit(ctx.variableDeclaration());
         // return visit(ctx.function());
         return statement;
     }
@@ -105,6 +103,8 @@ public class MyVisitor extends ParserGramBaseVisitor
 
     }
 
+    ////id
+
     ////literal
     @Override
     public Statement visitIntegerLiteral(ParserGram.IntegerLiteralContext ctx)
@@ -155,23 +155,79 @@ public class MyVisitor extends ParserGramBaseVisitor
         return super.visitNull(ctx);
     }
 
-
     @Override
     public Statement visitFunction(ParserGram.FunctionContext ctx)
     {
-        return (Statement) visit(ctx.functionExpr());
+        String exportKeyWord = ctx.EXPORT().toString();
+        Statement statement;
+        if(ctx.arrowFunction() != null)
+        {
+            statement = (Statement) visit(ctx.arrowFunction());
+        }else if(ctx.anonymousFunction() != null)
+        {
+            statement = (Statement) visit(ctx.anonymousFunction());
+        }
+        else{
+            statement = (Statement) visit(ctx.functionDeclaration());
+        }
+        return statement;
+    }
+
+    /*@Override
+    public Statement visitFunctionExpr(ParserGram.FunctionExprContext ctx)
+    {
+        String dataType = String.valueOf(visitDataType( ctx.dataType()));
+        String nameOfFunction =ctx.ID().getText();
+        Statement funcDecStatement = (Statement) visit(ctx.functionDeclaration());
+      //  return (Statement) visit(ctx.functionDeclaration());
+        return new FunctionExpr(dataType,nameOfFunction,funcDecStatement);
+    }*/
+
+    @Override
+    public Statement visitAnonymousFunction(ParserGram.AnonymousFunctionContext ctx)
+    {
+        String dataType = String.valueOf(visitDataType( ctx.dataType()));
+        String nameOfFunction =ctx.ID().getText();
+        Statement funcDecStatement = (Statement) visit(ctx.functionDeclaration());
+        //  return (Statement) visit(ctx.functionDeclaration());
+        return new AnonymousFunction(dataType,nameOfFunction,funcDecStatement);
+
     }
 
     @Override
-    public Statement visitFunctionExpr(ParserGram.FunctionExprContext ctx) {
-        return (Statement) visit(ctx.functionDeclaration());
+    public Statement visitArrowFunction(ParserGram.ArrowFunctionContext ctx)
+    {
+        String dataType = String.valueOf(visitDataType( ctx.dataType()));
+        String nameOfFunction =ctx.ID().getText();
+        Statement block = visitBlock(ctx.block());
+        Statement parameter = visitParameters(ctx.parameters());
+        if(ctx.parameters() != null)
+        {
+            return new ArrowFunction(dataType,nameOfFunction,parameter,block);
+        }
+        else
+        {
+            return new ArrowFunction(dataType,nameOfFunction,block);
+        }
+
+
     }
+
     @Override
     public Statement visitFunctionDeclaration(ParserGram.FunctionDeclarationContext ctx)
     {
         String function = ctx.FUNCTION().getText();
-        return new FunctionDeclaration(function,visitParameters(ctx.parameters()),visitBlock(ctx.block()));
+        Statement parameter = visitParameters(ctx.parameters());
+        Statement block = visitBlock(ctx.block());
+        if(ctx.parameters() != null)
+        {
+            return new FunctionDeclaration(function,parameter,block);
+        }else{
+            return new FunctionDeclaration(function,block);
+        }
+
     }
+
     @Override
     public Statement visitParameters(ParserGram.ParametersContext ctx) {
         ParametersOfFunction parameters = new ParametersOfFunction();
@@ -184,8 +240,19 @@ public class MyVisitor extends ParserGramBaseVisitor
     @Override
     public Statement visitBlock(ParserGram.BlockContext ctx)
     {
-        Statement s = visitReturnStatement(ctx.returnStatement());
-        return new BlockOfFunction(s);
+        Statement statement;
+        if(ctx.returnStatement() != null)
+        {
+            statement = visitReturnStatement(ctx.returnStatement());
+        }
+        else if(ctx.printOrLogStatement() != null) {
+            statement = visitPrintOrLogStatement(ctx.printOrLogStatement());
+        }
+        else{
+            //بدو تعديل
+            statement = (Statement) visitHook(ctx.hook());
+        }
+        return new BlockOfFunction(statement);
     }
     @Override
     public Statement visitReturnStatement(ParserGram.ReturnStatementContext ctx) {
@@ -207,6 +274,8 @@ public class MyVisitor extends ParserGramBaseVisitor
         // return (Statement) visit(ctx.expr()); // will return the expr
         String consoleKeyWord = ctx.CONSOLE().getText();
         String logKeyWord = ctx.LOG().getText();
+        //Statement expr = (Statement) visit(ctx.expr());
+        //Statement StringLiteral = (Statement) visit(ctx.StringLiteral());
         Statement value;
         if(ctx.expr() != null)
         {
@@ -220,9 +289,10 @@ public class MyVisitor extends ParserGramBaseVisitor
         {
             value = (Statement) visit(ctx.accessMethodInLogStatement());
         }
-        return new PrintOrLogStatement(consoleKeyWord,logKeyWord,value);
-    }
 
+        return new PrintOrLogStatement(consoleKeyWord,logKeyWord,value);
+
+    }
 
     //Expr
     @Override
@@ -256,8 +326,4 @@ public class MyVisitor extends ParserGramBaseVisitor
         }
         return floatExpr;
     }
-
-
-
 }
-

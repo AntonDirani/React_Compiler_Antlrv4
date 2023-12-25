@@ -4,15 +4,16 @@ import AST.Statement;
 
 public class BlockOfFunction extends Statement
 {
-    public Statement returnStatement;
+    public Statement statement;
 
-    public BlockOfFunction(Statement returnStatement) {
-        this.returnStatement = returnStatement;
+    public BlockOfFunction(Statement statement) {
+        this.statement = statement;
     }
 
     @Override
     public String toString() {
-        return "returnStatement: return " + returnStatement ;
+        return String.format(" %s ",statement);
+
     }
 }
 

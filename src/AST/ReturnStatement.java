@@ -17,8 +17,7 @@ public class ReturnStatement extends Statement
 
     @Override
     public String toString() {
-        return String.join(", ", val.stream().map(Object::toString).toArray(String[]::new));
-
+        return String.format("%s : return  %s", this.getClass().getSimpleName(), String.join(", ", val.stream().map(Object::toString).toArray(String[]::new)));
     }
 
 }

@@ -22,8 +22,15 @@ public class FunctionDeclaration extends AST.Function.Function
 
     @Override
     public String toString() {
-        return String.format("Statement: %s , funcKeyWord: %s , parameters: %s , block: %s", this.getClass().getSimpleName(),funcKeyWord,parameters,block);
 
+        if(parameters != null)
+        {
+            return String.format("TypeOfFunction: %s , funcKeyWord: %s , parameters: %s , block{ %s }", this.getClass().getSimpleName(), funcKeyWord, parameters, block);
+        }
+        else
+        {
+            return String.format("TypeOfFunction: %s , funcKeyWord: %s , block{ %s }", this.getClass().getSimpleName(),funcKeyWord,block);
+        }
     }
 }
 

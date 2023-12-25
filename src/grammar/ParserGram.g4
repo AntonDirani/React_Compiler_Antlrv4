@@ -100,22 +100,22 @@ ifElseIfStatement: ifStatement (ELSE ifStatement)+ elseStatemetn;
 
 ////function
 
-function: EXPORT* (       functionDeclaration
-                          | functionExpr
-                          | arrowFunction
-                          | anonymousFunction)
-                          ;
+function: EXPORT* ( functionDeclaration
+                  | arrowFunction
+                  | anonymousFunction)
+                  ;
 functionDeclaration: FUNCTION (ID)? OPENPAREN parameters CLOSEPAREN block;
 
 callFunction: ID OPENPAREN parameters CLOSEPAREN SEMICOLON;
 
-functionExpr: dataType ID EQUAL functionDeclaration SEMICOLON;
+anonymousFunction: dataType ID EQUAL functionDeclaration SEMICOLON;
+
 
 ////type of function
 
 arrowFunction: (dataType ID EQUAL)? OPENPAREN parameters CLOSEPAREN EQUAL GT block SEMICOLON;
 
-anonymousFunction:dataType ID EQUAL OPENPAREN functionDeclaration CLOSEPAREN OPENPAREN CLOSEPAREN SEMICOLON;
+//anonymousFunction:dataType ID EQUAL OPENPAREN functionDeclaration CLOSEPAREN OPENPAREN CLOSEPAREN SEMICOLON;
 
 parameters : OPENBRACE? ID (COMMA ID)* OPENBRACE? | /* Empty parameters */;
 
