@@ -7,6 +7,7 @@ import AST.Expr.IntExpr;
 import AST.Function.*;
 import AST.Literal.*;
 import AST.ReactHooks.PairValue;
+import AST.ReactHooks.UseEffectStatement;
 import AST.ReactHooks.UseStateStatement;
 import grammar.ParserGram;
 import grammar.ParserGramBaseVisitor;
@@ -35,6 +36,7 @@ public class MyVisitor extends ParserGramBaseVisitor
     {
 
         Statement statement;
+
         if(ctx.variableDeclaration() != null)
         {
             statement = (Statement) visit(ctx.variableDeclaration());
@@ -42,13 +44,17 @@ public class MyVisitor extends ParserGramBaseVisitor
         else if(ctx.function() != null)
         {
             statement = (Statement) visit(ctx.function());
+        }
+        else if(ctx.importStatement() != null)
+        {
+            statement = (Statement) visit(ctx.importStatement());
         }else if(ctx.assignment()!= null)
         {
             statement = (Statement) visit(ctx.assignment());
         }
-        else if(ctx.useState()!= null)
+        else if(ctx.useEffect()!= null)
         {
-            statement = (Statement) visit(ctx.useState());
+            statement = (Statement) visit(ctx.useEffect());
         }
         else
         {
@@ -110,7 +116,21 @@ public class MyVisitor extends ParserGramBaseVisitor
     }
 
     ////id
+    @Override
+    public Statement visitImportStatement(ParserGram.ImportStatementContext ctx) {
+        String importPath = ctx.StringLiteral().getText();
+        String libraryName = "";
+        if (ctx.ID()!=null){
+            libraryName = ctx.ID().getText();
+        }
+        if (ctx.REACT()!=null){
+            libraryName = ctx.REACT().getText();
+        }
+        //TODO: call hook here
 
+
+        return new ImportStatement(importPath,libraryName);
+    }
     ////literal
     @Override
     public Statement visitIntegerLiteral(ParserGram.IntegerLiteralContext ctx)
@@ -370,6 +390,20 @@ public class MyVisitor extends ParserGramBaseVisitor
 
     }
 
+    @Override
+    public Object visitUseEffect(ParserGram.UseEffectContext ctx) {
+        Statement arrowFunction = null;
+        Statement block = null;
+        if (ctx.arrowFunction()!=null){
+            arrowFunction = (Statement)  visitArrowFunction(ctx.arrowFunction());
+        }
+        if (ctx.block()!=null){
+            block = (Statement) visitBlock(ctx.block());
+        }
+
+        return new UseEffectStatement(arrowFunction,block);
+
+    }
 
     @Override
     public Object visitPairValue(ParserGram.PairValueContext ctx) {
