@@ -42,9 +42,9 @@ public class MyVisitor extends ParserGramBaseVisitor
         else if(ctx.function() != null)
         {
             statement = (Statement) visit(ctx.function());
-        }else if(ctx.returnStatement()!= null)
+        }else if(ctx.assignment()!= null)
         {
-            statement = (Statement) visit(ctx.returnStatement());
+            statement = (Statement) visit(ctx.assignment());
         }
         else
         {
@@ -78,6 +78,15 @@ public class MyVisitor extends ParserGramBaseVisitor
         }
         return type;
     }
+
+    @Override
+    public Statement visitAssignment(ParserGram.AssignmentContext ctx)
+    {
+        String id = ctx.ID().getText();
+        Statement value = (Statement) visit(ctx.variableValues());
+        return new AssignmentStatement(id,value);
+    }
+
     @Override
     public Statement visitVariableValues(ParserGram.VariableValuesContext ctx)
     {
@@ -85,6 +94,7 @@ public class MyVisitor extends ParserGramBaseVisitor
         return (Statement) visit(ctx.literal());
 
     }
+
     ////literal
     @Override
     public Statement visitIntegerLiteral(ParserGram.IntegerLiteralContext ctx)
@@ -148,23 +158,10 @@ public class MyVisitor extends ParserGramBaseVisitor
     }
     @Override
     public Statement visitFunctionDeclaration(ParserGram.FunctionDeclarationContext ctx)
-    {String function = ctx.FUNCTION().getText();
-        //return visitParameters(ctx.parameters());
-        // return  visitBlock(ctx.block());
+    {
+        String function = ctx.FUNCTION().getText();
         return new FunctionDeclaration(function,visitParameters(ctx.parameters()),visitBlock(ctx.block()));
     }
-    /* @Override
-     public Statement visitParameters(ParserGram.ParametersContext ctx) {
-         ParametersOfFunction parameters = new ParametersOfFunction();
-         for (int i = 0; i < ctx.children.size(); i++) {
-             //parameters.addChild(ctx.ID().get(i).toString());
-             if(ctx.ID() != null)
-                 parameters.addChild(ctx.ID().get(i).toString());
-             else
-                parameters.addChild(ctx.ID(i).getText());
-         }
-         return parameters;
-     }*/
     @Override
     public Statement visitParameters(ParserGram.ParametersContext ctx) {
         ParametersOfFunction parameters = new ParametersOfFunction();
@@ -200,8 +197,6 @@ public class MyVisitor extends ParserGramBaseVisitor
         // return (Statement) visit(ctx.expr()); // will return the expr
         String consoleKeyWord = ctx.CONSOLE().getText();
         String logKeyWord = ctx.LOG().getText();
-        //Statement expr = (Statement) visit(ctx.expr());
-        //Statement StringLiteral = (Statement) visit(ctx.StringLiteral());
         Statement value;
         if(ctx.expr() != null)
         {
@@ -215,9 +210,7 @@ public class MyVisitor extends ParserGramBaseVisitor
         {
             value = (Statement) visit(ctx.accessMethodInLogStatement());
         }
-
         return new PrintOrLogStatement(consoleKeyWord,logKeyWord,value);
-
     }
 
 
@@ -244,7 +237,6 @@ public class MyVisitor extends ParserGramBaseVisitor
         return intExpr;
     }
     @Override
-
     public Expr visitFloatExpr(ParserGram.FloatExprContext ctx) {
         FloatExpr floatExpr = new FloatExpr();
 
@@ -254,6 +246,8 @@ public class MyVisitor extends ParserGramBaseVisitor
         }
         return floatExpr;
     }
+
+
 
 }
 

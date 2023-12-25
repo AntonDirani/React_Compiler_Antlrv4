@@ -15,12 +15,6 @@ public class PrintOrLogStatement extends Statement
 
     @Override
     public String toString() {
-       /* return "PrintOrLogStatement{" +
-                "expr:" + expr +
-                '}';*/
-        // return + String.join(", ", val.stream().map(Object::toString).toArray(String[]::new));
         return String.format("Statement: %s , %s.%s(%s)", this.getClass().getSimpleName(), consoleKeyWord, logKeyWord,expr);
-
-
     }
 }
