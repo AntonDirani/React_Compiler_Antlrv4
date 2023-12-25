@@ -34,7 +34,8 @@ exportDefault: EXPORT DEFAULT ID SEMICOLON;
 //Variable declaration rule
 variableDeclaration: dataType ID (EQUAL variableValues )? SEMICOLON | letDecleration | varDeclaration;
 dataType: (VAR | LET | CONST );
-variableValues:(literal | hook | ID (DOT ID)?);
+//variableValues:(literal | hook | ID (DOT ID)?);
+variableValues:(literal | hook |expr| ID (DOT ID)?);
 
 letDecleration: LET ID (EQUAL literal)? SEMICOLON;
 

@@ -90,8 +90,18 @@ public class MyVisitor extends ParserGramBaseVisitor
     @Override
     public Statement visitVariableValues(ParserGram.VariableValuesContext ctx)
     {
-
-        return (Statement) visit(ctx.literal());
+        //value of variable is literal or idExpr or hook
+        //just add hook
+        Statement statement;
+        if(ctx.literal() != null )
+        {
+            statement = (Statement) visit(ctx.literal());
+        }
+        else
+        {
+            statement =(Statement) visit(ctx.expr());
+        }
+        return statement;
 
     }
 
