@@ -6,6 +6,8 @@ import AST.Expr.IdExpr;
 import AST.Expr.IntExpr;
 import AST.Function.*;
 import AST.Literal.*;
+import AST.ReactHooks.PairValue;
+import AST.ReactHooks.UseStateStatement;
 import grammar.ParserGram;
 import grammar.ParserGramBaseVisitor;
 
@@ -43,6 +45,10 @@ public class MyVisitor extends ParserGramBaseVisitor
         }else if(ctx.assignment()!= null)
         {
             statement = (Statement) visit(ctx.assignment());
+        }
+        else if(ctx.useState()!= null)
+        {
+            statement = (Statement) visit(ctx.useState());
         }
         else
         {
@@ -196,9 +202,16 @@ public class MyVisitor extends ParserGramBaseVisitor
 
     @Override
     public Statement visitArrowFunction(ParserGram.ArrowFunctionContext ctx)
-    {
-        String dataType = String.valueOf(visitDataType( ctx.dataType()));
-        String nameOfFunction =ctx.ID().getText();
+    {    String dataType ="null";
+
+        String nameOfFunction = "null";
+        if (ctx.dataType()!= null)
+        {
+           dataType = String.valueOf(visitDataType( ctx.dataType()));
+        }
+        if (ctx.ID()!=null){
+            nameOfFunction =ctx.ID().getText();
+        }
         Statement block = visitBlock(ctx.block());
         Statement parameter = visitParameters(ctx.parameters());
         if(ctx.parameters() != null)
@@ -325,5 +338,41 @@ public class MyVisitor extends ParserGramBaseVisitor
             floatExpr.addChild(Float.parseFloat(ctx.FLOAT().getText()));
         }
         return floatExpr;
+    }
+
+
+    @Override
+    public Statement visitUseState(ParserGram.UseStateContext ctx) {
+
+        Statement pairValue = new PairValue("","");
+        Statement contructorValue = null;
+
+           if (!ctx.pairValue().isEmpty()){
+
+               pairValue = (Statement) visit(ctx.pairValue());
+
+           }
+           if (
+                   ctx.INTEGER()!=null
+           ){
+               IntegerLiteral integerLiteral = new IntegerLiteral();
+               integerLiteral.addChild(Integer.parseInt(ctx.INTEGER().getText()));
+               contructorValue = integerLiteral;
+           }
+           else if(ctx.parameters()!= null) {
+               contructorValue = (Statement) visitParameters(ctx.parameters());
+           }
+           else {
+               contructorValue = (Statement) visitArrowFunction(ctx.arrowFunction());
+           }
+
+        return new UseStateStatement(pairValue, contructorValue);
+
+    }
+
+
+    @Override
+    public Object visitPairValue(ParserGram.PairValueContext ctx) {
+        return new PairValue(ctx.ID(0).getText(), ctx.ID(1).getText());
     }
 }

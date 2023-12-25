@@ -23,6 +23,7 @@ statement: classDeclaration
          | stringInterpolationStatement
          | exportDefault
          | returnStatement //consoleLog
+         | useState
          ;
 
 
@@ -113,7 +114,7 @@ anonymousFunction: dataType ID EQUAL functionDeclaration SEMICOLON;
 
 ////type of function
 
-arrowFunction: (dataType ID EQUAL)? OPENPAREN parameters CLOSEPAREN EQUAL GT block SEMICOLON;
+arrowFunction: (dataType ID EQUAL)? OPENPAREN parameters CLOSEPAREN EQUAL GT block SEMICOLON?;
 
 //anonymousFunction:dataType ID EQUAL OPENPAREN functionDeclaration CLOSEPAREN OPENPAREN CLOSEPAREN SEMICOLON;
 
@@ -170,7 +171,9 @@ reacctDotHooks: REACT DOT hook  SEMICOLON;
 //hook: USE_STATE | USE_EFFECT | USE_CALLBACK 3 | USE_CONTEXT | USE_REF;
 
 hook: useState | useEffect | useCallback | useContext | useRef | USE_STATE;
-useState: (CONST? OPENBRACKET ID COMMA ID CLOSEBRACKET EQUAL)? USE_STATE OPENPAREN (INTEGER | parameters | arrowFunction)? CLOSEPAREN SEMICOLON? ;
+useState: CONST? pairValue? USE_STATE OPENPAREN (INTEGER | parameters | arrowFunction)? CLOSEPAREN SEMICOLON? ;
+pairValue:OPENBRACKET ID COMMA ID CLOSEBRACKET EQUAL;
+
 useEffect: USE_EFFECT OPENPAREN arrowFunction? block? CLOSEPAREN ;
 clickHandler: CONST CLICK_HANDLER EQUAL arrowFunction;
 useCallback: USE_CALLBACK OPENPAREN parameters COMMA block CLOSEPAREN ;
