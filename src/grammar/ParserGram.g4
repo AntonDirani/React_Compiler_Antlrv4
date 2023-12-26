@@ -23,7 +23,7 @@ statement: classDeclaration
          | stringInterpolationStatement
          | exportDefault
          | returnStatement //consoleLog
-         | useEffect
+
 
          ;
 
@@ -177,9 +177,9 @@ pairValue:OPENBRACKET ID COMMA ID CLOSEBRACKET EQUAL;
 
 useEffect: USE_EFFECT OPENPAREN arrowFunction? block? CLOSEPAREN SEMICOLON?;
 clickHandler: CONST CLICK_HANDLER EQUAL arrowFunction;
-useCallback: USE_CALLBACK OPENPAREN parameters COMMA block CLOSEPAREN ;
+useCallback: USE_CALLBACK OPENPAREN parameters? arrowFunction? CLOSEPAREN SEMICOLON? ;
 
-useContext:  USE_CONTEXT OPENPAREN CLOSEPAREN ;
+useContext:  USE_CONTEXT OPENPAREN ID CLOSEPAREN SEMICOLON? ;
 
 useRef: USE_REF OPENPAREN INTEGER? CLOSEPAREN ;
 

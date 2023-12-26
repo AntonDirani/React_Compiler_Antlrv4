@@ -6,13 +6,10 @@ import AST.Expr.IdExpr;
 import AST.Expr.IntExpr;
 import AST.Function.*;
 import AST.Literal.*;
-import AST.ReactHooks.PairValue;
-import AST.ReactHooks.UseEffectStatement;
-import AST.ReactHooks.UseStateStatement;
+import AST.React.ClickHandlerStatement;
+import AST.React.ReactHooks.*;
 import grammar.ParserGram;
 import grammar.ParserGramBaseVisitor;
-
-import org.antlr.v4.runtime.tree.ParseTree;
 
 public class MyVisitor extends ParserGramBaseVisitor
 {
@@ -52,9 +49,9 @@ public class MyVisitor extends ParserGramBaseVisitor
         {
             statement = (Statement) visit(ctx.assignment());
         }
-        else if(ctx.useEffect()!= null)
+        else if(ctx.useRef()!= null)
         {
-            statement = (Statement) visit(ctx.useEffect());
+            statement = (Statement) visit(ctx.useRef());
         }
         else
         {
@@ -106,6 +103,10 @@ public class MyVisitor extends ParserGramBaseVisitor
         if(ctx.literal() != null )
         {
             statement = (Statement) visit(ctx.literal());
+        }
+        else if (ctx.hook()!= null)
+        {
+            statement =(Statement) visit(ctx.hook());
         }
         else
         {
@@ -403,6 +404,71 @@ public class MyVisitor extends ParserGramBaseVisitor
 
         return new UseEffectStatement(arrowFunction,block);
 
+    }
+
+    @Override
+    public Object visitUseCallback(ParserGram.UseCallbackContext ctx) {
+        Statement parameters = null;
+        Statement arrowFunction = null;
+
+        if (ctx.parameters()!=null){
+            parameters= (Statement) visit(ctx.parameters());
+        }
+        arrowFunction = (Statement)  visit(ctx.arrowFunction());
+        return new UseCallbackStatement(parameters,arrowFunction);
+
+    }
+
+    @Override
+    public Object visitHook(ParserGram.HookContext ctx) {
+        Statement reactHook = null;
+        if (ctx.useState()!=null){
+            reactHook = (Statement) visit(ctx.useState());
+        }
+        else if (ctx.useState()!=null){
+            reactHook = (Statement) visit(ctx.useState());
+        }
+        else if (ctx.useRef()!=null){
+            reactHook = (Statement) visit(ctx.useRef());
+        }
+        else if (ctx.useCallback()!=null){
+            reactHook = (Statement) visit(ctx.useCallback());
+        }
+        else if (ctx.useEffect()!=null){
+            reactHook = (Statement) visit(ctx.useEffect());
+        }
+        else if (ctx.useContext()!=null){
+            reactHook = (Statement) visit(ctx.useContext());
+        }
+        return new HookStatement(reactHook);
+    }
+
+    @Override
+    public Object visitUseContext(ParserGram.UseContextContext ctx) {
+        String context = "";
+        if (ctx.ID()!=null){
+            context = ctx.ID().getText();
+        }
+        return new UseContextStatement(context);
+    }
+
+    @Override
+    public Object visitUseRef(ParserGram.UseRefContext ctx) {
+        int param = 0;
+        if (ctx.INTEGER()!=null){
+
+            param = Integer.parseInt(ctx.INTEGER().getText());
+            return new UseRefStatement(param);
+        }
+        return new UseRefStatement();
+
+    }
+
+    @Override
+    public Object visitClickHandler(ParserGram.ClickHandlerContext ctx) {
+        Statement arrowFunction;
+        arrowFunction = (Statement) visit(ctx.arrowFunction());
+        return new ClickHandlerStatement(arrowFunction);
     }
 
     @Override

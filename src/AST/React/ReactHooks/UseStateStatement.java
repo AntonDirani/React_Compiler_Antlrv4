@@ -1,4 +1,4 @@
-package AST.ReactHooks;
+package AST.React.ReactHooks;
 
 import AST.Statement;
 

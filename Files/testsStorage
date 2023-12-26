@@ -1,0 +1,32 @@
+
+import Something from "dsdadas";
+
+useEffect(() => {
+  console.log('Effect executed!');
+});
+
+[x, y] = useState(5);
+useContext(something);
+useRef(6);
+ useCallback((event) => {
+  console.log('Button clicked!');
+});
+
+var i  = 10;
+const myFunction = function(i) {
+    return 9;
+                               };
+
+console.log(9);
+   i = 9;
+   i = i;
+
+   var anonymousFunction = () =>
+   {
+    console.log("jjjj");
+   };
+
+   var anonymousFunction = function() {
+   return 9;
+
+   };

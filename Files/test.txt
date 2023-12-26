@@ -1,20 +1,9 @@
+var tony = useContext(something);
 
 
-var i  = 10;
-const myFunction = function(i) {
-    return 9;
-                               };
+var test = useRef(2);
 
-console.log(9);
-   i = 9;
-   i = i;
 
-   var anonymousFunction = () =>
-   {
-    console.log("jjjj");
-   };
-
-   var anonymousFunction = function() {
-   return 9;
-
-   };
+let test2 =  useCallback((event) => {
+              console.log('Button clicked!');
+            });

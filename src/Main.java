@@ -11,6 +11,10 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 
+import java.io.File;
+import java.io.PrintStream;
+import java.nio.file.Path;
+
 import static org.antlr.v4.runtime.CharStreams.fromFileName;
 
 public class Main {
@@ -23,7 +27,28 @@ public class Main {
         ParseTree ast = parser.program();
         MyVisitor visitor = new MyVisitor();
         Program program = (Program) visitor.visit(ast);
-        System.out.println(program);
+        // Creating a File object that
+        // represents the disk file
+        PrintStream o = new PrintStream(new File("AST_Output.txt"));
+
+        // Store current System.out
+        // before assigning a new value
+        PrintStream console = System.out;
+
+        // Assign o to output stream
+        // using setOut() method
+        System.setOut(o);
+
+        // Display message only
+        System.out.println(
+                program);
+
+        // Use stored value for output stream
+        System.setOut(console);
+
+        // Display message only
+        System.out.println(
+                program);
 
 
     }
