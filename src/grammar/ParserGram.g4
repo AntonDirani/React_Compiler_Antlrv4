@@ -6,7 +6,8 @@ program:statement* EOF;
 
 
 //Statement can be a variable declaration, an assignment, or a string declaration
-statement: classDeclaration
+statement:classDeclaration
+         |inheritsClassDeclaration
          | importStatement
          | variableDeclaration
          | assignment
@@ -24,8 +25,6 @@ statement: classDeclaration
          | exportDefault
          | returnStatement
          | jsxBlock //consoleLog
-
-
          ;
 
 
@@ -109,7 +108,8 @@ function: EXPORT* ( functionDeclaration
                   ;
 functionDeclaration: FUNCTION (ID)? OPENPAREN parameters CLOSEPAREN block;
 
-callFunction: ID OPENPAREN parameters CLOSEPAREN SEMICOLON;
+callFunction: bodyOfCall SEMICOLON;
+bodyOfCall:ID OPENPAREN parameters CLOSEPAREN;
 
 anonymousFunction: dataType ID EQUAL functionDeclaration SEMICOLON;
 
@@ -128,15 +128,14 @@ returnStatement : RETURN (ID | literal | jsxBlock | arrowFunction |  reactDotCre
 
 ////class
 
-classDeclaration: class+ | class inheritsClass*;
 
-class : CLASS ID OPENBRACE bodyOfClass CLOSEBRACE ;
+classDeclaration : CLASS ID OPENBRACE bodyOfClass? CLOSEBRACE ;
+inheritsClassDeclaration : CLASS idExtendsId OPENBRACE bodyOfClass? CLOSEBRACE ;
+idExtendsId:ID EXTENDS ID;
 
-inheritsClass : CLASS ID  EXTENDS ID OPENBRACE bodyOfClass CLOSEBRACE ;
-
-bodyOfClass:  constructorMethod methodDeclaration* | statement*;
+bodyOfClass:  methodDeclaration*; //| statement*;
 ////method in class
-methodDeclaration : method | staticMethod;
+methodDeclaration : constructorMethod | method | staticMethod;
 
 method: ID OPENPAREN  parameters CLOSEPAREN  OPENBRACE bodyOfMethod CLOSEBRACE ;
 
@@ -149,12 +148,13 @@ constructorMethod:  CONSTRUCTOR OPENPAREN parameters CLOSEPAREN OPENBRACE bodyOf
 
 bodyOfConstructor: (THIS DOT ID EQUAL ID SEMICOLON)*;
 
-callMethod: ID DOT callFunction;
+callMethod: ID DOT bodyOfCall SEMICOLON;
 
-accessMethodInLogStatement: ID OPENPAREN parameters CLOSEPAREN  | ID DOT ID OPENPAREN parameters CLOSEPAREN;
+accessMethodInLogStatement: bodyOfCall | ID DOT bodyOfCall;
 
-createAnObjectStatement: dataType ID EQUAL NEW ID OPENPAREN (literal (COMMA literal)*) CLOSEPAREN SEMICOLON;  ///const myAnimal = new Animal("333",3);
-
+createAnObjectStatement: dataType ID EQUAL bodyOfObject SEMICOLON;
+bodyOfObject: NEW ID OPENPAREN literalOrMore CLOSEPAREN;
+literalOrMore: literal (COMMA literal)* ;
 stringInterpolationStatement: SDOLLAR OPENBRACE THIS DOT ID CLOSEBRACE; //${}
 
 ////react

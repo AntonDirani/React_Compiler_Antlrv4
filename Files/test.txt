@@ -2,3 +2,18 @@
   <div className="grid-container">
  </div>
  )
+
+ class Animal {
+   constructor(name, age) {
+     this.name = name;
+     this.age = age;
+   }
+
+   getInfo() {
+    return '${this.name} is ${this.age} years old.';
+   }
+
+   static greet() {
+     console.log("Hello from the Animal class!");
+   }
+ }

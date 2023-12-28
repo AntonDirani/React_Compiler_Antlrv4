@@ -1,5 +1,6 @@
 package Visitor;
 import AST.*;
+import AST.Class.*;
 import AST.Expr.Expr;
 import AST.Expr.FloatExpr;
 import AST.Expr.IdExpr;
@@ -7,6 +8,7 @@ import AST.Expr.IntExpr;
 import AST.Function.*;
 import AST.JSX.*;
 import AST.Literal.*;
+import AST.Method.*;
 import AST.React.ClickHandlerStatement;
 import AST.React.ReactHooks.*;
 import grammar.ParserGram;
@@ -37,22 +39,55 @@ public class MyVisitor extends ParserGramBaseVisitor
 
         Statement statement;
 
-        if(ctx.variableDeclaration() != null)
+        if(ctx.classDeclaration()!= null)
+        {
+            statement = (Statement) visit(ctx.classDeclaration());
+        }
+        else if(ctx.inheritsClassDeclaration() != null)
+        {
+            statement = (Statement) visit(ctx.inheritsClassDeclaration());
+        }else if(ctx.importStatement() != null)
+        {
+            statement = (Statement) visit(ctx.importStatement());
+        }
+        else if(ctx.variableDeclaration() != null)
         {
             statement = (Statement) visit(ctx.variableDeclaration());
+        }else if(ctx.assignment()!= null)
+        {
+            statement = (Statement) visit(ctx.assignment());
         }
         else if(ctx.function() != null)
         {
             statement = (Statement) visit(ctx.function());
         }
+        else if(ctx.callStatement() != null)
+        {
+            statement = (Statement) visit(ctx.callStatement());
+        }//if
+        //for
+        //while
+        //counter
+        //if else
+        //if else if
+        else if(ctx.createAnObjectStatement() != null)
+        {
+            statement = (Statement) visit(ctx.createAnObjectStatement());
+        }
+        else if(ctx.stringInterpolationStatement()!= null)
+        {
+            statement = (Statement) visit(ctx.stringInterpolationStatement());
+        }
+        else if(ctx.returnStatement()!= null)
+        {
+            statement = (Statement) visit(ctx.returnStatement());
+        }
+        //export
         else if(ctx.jsxBlock() != null)
         {
             statement = (Statement) visit(ctx.jsxBlock());
         }
-        else if(ctx.importStatement() != null)
-        {
-            statement = (Statement) visit(ctx.importStatement());
-        }else if(ctx.assignment()!= null)
+        else if(ctx.assignment()!= null)
         {
             statement = (Statement) visit(ctx.assignment());
         }
@@ -64,12 +99,176 @@ public class MyVisitor extends ParserGramBaseVisitor
         {
             statement = (Statement) visit(ctx.printOrLogStatement());
         }
-        // return super.visitStatement(ctx);
-        // return visit(ctx.variableDeclaration());
-        // return visit(ctx.function());
         return statement;
     }
 
+    ///class & method
+
+    @Override
+    public Statement visitClassDeclaration(ParserGram.ClassDeclarationContext ctx) {
+        String classKeyWord = ctx.CLASS().getText();
+        String  nameOfClass = ctx.ID().getText();
+        Statement bodyOfClass = visitBodyOfClass(ctx.bodyOfClass());
+
+        if(ctx.bodyOfClass() != null)
+        {
+            return new NormalClass(classKeyWord,nameOfClass,bodyOfClass);
+        }
+        else
+        {
+            return new NormalClass(classKeyWord,nameOfClass);
+        }
+    }
+
+    @Override
+    public Statement visitInheritsClassDeclaration(ParserGram.InheritsClassDeclarationContext ctx) {
+        String classKeyWord = ctx.CLASS().getText();
+        Statement bodyOfClass = visitBodyOfClass(ctx.bodyOfClass());
+        Statement idExtendsId = visitIdExtendsId(ctx.idExtendsId());
+        if(ctx.bodyOfClass() != null)
+        {
+            return new InheritsClass(classKeyWord,idExtendsId,bodyOfClass);
+        }
+        else
+        {
+            return new InheritsClass(classKeyWord,idExtendsId);
+        }
+    }
+
+    @Override
+    public Statement visitIdExtendsId(ParserGram.IdExtendsIdContext ctx)
+    {
+        ExtendsId id = new ExtendsId();
+        for (int i = 0; i < ctx.ID().size(); i++)
+        {
+            id.addChild(ctx.ID(i).getText());
+        }
+        return  id;
+    }
+
+    @Override
+    public Statement visitBodyOfClass(ParserGram.BodyOfClassContext ctx)
+    {
+        BodyOfClass bodyOfClass = new BodyOfClass();
+        for(int i = 0; i < ctx.methodDeclaration().size() ; i++)
+        {
+            MethodDeclaration methodDeclaration = (MethodDeclaration) visitMethodDeclaration(ctx.methodDeclaration(i));
+            bodyOfClass.addChild(methodDeclaration);
+        }
+        return bodyOfClass;
+    }
+
+    @Override
+    public Statement visitMethodDeclaration(ParserGram.MethodDeclarationContext ctx) {
+        Statement statement;
+        if (ctx.method() != null) {
+            statement = visitMethod(ctx.method());
+
+        } else if (ctx.staticMethod() != null)
+        {
+            statement = visitStaticMethod(ctx.staticMethod());
+        }else
+        {
+            statement = visitConstructorMethod(ctx.constructorMethod());
+        }
+
+        return statement;
+    }
+    @Override
+    public Statement visitMethod(ParserGram.MethodContext ctx) {
+        //id ,para,body
+        String nameOfMethod = ctx.ID().getText();
+        Statement parameters =visitParameters(ctx.parameters());
+        Statement bodyOfMethod = visitBodyOfMethod(ctx.bodyOfMethod());
+
+        if(ctx.parameters() != null) {
+            return new NormalMethod(nameOfMethod, parameters, bodyOfMethod);
+        }
+        else
+        {
+            return  new NormalMethod(nameOfMethod,bodyOfMethod);
+
+        }
+    }
+
+    @Override
+    public Statement visitStaticMethod(ParserGram.StaticMethodContext ctx) {
+
+        String staticKeyWord = ctx.STATIC().getText();
+        Statement method =  visitMethod(ctx.method());
+        return new StaticMethod(staticKeyWord,method);
+    }
+    @Override
+    public Statement visitBodyOfMethod(ParserGram.BodyOfMethodContext ctx)
+    {
+        BodyOfMethod bodyOfMethod = new BodyOfMethod();
+        for(int i = 0; i < ctx.statement().size() ; i++)
+        {
+            Statement s =  visitStatement(ctx.statement(i));
+
+            bodyOfMethod.addChild(s);
+        }
+        return bodyOfMethod;
+
+    }
+
+    @Override
+    public Statement visitConstructorMethod(ParserGram.ConstructorMethodContext ctx)
+    {
+        String constructorKeyWord = ctx.CONSTRUCTOR().getText();
+        Statement parameter = visitParameters(ctx.parameters());
+        Statement bodyOfConstructor =  visitBodyOfConstructor(ctx.bodyOfConstructor());
+
+        return new ConstructorMethod(constructorKeyWord,parameter,bodyOfConstructor);
+    }
+
+    @Override
+    public Statement visitBodyOfConstructor(ParserGram.BodyOfConstructorContext ctx)
+    {
+
+        String thisKeyWord = ctx.THIS().toString();
+        //String id = ctx.ID().toString();
+
+        ConstructorBody id = new ConstructorBody();
+        for (int i = 0; i < ctx.ID().size(); i++) {
+            id.addChild(ctx.ID(i).getText());
+        }
+        return id;
+    }
+
+    @Override
+    public Statement visitCreateAnObjectStatement(ParserGram.CreateAnObjectStatementContext ctx)
+    {
+        String type = String.valueOf(visitDataType(ctx.dataType()));
+        String var = ctx.ID().getText();
+        Statement body = visitBodyOfObject(ctx.bodyOfObject());
+        return new CreateAnObject(type,var,body);
+    }
+
+    @Override
+    public Statement visitBodyOfObject(ParserGram.BodyOfObjectContext ctx)
+    {
+
+        String newKeyWord = ctx.NEW().getText();
+        String nameOfClass = ctx.ID().getText();
+        Literal literals = visitLiteralOrMore(ctx.literalOrMore());
+        return new BodyOfObject(newKeyWord,nameOfClass,literals);
+    }
+
+    @Override
+    public Literal visitLiteralOrMore(ParserGram.LiteralOrMoreContext ctx) {
+        Literal literal = new Literal();
+        for(int i = 0; i < ctx.literal().size() ; i++)
+        {
+            Literal l= (Literal) visit(ctx.literal(i));
+            literal.addChild(l);
+        }
+        return literal;
+    }
+
+
+
+ /// variable & assignment
     @Override
     public Statement visitVariableDeclaration(ParserGram.VariableDeclarationContext ctx)
     {
@@ -77,7 +276,6 @@ public class MyVisitor extends ParserGramBaseVisitor
         String type = String.valueOf(visitDataType(ctx.dataType()));
         String variableName = ctx.ID().getText();
         return new VariableDeclarationStatement(type, variableName, (Statement) visit(ctx.variableValues()));
-        // return  (Statement) visit(ctx.variableValues());
     }
 
     @Override
@@ -123,7 +321,7 @@ public class MyVisitor extends ParserGramBaseVisitor
 
     }
 
-    ////id
+    ///import
     @Override
     public Statement visitImportStatement(ParserGram.ImportStatementContext ctx) {
         String importPath = ctx.StringLiteral().getText();
@@ -139,7 +337,8 @@ public class MyVisitor extends ParserGramBaseVisitor
 
         return new ImportStatement(importPath,libraryName);
     }
-    ////literal
+
+    ///literal
     @Override
     public Statement visitIntegerLiteral(ParserGram.IntegerLiteralContext ctx)
     {
@@ -189,6 +388,7 @@ public class MyVisitor extends ParserGramBaseVisitor
         return super.visitNull(ctx);
     }
 
+    ///function
     @Override
     public Statement visitFunction(ParserGram.FunctionContext ctx)
     {
@@ -223,7 +423,6 @@ public class MyVisitor extends ParserGramBaseVisitor
         String dataType = String.valueOf(visitDataType( ctx.dataType()));
         String nameOfFunction =ctx.ID().getText();
         Statement funcDecStatement = (Statement) visit(ctx.functionDeclaration());
-        //  return (Statement) visit(ctx.functionDeclaration());
         return new AnonymousFunction(dataType,nameOfFunction,funcDecStatement);
 
     }
@@ -270,6 +469,65 @@ public class MyVisitor extends ParserGramBaseVisitor
     }
 
     @Override
+    public Statement visitCallStatement(ParserGram.CallStatementContext ctx)
+    {
+        Statement statement;
+        if(ctx.callFunction() != null)
+        {
+            statement =  visitCallFunction(ctx.callFunction());
+        }
+        else
+        {
+            statement = visitCallMethod(ctx.callMethod());
+        }
+        return statement;
+    }
+    @Override
+    public Statement visitCallFunction(ParserGram.CallFunctionContext ctx)
+    {
+
+        Statement statement =  visitBodyOfCall(ctx.bodyOfCall());
+        return new CallFunction(statement);
+
+    }
+    @Override
+    public Statement visitCallMethod(ParserGram.CallMethodContext ctx) {
+        String nameOfObj = ctx.ID().getText();
+        Statement statement = visitBodyOfCall(ctx.bodyOfCall());
+        return new CallMethod(nameOfObj,statement);
+    }
+
+
+    @Override
+    public Statement visitBodyOfCall(ParserGram.BodyOfCallContext ctx)
+    {
+        String name = ctx.ID().getText();
+        Statement parameter = visitParameters(ctx.parameters());
+        if(ctx.parameters() != null)
+        {
+            return new BodyOfCall(name,parameter);
+        }
+        else{
+            return new BodyOfCall(name);
+        }
+    }
+
+    @Override
+    public Statement visitAccessMethodInLogStatement(ParserGram.AccessMethodInLogStatementContext ctx) {
+        String id = ctx.ID().getText();
+        Statement statement = visitBodyOfCall(ctx.bodyOfCall());
+        if(ctx.ID() != null)
+        {
+            return new AccessMethodInLogStatement(id,statement);
+        }
+        else
+        {
+            return new AccessMethodInLogStatement(statement);
+
+        }
+    }
+
+    @Override
     public Statement visitParameters(ParserGram.ParametersContext ctx) {
         ParametersOfFunction parameters = new ParametersOfFunction();
         for (int i = 0; i < ctx.ID().size(); i++) {
@@ -295,6 +553,8 @@ public class MyVisitor extends ParserGramBaseVisitor
         }
         return new BlockOfFunction(statement);
     }
+
+    ///return
     @Override
     public Statement visitReturnStatement(ParserGram.ReturnStatementContext ctx) {
         // return super.visitReturnStatement(ctx);
@@ -303,7 +563,10 @@ public class MyVisitor extends ParserGramBaseVisitor
             returnStatement.addChild(ctx.ID().getText());
         } else if (ctx.literal() != null) {
             returnStatement.addChild(ctx.literal().getText());
-        } else {
+        } else if (ctx.arrowFunction() != null)
+        {
+            returnStatement.addChild(ctx.arrowFunction().getText());
+        }else {
             returnStatement.addChild(ctx.getText());
         }
 
@@ -315,9 +578,8 @@ public class MyVisitor extends ParserGramBaseVisitor
         // return (Statement) visit(ctx.expr()); // will return the expr
         String consoleKeyWord = ctx.CONSOLE().getText();
         String logKeyWord = ctx.LOG().getText();
-        //Statement expr = (Statement) visit(ctx.expr());
-        //Statement StringLiteral = (Statement) visit(ctx.StringLiteral());
         Statement value;
+
         if(ctx.expr() != null)
         {
             value = (Statement) visit(ctx.expr());
@@ -335,7 +597,25 @@ public class MyVisitor extends ParserGramBaseVisitor
 
     }
 
-    //Expr
+
+    @Override
+    public Statement visitStringInterpolationStatement(ParserGram.StringInterpolationStatementContext ctx)
+    {
+        String sDollar = ctx.SDOLLAR().getText();
+        String thisKeyWord = ctx.THIS().getText();
+        String dot = ctx.DOT().getText();
+        String id = ctx.ID().getText();
+        //if(ctx.THIS() != null)
+        //{
+        return new StringInterpolation(sDollar,thisKeyWord,dot,id);
+
+       /* } else
+        {
+            return new StringInterpolation(sDollar,id);
+        }*/
+    }
+
+    ///Expr
     @Override
     public Expr visitIdExpr(ParserGram.IdExprContext ctx)
     {
@@ -483,15 +763,11 @@ public class MyVisitor extends ParserGramBaseVisitor
         return new PairValue(ctx.ID(0).getText(), ctx.ID(1).getText());
     }
 
-
-
-
     @Override
     public Object visitJsxBlock(ParserGram.JsxBlockContext ctx) {
         Statement jsxElement = visitJsxElement(ctx.jsxElement());
         return new JsxBlockNode(jsxElement);
     }
-
 
     @Override
     public Statement visitJsxElement(ParserGram.JsxElementContext ctx) {

@@ -1,3 +1,23 @@
-JsxBlockNode|{Content:jsxElement}AST.JSX.JSXELEMENTNODE@326DE728
+JsxBlockNode|{Content:jsxElement}AST.JSX.JSXELEMENTNODE@1B40D5F0
 JSXELEMENTNODE|{TAGNAME: DIV}         JSXCLASS|{CLASSNAME='CLASSNAME', VALUE="GRID-CONTAINER"}
+Statement: NormalClass ,classKeyWord: class , className: Animal{
+
+classBody{
+
+MethodDeclaration, methodType:  ConstructorMethod{ constructorKeyWord: constructor(parameters: name, age){ constructorBody{ this.name = name = age = age } }
+
+MethodDeclaration, methodType: NormalMethod , methodName: getInfo(parameters: ) methodBody{
+
+ReturnStatement : return  '${this.name} is ${this.age} years old.'
+
+}
+
+MethodDeclaration, methodType: StaticMethod { staticKeyWord: static  MethodDeclaration, methodType: NormalMethod , methodName: greet(parameters: ) methodBody{
+
+PrintOrLogStatement : console.log("Hello from the Animal class!")
+
+}}
+
+}
+}
 

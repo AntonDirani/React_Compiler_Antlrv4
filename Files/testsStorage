@@ -30,3 +30,44 @@ console.log(9);
    return 9;
 
    };
+
+
+
+   class Animal {
+     constructor(name, age) {
+       this.name = name;
+       this.age = age;
+     }
+
+     getInfo() {
+      return '${this.name} is ${this.age} years old.';
+     }
+
+     static greet() {
+       console.log("Hello from the Animal class!");
+     }
+   }
+
+
+
+   {this.id}
+
+   class B{}
+   class A extends B {}
+
+   getName(i,y,o);
+   const myAnimal = new Animal("Buddy", 3);
+
+   console.log(myAnimal.getInfo());
+
+   Animal.greet();
+
+   myAnimal.getInfo(i);
+
+   console.log(myAnimal.getInfo(i));
+
+
+ (
+  <div className="grid-container">
+ </div>
+ )
