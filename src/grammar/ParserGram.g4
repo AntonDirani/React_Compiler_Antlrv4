@@ -22,7 +22,8 @@ statement: classDeclaration
          | createAnObjectStatement
          | stringInterpolationStatement
          | exportDefault
-         | returnStatement //consoleLog
+         | returnStatement
+         | jsxBlock //consoleLog
 
 
          ;
@@ -162,7 +163,8 @@ createElement: CREATE_ELEMENT OPENPAREN ( WS* HTML_TAGS_ELEMENT  | callFunction 
 
 props: OPENBRACE+ prop (COMMA prop)* CLOSEBRACE+;
 
-prop: (JSX_CLASS | ON_CLICK | SRC | ALT | DISPLAY | FLEX_FLOW | JUSTIFY | ALIGN_CONTENT ) COLON (literal | ID);
+prop: ID COLON literal;
+
 children: (OPENBRACE? (REACT DOT)? createElement (COMMA (REACT DOT)? createElement)* COMMA? CLOSEBRACE? | StringLiteral  );
 /*createElement*/
 
@@ -183,25 +185,33 @@ useContext:  USE_CONTEXT OPENPAREN ID CLOSEPAREN SEMICOLON? ;
 
 useRef: USE_REF OPENPAREN INTEGER? CLOSEPAREN ;
 
+
 ////jsx
 
-jsxBlock: OPENPAREN jsx_element CLOSEPAREN;
+jsxBlock: OPENPAREN jsxElement CLOSEPAREN;
 
-jsx_element:jsx_open_tag  (jsx_element|jsx_openSelf_close|jsx_Expreeion|element_js|jsx_text) * CLOSE_TAG;
+jsxElement:jsxOpenTag  jsxChildren closeTag;
 
-jsx_open_tag:OPEN_TAG attribute* jsx_class* attribute_click* GT;
+jsxChildren:(jsxElement|jsxOpenSelfClose|jsxExpreeion|elementJs|jsxText)*;
 
-jsx_class: (JSX_CLASS | STYLE) EQUAL (StringLiteral | props ) ;
+jsxOpenTag:LT ID (attribute|jsxClass)*(attributeClick|style)? GT;
+
+closeTag:LT DIVIDE ID GT;
+
+jsxClass:JSX_CLASS EQUAL StringLiteral;
+
+style:STYLE EQUAL props ;
 
 attribute:ID EQUAL StringLiteral;
 
-jsx_openSelf_close:OPEN_TAG_SELF attribute* ID? DIVIDE GT;
+jsxOpenSelfClose:LT ID  attribute+  DIVIDE GT;
 
+attributeClick:ON_CLICK EQUAL jsxExpreeion ;
 
-attribute_click:ON_CLICK EQUAL jsx_Expreeion ;
+attributeElementJs:ID EQUAL jsxExpreeion;
 
-jsx_Expreeion:OPENBRACE .*? CLOSEBRACE ;
+jsxExpreeion:OPENBRACE ID CLOSEBRACE ;
 
-element_js:LT .*? DIVIDE GT;
+elementJs:LT ID attributeElementJs* DIVIDE GT;
 
-jsx_text: ~('<'|'>'|'{'|'}' | ')' | '(' )+;
+jsxText: ~('<'|'>'|'{'|'}' | ')' | '(' )+;

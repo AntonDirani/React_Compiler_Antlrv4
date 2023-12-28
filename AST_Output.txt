@@ -1,9 +1,3 @@
-Statement: VariableDeclarationStatement , dataType: Var , variableName: tony , variableValues: UseContext{context='something'} 
-Statement: VariableDeclarationStatement , dataType: Var , variableName: test , variableValues: UseRefStatement{param=2}
-
-Statement: VariableDeclarationStatement , dataType: Let , variableName: test2 ,
-variableValues:
-UseCallbackStatement{paramaters=, useCalllbackFunction=TypeOfFunction:
-ArrowFunction , dataType: null , functionName: null , parameters: event ,
-Function Block {  PrintOrLogStatement : console.log('Button clicked!')  }}
+JsxBlockNode|{Content:jsxElement}AST.JSX.JSXELEMENTNODE@326DE728
+JSXELEMENTNODE|{TAGNAME: DIV}         JSXCLASS|{CLASSNAME='CLASSNAME', VALUE="GRID-CONTAINER"}
 

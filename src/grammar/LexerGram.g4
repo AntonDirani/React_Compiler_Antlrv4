@@ -55,16 +55,10 @@ USE_CONTEXT        : 'useContext';
 USE_REF            : 'useRef';
 JSX_CLASS:'className';
 ON_CLICK:'onClick';
-SRC : 'src';
-ALT: 'alt';
 //CONSOLE_LOG        : 'console.log';
 CLICK_HANDLER: 'clickHandler';
 PROP: 'prop';
 STYLE: 'style';
-DISPLAY: 'display';
-FLEX_FLOW: 'flexFlow';
-JUSTIFY: 'justifyContent';
-ALIGN_CONTENT: 'alignContent';
 //APP: 'App';
 
 //symbols
@@ -123,20 +117,6 @@ StringLiteral : '\'' ( ~'\'' | '\'\'' )* '\''      // Single-quoted string
              | '"' ( ~'"' | '""' )* '"' // Double-quoted string
              ;
 //Bool: TRUE | FALSE;
-
-OPEN_TAG:LT HTML_TAGS ;
-
-OPEN_TAG_SELF:LT HTML_TAGS_SPECIAL ;
-
-CLOSE_TAG:LT DIVIDE HTML_TAGS GT;
-CLOSE_TAG_SELF: DIVIDE GT;
-//HTML_TAGS:ID;
-
-HTML_TAGS: WS* ('h1' | 'h2' | 'h3' | 'p' | 'span' | 'div' | 'button') WS*;
-
-
-HTML_TAGS_SPECIAL:'img'| 'link';
-
 
 //ATTRIBUTES_JSX:  ('className') ;
 

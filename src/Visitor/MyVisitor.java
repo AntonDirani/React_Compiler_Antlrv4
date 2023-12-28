@@ -5,11 +5,14 @@ import AST.Expr.FloatExpr;
 import AST.Expr.IdExpr;
 import AST.Expr.IntExpr;
 import AST.Function.*;
+import AST.JSX.*;
 import AST.Literal.*;
 import AST.React.ClickHandlerStatement;
 import AST.React.ReactHooks.*;
 import grammar.ParserGram;
 import grammar.ParserGramBaseVisitor;
+
+import java.util.LinkedList;
 
 public class MyVisitor extends ParserGramBaseVisitor
 {
@@ -42,6 +45,10 @@ public class MyVisitor extends ParserGramBaseVisitor
         {
             statement = (Statement) visit(ctx.function());
         }
+        else if(ctx.jsxBlock() != null)
+        {
+            statement = (Statement) visit(ctx.jsxBlock());
+        }
         else if(ctx.importStatement() != null)
         {
             statement = (Statement) visit(ctx.importStatement());
@@ -49,10 +56,10 @@ public class MyVisitor extends ParserGramBaseVisitor
         {
             statement = (Statement) visit(ctx.assignment());
         }
-        else if(ctx.useRef()!= null)
-        {
-            statement = (Statement) visit(ctx.useRef());
-        }
+//        else if(ctx.useRef()!= null)
+//        {
+//            statement = (Statement) visit(ctx.useRef());
+//        }
         else
         {
             statement = (Statement) visit(ctx.printOrLogStatement());
@@ -475,4 +482,194 @@ public class MyVisitor extends ParserGramBaseVisitor
     public Object visitPairValue(ParserGram.PairValueContext ctx) {
         return new PairValue(ctx.ID(0).getText(), ctx.ID(1).getText());
     }
-}
+
+
+
+
+    @Override
+    public Object visitJsxBlock(ParserGram.JsxBlockContext ctx) {
+        Statement jsxElement = visitJsxElement(ctx.jsxElement());
+        return new JsxBlockNode(jsxElement);
+    }
+
+
+    @Override
+    public Statement visitJsxElement(ParserGram.JsxElementContext ctx) {
+        LinkedList<Statement> jsxChildren = new LinkedList<>();
+        String jsxOpenTag = ctx.jsxOpenTag().ID().getText();
+        LinkedList<Statement> attributes = new LinkedList<>();
+        LinkedList<Statement> jsxClasses = new LinkedList<>();
+        Statement onClick = null;
+        LinkedList<PropNode> styleProps = new LinkedList<>();
+
+        for (ParserGram.AttributeContext attributeCtx : ctx.jsxOpenTag().attribute()) {
+            Statement attribute = visitAttribute(attributeCtx);
+            if (attribute instanceof JsxAttributeNode) {
+                attributes.add((Statement) attribute);
+            }
+
+        }
+
+        for (ParserGram.JsxClassContext jsxClassCtx : ctx.jsxOpenTag().jsxClass()) {
+            Statement jsxClass = visitJsxClass(jsxClassCtx);
+            if (jsxClass instanceof JsxClassNode) {
+                jsxClasses.add((Statement) jsxClass);
+            }
+        }
+
+        if(ctx.jsxOpenTag().attributeClick() != null){
+            onClick = visitAttributeClick(ctx.jsxOpenTag().attributeClick());
+        }
+
+        if (ctx.jsxOpenTag().style() != null) {
+            styleProps = visitStyle(ctx.jsxOpenTag().style());
+        }
+
+
+        for (ParserGram.JsxElementContext childCtx : ctx.jsxChildren().jsxElement()) {
+            Statement child = visitJsxElement(childCtx);
+            jsxChildren.add(child);
+        }
+
+        for (ParserGram.JsxOpenSelfCloseContext childCtx : ctx.jsxChildren().jsxOpenSelfClose()) {
+            Statement child = visitJsxOpenSelfClose(childCtx);
+            jsxChildren.add(child);
+        }
+
+        for (ParserGram.JsxExpreeionContext childCtx : ctx.jsxChildren().jsxExpreeion()) {
+            Statement child = visitJsxExpreeion(childCtx);
+            jsxChildren.add(child);
+        }
+
+        for (ParserGram.ElementJsContext childCtx : ctx.jsxChildren().elementJs()) {
+            Statement child = visitElementJs(childCtx);
+            jsxChildren.add(child);
+        }
+
+        for (ParserGram.JsxTextContext childCtx : ctx.jsxChildren().jsxText()) {
+            Statement child = visitJsxText(childCtx);
+            jsxChildren.add(child);
+        }
+
+
+
+
+        return new JsxElementNode(jsxOpenTag, attributes, jsxClasses, jsxChildren,onClick,styleProps);
+    }
+
+
+    @Override
+    public Statement visitJsxOpenTag(ParserGram.JsxOpenTagContext ctx) {
+        LinkedList<Statement> attributes = new LinkedList<>();
+        LinkedList<Statement> jsxClasses = new LinkedList<>();
+
+
+        for (ParserGram.AttributeContext attributeCtx : ctx.attribute()) {
+            Statement attribute = visitAttribute(attributeCtx);
+            attributes.add(attribute);
+        }
+
+
+        for (ParserGram.JsxClassContext jsxClassCtx : ctx.jsxClass()) {
+            Statement jsxClass = visitJsxClass(jsxClassCtx);
+            jsxClasses.add(jsxClass);
+        }
+
+        return new JsxOpenTagNode(attributes, jsxClasses);
+
+    }
+
+    @Override
+    public Statement visitAttribute(ParserGram.AttributeContext ctx) {
+        String attributeName = ctx.ID().getText();
+        String attributeValue = ctx.StringLiteral().getText();
+        return new JsxAttributeNode(attributeName, attributeValue);
+    }
+
+
+    @Override
+    public Statement visitJsxClass(ParserGram.JsxClassContext ctx) {
+        String className = null ;
+        String value = ctx.StringLiteral().getText();
+        if(ctx.JSX_CLASS() != null) {
+            className = ctx.JSX_CLASS().getText();
+        }
+
+
+        return new JsxClassNode(className, value);
+    }
+
+
+    @Override
+    public Statement visitJsxOpenSelfClose(ParserGram.JsxOpenSelfCloseContext ctx) {
+        String tagName = ctx.ID().toString();
+        LinkedList<Statement> attributes = new LinkedList<>();
+
+
+        for (ParserGram.AttributeContext attributeCtx : ctx.attribute()) {
+            Statement attribute = visitAttribute(attributeCtx);
+            attributes.add(attribute);
+        }
+
+        return new JsxOpenSelfCloseNode(tagName, attributes);
+    }
+
+
+
+    @Override
+    public  Statement visitJsxText(ParserGram.JsxTextContext ctx) {
+        String text = ctx.getText();
+        return new JsxTextNode(text);
+    }
+
+
+    @Override
+    public Statement visitJsxExpreeion(ParserGram.JsxExpreeionContext ctx) {
+        String expressionText = ctx.ID().getText();
+        return new JsxExpressionNode(expressionText);
+    }
+
+
+    @Override
+    public Statement visitElementJs(ParserGram.ElementJsContext ctx) {
+        String value = ctx.ID().getText();
+        LinkedList<AttributeElementJsNode> attributes = new LinkedList<>();
+        for(ParserGram.AttributeElementJsContext AttributeCtx : ctx.attributeElementJs()){
+
+            Statement AttributeElement = visitAttributeElementJs(AttributeCtx);
+            attributes.add((AttributeElementJsNode)AttributeElement);}
+
+        return new JsxElementJsNode(value,attributes);
+    }
+
+
+    @Override
+    public Statement visitAttributeElementJs(ParserGram.AttributeElementJsContext ctx) {
+        String attributeName = ctx.ID().getText();
+        String value = ctx.jsxExpreeion().ID().getText();
+        return new AttributeElementJsNode(attributeName,value);
+    }
+
+
+    @Override
+    public Statement visitAttributeClick(ParserGram.AttributeClickContext ctx) {
+        String attributeName = "ON_CLICK";
+        String value = ctx.jsxExpreeion().ID().getText();
+        return new JsxAttributeClickNode(attributeName, value);
+    }
+
+
+    @Override
+    public LinkedList<PropNode> visitStyle(ParserGram.StyleContext ctx) {
+        LinkedList<PropNode> styleProps = new LinkedList<>();
+
+        for (ParserGram.PropContext propCtx : ctx.props().prop()) {
+            String propName = propCtx.ID().getText();
+            String propValue =propCtx.literal().getText() ;
+            styleProps.add(new PropNode(propName, propValue));
+        }
+
+        return styleProps;
+    }}
+
+
