@@ -68,6 +68,7 @@ forStatement: FOR OPENPAREN variableDeclaration comparisonExpr SEMICOLON exprOpe
 expr: ID      #idExpr
     | INTEGER #intExpr
     | FLOAT   #floatExpr
+    | BOOL   #boolExpr
      ;
 
 
@@ -81,7 +82,7 @@ forBodyStatement: OPENBRACE (forStatement | printOrLogStatement | ifStatement) C
 
 printOrLogStatement: CONSOLE DOT LOG OPENPAREN (expr | literal | accessMethodInLogStatement)? CLOSEPAREN SEMICOLON;
 
-whileStatement: WHILE OPENPAREN (comparisonExpr | BOOL ) CLOSEPAREN OPENBRACE statement exprOperation SEMICOLON CLOSEBRACE;
+whileStatement: WHILE OPENPAREN (comparisonExpr | expr ) CLOSEPAREN OPENBRACE statement exprOperation SEMICOLON CLOSEBRACE;
 
 exprOperation:    expr PLUS expr     #add
                 | expr MINUS expr    #min
@@ -97,7 +98,7 @@ logicalExpr: comparisonExpr AND comparisonExpr  #and
            | comparisonExpr NOTEQUAL comparisonExpr  #notEqual
            ;
 
-ifStatement: IF OPENPAREN(comparisonExpr | logicalExpr | BOOL ) CLOSEPAREN OPENBRACE statement CLOSEBRACE;
+ifStatement: IF OPENPAREN(comparisonExpr | logicalExpr | expr ) CLOSEPAREN OPENBRACE statement CLOSEBRACE;
 
 ifElseStatement:ifStatement elseStatement;// ELSE OPENBRACE statement CLOSEBRACE;
 

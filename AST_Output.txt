@@ -1,11 +1,11 @@
-JsxBlockNode|{Content:jsxElement}AST.JSX.JSXELEMENTNODE@3C0F93F1
+JsxBlockNode|{Content:jsxElement}AST.JSX.JSXELEMENTNODE@185D8B6
 JSXELEMENTNODE|{TAGNAME: DIV}         JSXCLASS|{CLASSNAME='CLASSNAME', VALUE="GRID-CONTAINER"}
 WhileStatement: while(i <= 5){
  ForStatement: for(Statement: VariableDeclarationStatement , dataType: Let , variableName: i , variableValues: 0  ; i < 5 ; i++){ PrintOrLogStatement : console.log(i) } 
  i++;
  }
 
-MultiIfElseStatement :  IfStatement: if(null){ PrintOrLogStatement : console.log("You are a minor.") }
+MultiIfElseStatement :  IfStatement: if(true){ PrintOrLogStatement : console.log("You are a minor.") }
  else IfStatement: if(age >= 18 && age <= 24){ PrintOrLogStatement : console.log("You are a student.") }
  else IfStatement: if(age >= 25 && age <= 60){ PrintOrLogStatement : console.log("You are an adult.") }
  else {

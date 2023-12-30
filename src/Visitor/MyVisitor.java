@@ -6,10 +6,7 @@ import AST.ComparisonExpr.GreaterThan;
 import AST.ComparisonExpr.GreaterThanOrEqual;
 import AST.ComparisonExpr.LessThan;
 import AST.ComparisonExpr.LessThanOrEqual;
-import AST.Expr.Expr;
-import AST.Expr.FloatExpr;
-import AST.Expr.IdExpr;
-import AST.Expr.IntExpr;
+import AST.Expr.*;
 import AST.LogicExpr.And;
 import AST.LogicExpr.EqualEqual;
 import AST.LogicExpr.NotEqual;
@@ -658,6 +655,17 @@ public class MyVisitor extends ParserGramBaseVisitor
         return floatExpr;
     }
 
+    @Override
+    public Expr visitBoolExpr(ParserGram.BoolExprContext ctx)
+    {
+        String booleanVal ="";
+        if(ctx.BOOL()!= null){
+            booleanVal = ctx.BOOL().getText();
+        }
+        return new BoolExpr(booleanVal);
+    }
+
+
     ///operationExpr
 
     @Override
@@ -1122,7 +1130,7 @@ public class MyVisitor extends ParserGramBaseVisitor
         }
         else
         {
-            condition = (Expr) visit(ctx.BOOL());
+            condition = (Expr) visit(ctx.expr());
         }
         Statement statement = null;
         if(ctx.statement() != null)
@@ -1155,7 +1163,7 @@ public class MyVisitor extends ParserGramBaseVisitor
         }
         else
         {
-            condition = (Expr) visit(ctx.BOOL());
+            condition = (Expr) visit(ctx.expr());
         }
 
         if(ctx.statement() != null)
