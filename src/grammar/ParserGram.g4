@@ -202,9 +202,9 @@ jsxBlock: OPENPAREN jsxElement CLOSEPAREN;
 
 jsxElement:jsxOpenTag  jsxChildren closeTag;
 
-jsxChildren:(jsxElement|jsxOpenSelfClose|jsxExpreeion|elementJs|jsxText)*;
+jsxChildren:(jsxElement | jsxOpenSelfClose | jsxExpreeion | elementJs | jsxText)*;
 
-jsxOpenTag:LT ID (attribute|jsxClass)*(attributeClick|style)? GT;
+jsxOpenTag:LT ID (attribute)*(jsxClass | attributeClick | style)? GT;
 
 closeTag:LT DIVIDE ID GT;
 
@@ -214,7 +214,7 @@ style:STYLE EQUAL props ;
 
 attribute:ID EQUAL StringLiteral;
 
-jsxOpenSelfClose:LT ID  attribute+  DIVIDE GT;
+jsxOpenSelfClose:LT ID jsxClass?  attribute+  DIVIDE GT;
 
 attributeClick:ON_CLICK EQUAL jsxExpreeion ;
 

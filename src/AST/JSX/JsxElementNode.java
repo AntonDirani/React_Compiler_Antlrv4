@@ -1,7 +1,7 @@
 //package AST.JSX;
 //
 //import java.util.LinkedList;
-//import old.Node;
+//import AST.Node;
 //public class JsxElementNode extends Node {
 //    private String tagName;
 //    private LinkedList<Node> children = new LinkedList<>();
@@ -40,6 +40,7 @@ package AST.JSX;
 
 import AST.Statement;
 
+
 import java.util.LinkedList;
 
 public class JsxElementNode extends Statement {
@@ -47,14 +48,14 @@ public class JsxElementNode extends Statement {
     private Statement onClick;
     private LinkedList<Statement> children = new LinkedList<>();
     private LinkedList<Statement> attributes = new LinkedList<>();
-    private LinkedList<Statement> jsxClasses = new LinkedList<>();
+    private Statement jsxClasse ;
     private LinkedList<PropNode> styleProps = new LinkedList<>();
 
 
-    public JsxElementNode(String tagName, LinkedList<Statement> attributes, LinkedList<Statement> jsxClasses, LinkedList<Statement> children,Statement onClick,LinkedList<PropNode> styleProps) {
+    public JsxElementNode(String tagName, LinkedList<Statement> attributes,Statement jsxClasse, LinkedList<Statement> children,Statement onClick,LinkedList<PropNode> styleProps) {
         this.tagName = tagName;
         this.attributes = attributes;
-        this.jsxClasses = jsxClasses;
+        this.jsxClasse = jsxClasse;
         this.children = children;
         this.onClick  = onClick;
         this.styleProps = styleProps;
@@ -77,8 +78,8 @@ public class JsxElementNode extends Statement {
         }
 
 
-        for (Statement jsxClass : jsxClasses) {
-            stringBuilder.append(jsxClass.toString());
+        if( jsxClasse != null) {
+            stringBuilder.append(jsxClasse.toString());
         }
         if (onClick != null) {
             stringBuilder.append(String.format(onClick.toString()));

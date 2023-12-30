@@ -1,9 +1,9 @@
  (
   <div className="grid-container">
+  <img className="thumbnail" src="https://via.placeholder.com/50" alt="Product Thumbnail" />
  </div>
  )
-
-
+/*
 while (i <= 5)
   {
     for(let i =0; i< 5;i++)
@@ -22,3 +22,4 @@ while (i <= 5)
   } else {
     console.log("You are a senior citizen.");
   }
+  */

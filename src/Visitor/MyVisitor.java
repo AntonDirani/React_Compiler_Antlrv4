@@ -899,9 +899,10 @@ public class MyVisitor extends ParserGramBaseVisitor
         LinkedList<Statement> jsxChildren = new LinkedList<>();
         String jsxOpenTag = ctx.jsxOpenTag().ID().getText();
         LinkedList<Statement> attributes = new LinkedList<>();
-        LinkedList<Statement> jsxClasses = new LinkedList<>();
-        Statement onClick = null;
         LinkedList<PropNode> styleProps = new LinkedList<>();
+        Statement jsxClasse = null;
+        Statement onClick = null;
+
 
         for (ParserGram.AttributeContext attributeCtx : ctx.jsxOpenTag().attribute()) {
             Statement attribute = visitAttribute(attributeCtx);
@@ -910,13 +911,10 @@ public class MyVisitor extends ParserGramBaseVisitor
             }
 
         }
-
-        for (ParserGram.JsxClassContext jsxClassCtx : ctx.jsxOpenTag().jsxClass()) {
-            Statement jsxClass = visitJsxClass(jsxClassCtx);
-            if (jsxClass instanceof JsxClassNode) {
-                jsxClasses.add((Statement) jsxClass);
-            }
+        if(ctx.jsxOpenTag().jsxClass() != null){
+            jsxClasse = visitJsxClass(ctx.jsxOpenTag().jsxClass());
         }
+
 
         if(ctx.jsxOpenTag().attributeClick() != null){
             onClick = visitAttributeClick(ctx.jsxOpenTag().attributeClick());
@@ -955,14 +953,16 @@ public class MyVisitor extends ParserGramBaseVisitor
 
 
 
-        return new JsxElementNode(jsxOpenTag, attributes, jsxClasses, jsxChildren,onClick,styleProps);
+        return new JsxElementNode(jsxOpenTag, attributes, jsxClasse, jsxChildren,onClick,styleProps);
     }
+
+
 
 
     @Override
     public Statement visitJsxOpenTag(ParserGram.JsxOpenTagContext ctx) {
         LinkedList<Statement> attributes = new LinkedList<>();
-        LinkedList<Statement> jsxClasses = new LinkedList<>();
+        Statement jsxClasse = null;
 
 
         for (ParserGram.AttributeContext attributeCtx : ctx.attribute()) {
@@ -971,14 +971,14 @@ public class MyVisitor extends ParserGramBaseVisitor
         }
 
 
-        for (ParserGram.JsxClassContext jsxClassCtx : ctx.jsxClass()) {
-            Statement jsxClass = visitJsxClass(jsxClassCtx);
-            jsxClasses.add(jsxClass);
+        if(ctx.jsxClass() != null){
+            jsxClasse = visitJsxClass(ctx.jsxClass());
         }
 
-        return new JsxOpenTagNode(attributes, jsxClasses);
+        return new JsxOpenTagNode(attributes, jsxClasse);
 
     }
+
 
     @Override
     public Statement visitAttribute(ParserGram.AttributeContext ctx) {
@@ -1005,15 +1005,21 @@ public class MyVisitor extends ParserGramBaseVisitor
     public Statement visitJsxOpenSelfClose(ParserGram.JsxOpenSelfCloseContext ctx) {
         String tagName = ctx.ID().toString();
         LinkedList<Statement> attributes = new LinkedList<>();
+        Statement jsxClasse = null;
 
+        if(ctx.jsxClass() != null){
+            jsxClasse = visitJsxClass(ctx.jsxClass());
+        }
 
         for (ParserGram.AttributeContext attributeCtx : ctx.attribute()) {
             Statement attribute = visitAttribute(attributeCtx);
             attributes.add(attribute);
         }
 
-        return new JsxOpenSelfCloseNode(tagName, attributes);
+        return new JsxOpenSelfCloseNode(tagName, attributes,jsxClasse);
     }
+
+
 
 
 
