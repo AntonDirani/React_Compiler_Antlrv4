@@ -17,9 +17,9 @@ statement:classDeclaration
          | forStatement
          | printOrLogStatement
          | whileStatement
-         | counterStatement
          | ifElseStatement
          | ifElseIfStatement
+         | multiIfElseStatement
          | createAnObjectStatement
          | stringInterpolationStatement
          | exportDefault
@@ -63,39 +63,48 @@ literal: INTEGER #integerLiteral
 
 
 ///for statement
-forStatement: FOR OPENPAREN letDecleration SEMICOLON comparisonExpr SEMICOLON counterStatement CLOSEPAREN forBodyStatement;
+forStatement: FOR OPENPAREN variableDeclaration comparisonExpr SEMICOLON exprOperation CLOSEPAREN forBodyStatement;
 
 expr: ID      #idExpr
     | INTEGER #intExpr
     | FLOAT   #floatExpr
      ;
 
-comparisonExpr: expr LT expr
-              | expr GT expr
-              | expr LTE expr
-              | expr GTE expr;
+
+comparisonExpr: expr LT expr #lessThan
+              | expr GT expr #greaterThan
+              | expr LTE expr #lessThanOrEqual
+              | expr GTE expr #greaterThanOrEqual
+              ;
 
 forBodyStatement: OPENBRACE (forStatement | printOrLogStatement | ifStatement) CLOSEBRACE;
 
 printOrLogStatement: CONSOLE DOT LOG OPENPAREN (expr | literal | accessMethodInLogStatement)? CLOSEPAREN SEMICOLON;
 
-whileStatement: WHILE OPENPAREN (comparisonExpr | BOOL_TRUE_FALSE ) CLOSEPAREN OPENBRACE (statement |counterStatement SEMICOLON)+ CLOSEBRACE;
+whileStatement: WHILE OPENPAREN (comparisonExpr | BOOL ) CLOSEPAREN OPENBRACE statement exprOperation SEMICOLON CLOSEBRACE;
 
-counterStatement: expr((PLUS expr| MINUS expr| MULTIPLY expr | DIVIDE expr | PLUSPLUS | MINUSMINUS) |expr)+;
+exprOperation:    expr PLUS expr     #add
+                | expr MINUS expr    #min
+                | expr MULTIPLY expr #mul
+                | expr DIVIDE expr   #div
+                | expr PLUSPLUS      #increment
+                | expr MINUSMINUS    #decrement
+                ;
 
-logicalExpr: AND
-           | OR
-           | EQUALEQUAL
-           | NOTEQUAL
+logicalExpr: comparisonExpr AND comparisonExpr  #and
+           | comparisonExpr OR comparisonExpr #or
+           | comparisonExpr EQUALEQUAL comparisonExpr #equalEqual
+           | comparisonExpr NOTEQUAL comparisonExpr  #notEqual
            ;
 
-ifStatement: IF OPENPAREN((comparisonExpr | (comparisonExpr logicalExpr)* comparisonExpr) | BOOL_TRUE_FALSE )CLOSEPAREN OPENBRACE statement CLOSEBRACE;
+ifStatement: IF OPENPAREN(comparisonExpr | logicalExpr | BOOL ) CLOSEPAREN OPENBRACE statement CLOSEBRACE;
 
-ifElseStatement:ifStatement elseStatemetn;// ELSE OPENBRACE statement CLOSEBRACE;
+ifElseStatement:ifStatement elseStatement;// ELSE OPENBRACE statement CLOSEBRACE;
 
-elseStatemetn:ELSE OPENBRACE statement CLOSEBRACE;
+elseStatement:ELSE OPENBRACE statement CLOSEBRACE;
 
-ifElseIfStatement: ifStatement (ELSE ifStatement)+ elseStatemetn;
+multiIfElseStatement: ifElseIfStatement elseStatement;
+ifElseIfStatement: ifStatement (ELSE ifStatement)+ ;
 
  callStatement: callMethod | callFunction;
 

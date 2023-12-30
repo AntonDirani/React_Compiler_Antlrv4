@@ -1,4 +1,6 @@
-package AST;
+package AST.Variables;
+
+import AST.Statement;
 
 public class AssignmentStatement extends Statement
 {

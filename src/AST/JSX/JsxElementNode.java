@@ -1,7 +1,7 @@
 //package AST.JSX;
 //
 //import java.util.LinkedList;
-//import AST.Node;
+//import old.Node;
 //public class JsxElementNode extends Node {
 //    private String tagName;
 //    private LinkedList<Node> children = new LinkedList<>();
@@ -38,9 +38,7 @@
 
 package AST.JSX;
 
-import AST.Node;
 import AST.Statement;
-import AST.StatementNode;
 
 import java.util.LinkedList;
 

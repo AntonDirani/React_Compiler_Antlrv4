@@ -1,8 +1,10 @@
-package AST;
+package AST.Variables;
+
+import AST.Statement;
 
 import java.util.ArrayList;
 
-public class VariableDeclarationStatement extends  Statement
+public class VariableDeclarationStatement extends Statement
 {
 
     ArrayList<String> values;

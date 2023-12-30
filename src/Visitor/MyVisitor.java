@@ -1,16 +1,29 @@
 package Visitor;
 import AST.*;
 import AST.Class.*;
+
+import AST.ComparisonExpr.GreaterThan;
+import AST.ComparisonExpr.GreaterThanOrEqual;
+import AST.ComparisonExpr.LessThan;
+import AST.ComparisonExpr.LessThanOrEqual;
 import AST.Expr.Expr;
 import AST.Expr.FloatExpr;
 import AST.Expr.IdExpr;
 import AST.Expr.IntExpr;
+import AST.LogicExpr.And;
+import AST.LogicExpr.EqualEqual;
+import AST.LogicExpr.NotEqual;
+import AST.LogicExpr.Or;
 import AST.Function.*;
 import AST.JSX.*;
 import AST.Literal.*;
+import AST.Loop.*;
 import AST.Method.*;
+import AST.OperationExpr.*;
 import AST.React.ClickHandlerStatement;
 import AST.React.ReactHooks.*;
+import AST.Variables.AssignmentStatement;
+import AST.Variables.VariableDeclarationStatement;
 import grammar.ParserGram;
 import grammar.ParserGramBaseVisitor;
 
@@ -64,12 +77,22 @@ public class MyVisitor extends ParserGramBaseVisitor
         else if(ctx.callStatement() != null)
         {
             statement = (Statement) visit(ctx.callStatement());
-        }//if
-        //for
-        //while
-        //counter
-        //if else
-        //if else if
+        }else if(ctx.ifStatement()!= null)
+        {
+            statement = (Statement) visit(ctx.ifStatement());
+        }else if(ctx.ifElseStatement()!= null)
+        {
+            statement = (Statement) visit(ctx.ifElseStatement());
+        }else if(ctx.multiIfElseStatement()!= null)
+        {
+            statement = (Statement) visit(ctx.multiIfElseStatement());
+        }else if(ctx.forStatement()!= null)
+        {
+            statement = (Statement) visit(ctx.forStatement());
+        }else if(ctx.whileStatement()!= null)
+        {
+            statement = (Statement) visit(ctx.whileStatement());
+        }
         else if(ctx.createAnObjectStatement() != null)
         {
             statement = (Statement) visit(ctx.createAnObjectStatement());
@@ -176,7 +199,6 @@ public class MyVisitor extends ParserGramBaseVisitor
     }
     @Override
     public Statement visitMethod(ParserGram.MethodContext ctx) {
-        //id ,para,body
         String nameOfMethod = ctx.ID().getText();
         Statement parameters =visitParameters(ctx.parameters());
         Statement bodyOfMethod = visitBodyOfMethod(ctx.bodyOfMethod());
@@ -227,8 +249,6 @@ public class MyVisitor extends ParserGramBaseVisitor
     {
 
         String thisKeyWord = ctx.THIS().toString();
-        //String id = ctx.ID().toString();
-
         ConstructorBody id = new ConstructorBody();
         for (int i = 0; i < ctx.ID().size(); i++) {
             id.addChild(ctx.ID(i).getText());
@@ -406,16 +426,6 @@ public class MyVisitor extends ParserGramBaseVisitor
         }
         return statement;
     }
-
-    /*@Override
-    public Statement visitFunctionExpr(ParserGram.FunctionExprContext ctx)
-    {
-        String dataType = String.valueOf(visitDataType( ctx.dataType()));
-        String nameOfFunction =ctx.ID().getText();
-        Statement funcDecStatement = (Statement) visit(ctx.functionDeclaration());
-      //  return (Statement) visit(ctx.functionDeclaration());
-        return new FunctionExpr(dataType,nameOfFunction,funcDecStatement);
-    }*/
 
     @Override
     public Statement visitAnonymousFunction(ParserGram.AnonymousFunctionContext ctx)
@@ -647,6 +657,113 @@ public class MyVisitor extends ParserGramBaseVisitor
         }
         return floatExpr;
     }
+
+    ///operationExpr
+
+    @Override
+    public Expr visitAdd(ParserGram.AddContext ctx) {
+
+        Expr left = (Expr) visit(ctx.getChild(0));
+        Expr right = (Expr) visit(ctx.getChild(2));
+        return new Add(left,right);
+    }
+
+    @Override
+    public Expr visitMin(ParserGram.MinContext ctx) {
+
+        Expr left = (Expr) visit(ctx.getChild(0));
+        Expr right = (Expr) visit(ctx.getChild(2));
+        return new Min(left,right);
+    }
+
+    @Override
+    public Expr visitMul(ParserGram.MulContext ctx) {
+
+        Expr left = (Expr) visit(ctx.getChild(0));
+        Expr right = (Expr) visit(ctx.getChild(2));
+        return new Mul(left,right);    }
+
+    @Override
+    public Expr visitDiv(ParserGram.DivContext ctx) {
+
+        Expr left = (Expr) visit(ctx.getChild(0));
+        Expr right = (Expr) visit(ctx.getChild(2));
+        return new Div(left,right);
+    }
+
+    @Override
+    public Expr visitIncrement(ParserGram.IncrementContext ctx) {
+        Expr left = (Expr) visit(ctx.getChild(0));
+        return new Increment(left);    }
+
+    @Override
+    public Expr visitDecrement(ParserGram.DecrementContext ctx) {
+        Expr left = (Expr) visit(ctx.getChild(0));
+        return new Decrement(left);
+    }
+
+    ///compExpr
+
+    @Override
+    public Expr visitLessThan(ParserGram.LessThanContext ctx)
+    {
+        Expr left = (Expr) visit(ctx.getChild(0));
+        Expr right = (Expr) visit(ctx.getChild(2));
+        return new LessThan(left,right);
+    }
+    @Override
+    public Expr visitGreaterThan(ParserGram.GreaterThanContext ctx) {
+        Expr left = (Expr) visit(ctx.getChild(0));
+        Expr right = (Expr) visit(ctx.getChild(2));
+        return new GreaterThan(left,right);
+    }
+
+    @Override
+    public Expr visitLessThanOrEqual(ParserGram.LessThanOrEqualContext ctx) {
+        Expr left = (Expr) visit(ctx.getChild(0));
+        Expr right = (Expr) visit(ctx.getChild(2));
+        return new LessThanOrEqual(left,right);
+    }
+
+    @Override
+    public Expr visitGreaterThanOrEqual(ParserGram.GreaterThanOrEqualContext ctx) {
+        Expr left = (Expr) visit(ctx.getChild(0));
+        Expr right = (Expr) visit(ctx.getChild(2));
+        return new GreaterThanOrEqual(left,right);
+    }
+
+    ///logicExpr
+
+    @Override
+    public Expr visitAnd(ParserGram.AndContext ctx) {
+        Expr left = (Expr) visit(ctx.getChild(0));
+        Expr right = (Expr) visit(ctx.getChild(2));
+        return new And(left,right);
+    }
+
+    @Override
+    public Expr visitOr(ParserGram.OrContext ctx) {
+        Expr left = (Expr) visit(ctx.getChild(0));
+        Expr right = (Expr) visit(ctx.getChild(2));
+        return new Or(left,right);
+    }
+
+    @Override
+    public Expr visitEqualEqual(ParserGram.EqualEqualContext ctx) {
+        Expr left = (Expr) visit(ctx.getChild(0));
+        Expr right = (Expr) visit(ctx.getChild(2));
+        return new EqualEqual(left,right);    }
+
+    @Override
+    public Expr visitNotEqual(ParserGram.NotEqualContext ctx) {
+        Expr left = (Expr) visit(ctx.getChild(0));
+        Expr right = (Expr) visit(ctx.getChild(2));
+        return new NotEqual(left,right);
+    }
+
+
+
+
 
 
     @Override
@@ -946,6 +1063,162 @@ public class MyVisitor extends ParserGramBaseVisitor
         }
 
         return styleProps;
-    }}
+    }
+
+    ///loop
+
+    @Override
+    public Statement visitForStatement(ParserGram.ForStatementContext ctx)
+    {
+        Statement varDeclaration = null;
+
+        Expr comparisonExpr = null;
+        Expr exprOperation = null;
+        Statement forBodyStatement = null;
+        if (ctx.variableDeclaration() != null)
+        {
+            varDeclaration = visitVariableDeclaration(ctx.variableDeclaration());
+
+        }
+        if (ctx.comparisonExpr() != null)
+        {
+            comparisonExpr = (Expr) visit(ctx.comparisonExpr());
+        }
+        if (ctx.exprOperation() != null)
+        {
+            exprOperation = (Expr) visit(ctx.exprOperation());
+        } if (ctx.forBodyStatement() != null)
+    {
+        forBodyStatement = visitForBodyStatement(ctx.forBodyStatement());
+    }
+
+        return new ForStatement(varDeclaration,comparisonExpr,exprOperation,forBodyStatement);
+    }
+
+    @Override
+    public Statement visitForBodyStatement(ParserGram.ForBodyStatementContext ctx)
+    {
+        Statement statement;
+        if(ctx.forStatement() != null)
+        {
+            statement = visitForStatement(ctx.forStatement());
+        }else if(ctx.ifStatement() != null)
+        {
+            statement = visitIfStatement(ctx.ifStatement());
+        }else
+        {
+            statement = visitPrintOrLogStatement(ctx.printOrLogStatement());
+        }
+        return statement;
+    }
+
+    @Override
+    public Statement visitWhileStatement(ParserGram.WhileStatementContext ctx)
+    {
+        Expr condition;
+        if(ctx.comparisonExpr() != null)
+        {
+            condition = (Expr) visit(ctx.comparisonExpr());
+        }
+        else
+        {
+            condition = (Expr) visit(ctx.BOOL());
+        }
+        Statement statement = null;
+        if(ctx.statement() != null)
+        {
+            statement = visitStatement(ctx.statement());
+        }
+        Expr counter = null ;
+        if (ctx.exprOperation() != null)
+        {
+            counter = (Expr) visit(ctx.exprOperation());
+        }
+
+        return new WhileStatement(condition,statement,counter);
+    }
+
+    @Override
+    public Statement visitIfStatement(ParserGram.IfStatementContext ctx)
+    {
+        Statement statement = null;
+        Expr condition ;
+        if(ctx.comparisonExpr() != null)
+        {
+            condition =  (Expr) visit(ctx.comparisonExpr());
+
+        }
+        else if(ctx.logicalExpr() != null)
+        {
+            condition = (Expr) visit(ctx.logicalExpr());
+
+        }
+        else
+        {
+            condition = (Expr) visit(ctx.BOOL());
+        }
+
+        if(ctx.statement() != null)
+        {
+            statement = visitStatement(ctx.statement());
+        }
+
+        return  new IfStatement(condition,statement);
+    }
+
+    @Override
+    public Statement visitElseStatement(ParserGram.ElseStatementContext ctx) {
+        return visitStatement(ctx.statement());
+    }
+
+    @Override
+    public Statement visitIfElseStatement(ParserGram.IfElseStatementContext ctx)
+    {
+        Statement s1 = null;//= visitIfStatement(ctx.ifStatement());
+        Statement s2 = null;//=visitElseStatement(ctx.elseStatemetn());
+
+        if(ctx.ifStatement() != null)
+        {
+            s1 = visitIfStatement(ctx.ifStatement());
+        }
+        if(ctx.elseStatement() != null)
+        {
+            s2 =visitElseStatement(ctx.elseStatement());
+
+        }
+        return new IfElseStatement(s1,s2);
+    }
+
+    @Override
+    public Statement visitMultiIfElseStatement(ParserGram.MultiIfElseStatementContext ctx)
+    {
+        Statement s1 = null;
+        Statement s2 = null;
+
+        if(ctx.ifElseIfStatement() != null)
+        {
+            s1 = visitIfElseIfStatement(ctx.ifElseIfStatement());
+        }
+        if(ctx.elseStatement() != null)
+        {
+            s2 =visitElseStatement(ctx.elseStatement());
+
+        }
+        return new MultiIfElseStatement(s1,s2);
+    }
+
+    @Override
+    public Statement visitIfElseIfStatement(ParserGram.IfElseIfStatementContext ctx)
+    {
+        IfElseIfStatement ifElseIf = new IfElseIfStatement();
+        for(int i = 0; i < ctx.ifStatement().size() ; i++)
+        {
+            IfStatement statement = (IfStatement) visitIfStatement(ctx.ifStatement(i));
+            ifElseIf.addToList( statement);
+        }
+        return ifElseIf;
+
+    }
+}
 
 

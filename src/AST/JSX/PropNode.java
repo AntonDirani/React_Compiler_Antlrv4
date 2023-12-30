@@ -1,8 +1,6 @@
 package AST.JSX;
 
-import AST.Node;
 import AST.Statement;
-import AST.StatementNode;
 
 public class PropNode extends Statement {
     private String propName;

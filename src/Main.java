@@ -114,8 +114,8 @@ public class Main {
 
 
 /*
-import AST.Node;
-import AST.ProgramNode;
+import old.Node;
+import old.ProgramNode;
 import grammar.*;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
