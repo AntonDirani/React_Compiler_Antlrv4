@@ -109,8 +109,10 @@ FLOAT: INTEGER '.' [0-9]+;
 //identifier
 ID: [a-zA-Z_][a-zA-Z0-9_]*;
 
+/*
 
 HTML_TAGS_ELEMENT: WS* ('\'h1\'' | '\'h2\'' | '\'h3\'' | '\'p\'' | '\'span\'' | '\'div\'' | '\'button\'' | '\'img\'') WS*;
+*/
 
 // String literal rule
 StringLiteral : '\'' ( ~'\'' | '\'\'' )* '\''      // Single-quoted string
