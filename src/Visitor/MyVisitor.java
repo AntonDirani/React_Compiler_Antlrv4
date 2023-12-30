@@ -330,6 +330,10 @@ public class MyVisitor extends ParserGramBaseVisitor
         {
             statement =(Statement) visit(ctx.hook());
         }
+        else if (ctx.arrowFunction()!= null)
+        {
+            statement =(Statement) visit(ctx.arrowFunction());
+        }
         else
         {
             statement =(Statement) visit(ctx.expr());
@@ -553,6 +557,9 @@ public class MyVisitor extends ParserGramBaseVisitor
         }
         else if(ctx.printOrLogStatement() != null) {
             statement = visitPrintOrLogStatement(ctx.printOrLogStatement());
+        }
+        else if(ctx.variableDeclaration() != null) {
+            statement = visitVariableDeclaration(ctx.variableDeclaration());
         }
         else{
             //بدو تعديل

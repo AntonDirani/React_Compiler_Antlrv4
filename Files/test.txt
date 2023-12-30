@@ -1,25 +1,7 @@
- (
-  <div className="grid-container">
-  <img className="thumbnail" src="https://via.placeholder.com/50" alt="Product Thumbnail" />
- </div>
- )
-/*
-while (i <= 5)
-  {
-    for(let i =0; i< 5;i++)
-    {
-     console.log(i);
-     }
-    i++;
-  }
-  if (true) {
-    console.log("You are a minor.");
-  } else if (age >= 18 && age <= 24 )
-  {
-    console.log("You are a student.");
-  }  else if (age >= 25 && age <= 60) {
-    console.log("You are an adult.");
-  } else {
-    console.log("You are a senior citizen.");
-  }
-  */
+
+
+export const ProductGrid = () => {
+  const handleClick = () => {
+    console.log('ProductGrid clicked!');
+  }; };
+  

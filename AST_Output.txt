@@ -1,4 +1,2 @@
-JsxBlockNode|{Content:jsxElement}AST.JSX.JSXELEMENTNODE@3AA9E816
-JSXELEMENTNODE|{TAGNAME: DIV}         JSXCLASS|{CLASSNAME='CLASSNAME', VALUE="GRID-CONTAINER"}
-JSXOPENSELFCLOSE|{TAGNAME='IMG', ATTRIBUTES='[JSXATTRIBUTE|{ATTRIBUTENAME='SRC', ATTRIBUTEVALUE='"HTTPS://VIA.PLACEHOLDER.COM/50"'}, JSXATTRIBUTE|{ATTRIBUTENAME='ALT', ATTRIBUTEVALUE='"PRODUCT THUMBNAIL"'}]     JSXCLASS|{CLASSNAME='CLASSNAME', VALUE="THUMBNAIL"}}
+TypeOfFunction: ArrowFunction , dataType: Const , functionName: ProductGrid , parameters:  ,  Function Block {  Statement: VariableDeclarationStatement , dataType: Const , variableName: handleClick , variableValues: TypeOfFunction: ArrowFunction , dataType: null , functionName: null , parameters:  ,  Function Block {  PrintOrLogStatement : console.log('ProductGrid clicked!')  }   }
 
