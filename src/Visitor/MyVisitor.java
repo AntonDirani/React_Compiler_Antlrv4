@@ -21,13 +21,18 @@ import AST.React.ClickHandlerStatement;
 import AST.React.ReactHooks.*;
 import AST.Variables.AssignmentStatement;
 import AST.Variables.VariableDeclarationStatement;
+import SymbolTable.SymbolInfo;
+import SymbolTable.SymbolTable;
 import grammar.ParserGram;
 import grammar.ParserGramBaseVisitor;
+
 
 import java.util.LinkedList;
 
 public class MyVisitor extends ParserGramBaseVisitor
 {
+
+    SymbolTable symbolTable = new SymbolTable();
 
 
     @Override
@@ -35,10 +40,13 @@ public class MyVisitor extends ParserGramBaseVisitor
         Program program = new Program();
         for(int i = 0; i < ctx.statement().size() ; i++)
         {
+
             //  program.addChild(visitStatement(ctx.statement().get(i)));
             Statement node = (Statement) visitStatement(ctx.statement(i));
             program.addChild(node);
         }
+        this.symbolTable.print();
+
         return program;
     }
 
@@ -129,15 +137,21 @@ public class MyVisitor extends ParserGramBaseVisitor
         String classKeyWord = ctx.CLASS().getText();
         String  nameOfClass = ctx.ID().getText();
         Statement bodyOfClass = visitBodyOfClass(ctx.bodyOfClass());
-
+        Statement statement ;
         if(ctx.bodyOfClass() != null)
         {
-            return new NormalClass(classKeyWord,nameOfClass,bodyOfClass);
+            statement = new NormalClass(classKeyWord,nameOfClass,bodyOfClass);
         }
         else
         {
-            return new NormalClass(classKeyWord,nameOfClass);
+            statement = new NormalClass(classKeyWord,nameOfClass);
         }
+
+        SymbolInfo classInfo = new SymbolInfo();
+        classInfo.setType(classKeyWord);
+        classInfo.setName(nameOfClass);
+        symbolTable.getRow().add(classInfo);
+        return statement;
     }
 
     @Override
@@ -145,14 +159,23 @@ public class MyVisitor extends ParserGramBaseVisitor
         String classKeyWord = ctx.CLASS().getText();
         Statement bodyOfClass = visitBodyOfClass(ctx.bodyOfClass());
         Statement idExtendsId = visitIdExtendsId(ctx.idExtendsId());
+        Statement statement ;
+
         if(ctx.bodyOfClass() != null)
         {
-            return new InheritsClass(classKeyWord,idExtendsId,bodyOfClass);
+            statement = new InheritsClass(classKeyWord,idExtendsId,bodyOfClass);
         }
         else
         {
-            return new InheritsClass(classKeyWord,idExtendsId);
+            statement = new InheritsClass(classKeyWord,idExtendsId);
         }
+
+        SymbolInfo classInfo = new SymbolInfo();
+        classInfo.setType(classKeyWord);
+        classInfo.setName(String.valueOf(idExtendsId));
+        symbolTable.getRow().add(classInfo);
+
+        return statement;
     }
 
     @Override
@@ -286,13 +309,28 @@ public class MyVisitor extends ParserGramBaseVisitor
 
 
  /// variable & assignment
+
     @Override
     public Statement visitVariableDeclaration(ParserGram.VariableDeclarationContext ctx)
     {
-
+        Statement values = null;
         String type = String.valueOf(visitDataType(ctx.dataType()));
         String variableName = ctx.ID().getText();
-        return new VariableDeclarationStatement(type, variableName, (Statement) visit(ctx.variableValues()));
+        if(ctx.variableValues() != null)
+        {
+            values = (Statement) visit(ctx.variableValues());
+        }
+        VariableDeclarationStatement var =  new VariableDeclarationStatement(type, variableName,values );
+
+        SymbolInfo info = new SymbolInfo();
+        String type1 = "Variable: "+type;
+        String value2 = "value is  "+values;
+        info.setType(type1);
+        info.setName(variableName);
+        info.setValue(value2);
+        symbolTable.getRow().add(info);
+
+        return var;
     }
 
     @Override
@@ -434,37 +472,83 @@ public class MyVisitor extends ParserGramBaseVisitor
         String dataType = String.valueOf(visitDataType( ctx.dataType()));
         String nameOfFunction =ctx.ID().getText();
         Statement funcDecStatement = (Statement) visit(ctx.functionDeclaration());
+
+
+        SymbolInfo funcInfo = new SymbolInfo();
+        String s = "Function :  "+dataType;
+        funcInfo.setType(s);
+        funcInfo.setName(nameOfFunction);
+        symbolTable.getRow().add(funcInfo);
+
         return new AnonymousFunction(dataType,nameOfFunction,funcDecStatement);
 
     }
 
+
     @Override
     public Statement visitArrowFunction(ParserGram.ArrowFunctionContext ctx)
-    {    String dataType ="null";
-
-        String nameOfFunction = "null";
-        if (ctx.dataType()!= null)
-        {
-           dataType = String.valueOf(visitDataType( ctx.dataType()));
-        }
-        if (ctx.ID()!=null){
-            nameOfFunction =ctx.ID().getText();
-        }
+    {
+        String dataType = String.valueOf(visitDataType( ctx.dataType()));
+        String nameOfFunction =ctx.ID().getText();
         Statement block = visitBlock(ctx.block());
         Statement parameter = visitParameters(ctx.parameters());
+        Statement statement ;
         if(ctx.parameters() != null)
         {
-            return new ArrowFunction(dataType,nameOfFunction,parameter,block);
+            statement = new ArrowFunction(dataType,nameOfFunction,parameter,block);
         }
         else
         {
-            return new ArrowFunction(dataType,nameOfFunction,block);
+            statement = new ArrowFunction(dataType,nameOfFunction,block);
         }
 
+        SymbolInfo funcInfo = new SymbolInfo();
+        String s = "function :  "+dataType;
+        String s1 = "parameters is  "+parameter;
+        funcInfo.setType(s);
+        funcInfo.setName(nameOfFunction);
+        funcInfo.setValue(s1);
+        symbolTable.getRow().add(funcInfo);
+        return statement;
+    }
+    @Override
+    public Statement visitFunctionDeclaration(ParserGram.FunctionDeclarationContext ctx)
+    {
+        String function = ctx.FUNCTION().getText();
+        String nameOfFunction = null;
+        Statement parameter = null;
+        Statement block = null;
+        Statement statement;
 
+
+        if(ctx.ID() != null)
+        {
+            nameOfFunction = ctx.ID().getText();
+        }
+
+        if(ctx.parameters() != null)
+        {
+            parameter = visitParameters(ctx.parameters());
+        }
+        if(ctx.block() != null)
+        {
+            block = visitBlock(ctx.block());
+        }
+        statement = new FunctionDeclaration(function,nameOfFunction,parameter,block);
+
+        SymbolInfo func = new SymbolInfo();
+
+        func.setType(function);
+        func.setName(nameOfFunction);
+        String s = "parameters is "+parameter;
+        func.setValue(s);
+        symbolTable.getRow().add(func);
+
+        return statement;
     }
 
-    @Override
+
+    /*@Override
     public Statement visitFunctionDeclaration(ParserGram.FunctionDeclarationContext ctx)
     {
         String function = ctx.FUNCTION().getText();
@@ -477,7 +561,7 @@ public class MyVisitor extends ParserGramBaseVisitor
             return new FunctionDeclaration(function,block);
         }
 
-    }
+    }*/
 
     @Override
     public Statement visitCallStatement(ParserGram.CallStatementContext ctx)

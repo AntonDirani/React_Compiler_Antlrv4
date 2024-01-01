@@ -47,8 +47,8 @@ public class Main {
         System.setOut(console);
 
         // Display message only
-        System.out.println(
-                program);
+       // System.out.println(program);
+        System.out.println("\nAST \n"+program);
 
 
     }
