@@ -1,2 +1,3 @@
-TypeOfFunction: ArrowFunction , dataType: Const , functionName: ProductGrid , parameters:  ,  Function Block {  Statement: VariableDeclarationStatement , dataType: Const , variableName: handleClick , variableValues: TypeOfFunction: ArrowFunction , dataType: null , functionName: null , parameters:  ,  Function Block {  PrintOrLogStatement : console.log('ProductGrid clicked!')  }   }
+ImportStatement | Library Name: React, Path: 'react'
+TypeOfFunction: ArrowFunction , dataType: Const , functionName: ProductGrid , parameters:  ,  Function Block {  ReturnStatement : return  React.createElement('div',{className:'grid-container',onClick:handleClick},React.createElement('div',{className:'product-details'},React.createElement('h2',null,'Product s Name'),React.createElement('p',null,'Product Description Lorem ipsum dolor sit amet, consectetur adipiscing elit.'),React.createElement('p',null,'Price: $19.99'),React.createElement('p',null,'Rating: 4.5')),)  }
 

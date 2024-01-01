@@ -49,10 +49,10 @@ public class JsxElementNode extends Statement {
     private LinkedList<Statement> children = new LinkedList<>();
     private LinkedList<Statement> attributes = new LinkedList<>();
     private Statement jsxClasse ;
-    private LinkedList<PropNode> styleProps = new LinkedList<>();
+    private LinkedList<PropStatement> styleProps = new LinkedList<>();
 
 
-    public JsxElementNode(String tagName, LinkedList<Statement> attributes,Statement jsxClasse, LinkedList<Statement> children,Statement onClick,LinkedList<PropNode> styleProps) {
+    public JsxElementNode(String tagName, LinkedList<Statement> attributes,Statement jsxClasse, LinkedList<Statement> children,Statement onClick,LinkedList<PropStatement> styleProps) {
         this.tagName = tagName;
         this.attributes = attributes;
         this.jsxClasse = jsxClasse;
@@ -84,7 +84,7 @@ public class JsxElementNode extends Statement {
         if (onClick != null) {
             stringBuilder.append(String.format(onClick.toString()));
         }
-        for (PropNode styleProp : styleProps) {
+        for (PropStatement styleProp : styleProps) {
             stringBuilder.append(styleProp.toString());
         }
         for (Statement child : children) {

@@ -25,6 +25,7 @@ statement:classDeclaration
          | exportDefault
          | returnStatement
          | jsxBlock //consoleLog
+
          ;
 
 
@@ -132,7 +133,7 @@ arrowFunction: (dataType ID EQUAL)? OPENPAREN parameters CLOSEPAREN EQUAL GT blo
 
 parameters : OPENBRACE? ID (COMMA ID)* OPENBRACE? | /* Empty parameters */;
 
-block: OPENBRACE (variableDeclaration | reacctDotHooks| hook |returnStatement| printOrLogStatement)* CLOSEBRACE;
+block: OPENBRACE (variableDeclaration | reacctDotHooks| hook |returnStatement| printOrLogStatement)+ CLOSEBRACE;
 
 returnStatement : RETURN (ID | literal | jsxBlock | arrowFunction |  reactDotCreateElement)? SEMICOLON;
 
@@ -169,16 +170,14 @@ stringInterpolationStatement: SDOLLAR OPENBRACE THIS DOT ID CLOSEBRACE; //${}
 
 ////react
 reactDotCreateElement: REACT DOT createElement;
-createElement: CREATE_ELEMENT OPENPAREN (  StringLiteral  | callFunction | ID) COMMA ( NULL  | props  )? (COMMA children)? CLOSEPAREN ;
+createElement: CREATE_ELEMENT OPENPAREN type COMMA createElementProps? (COMMA children)? CLOSEPAREN ;
 
+type:(  StringLiteral  | callFunction | ID);
+createElementProps:( NULL  | props  );
 props: OPENBRACE+ prop (COMMA prop)* CLOSEBRACE+;
 
-prop: (ID | JSX_CLASS | ON_CLICK) COLON (literal | ID);
-
-
+prop: (ID | JSX_CLASS | ON_CLICK) COLON (StringLiteral | ID);
 children: (OPENBRACE? (REACT DOT)? createElement (COMMA (REACT DOT)? createElement)* COMMA? CLOSEBRACE? | StringLiteral  );
-/*createElement*/
-
 
 reacctDotHooks: REACT DOT hook  SEMICOLON;
 //reactHooks: REACT_HOOKS OPENPAREN (INTEGER | parameters | arrowFunction) CLOSEPAREN;

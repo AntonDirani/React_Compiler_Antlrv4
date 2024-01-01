@@ -2,11 +2,11 @@ package AST.JSX;
 
 import AST.Statement;
 
-public class PropNode extends Statement {
+public class PropStatement extends Statement {
     private String propName;
     private String propValue;
 
-    public PropNode(String propName, String propValue) {
+    public PropStatement(String propName, String propValue) {
         this.propName = propName;
         this.propValue = propValue;
     }
@@ -14,7 +14,7 @@ public class PropNode extends Statement {
 
     @Override
     public String toString() {
-        return "   STYLE|{" +
+        return "PropStatement {" +
                 "propName='" + propName + '\'' +
                 ", propValue='" + propValue + '\'' +
                 '}';

@@ -7,6 +7,7 @@ import AST.ComparisonExpr.GreaterThanOrEqual;
 import AST.ComparisonExpr.LessThan;
 import AST.ComparisonExpr.LessThanOrEqual;
 import AST.Expr.*;
+import AST.JSX.PropStatement;
 import AST.LogicExpr.And;
 import AST.LogicExpr.EqualEqual;
 import AST.LogicExpr.NotEqual;
@@ -17,7 +18,7 @@ import AST.Literal.*;
 import AST.Loop.*;
 import AST.Method.*;
 import AST.OperationExpr.*;
-import AST.React.ClickHandlerStatement;
+import AST.React.*;
 import AST.React.ReactHooks.*;
 import AST.Variables.AssignmentStatement;
 import AST.Variables.VariableDeclarationStatement;
@@ -27,6 +28,7 @@ import grammar.ParserGram;
 import grammar.ParserGramBaseVisitor;
 
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 public class MyVisitor extends ParserGramBaseVisitor
@@ -488,8 +490,15 @@ public class MyVisitor extends ParserGramBaseVisitor
     @Override
     public Statement visitArrowFunction(ParserGram.ArrowFunctionContext ctx)
     {
-        String dataType = String.valueOf(visitDataType( ctx.dataType()));
-        String nameOfFunction =ctx.ID().getText();
+
+        String dataType = "null";
+        if (ctx.dataType()!=null){
+            dataType = String.valueOf(visitDataType( ctx.dataType()));
+        }
+        String nameOfFunction = "null";
+        if (ctx.ID()!=null){
+            nameOfFunction =ctx.ID().getText();
+        }
         Statement block = visitBlock(ctx.block());
         Statement parameter = visitParameters(ctx.parameters());
         Statement statement ;
@@ -634,20 +643,22 @@ public class MyVisitor extends ParserGramBaseVisitor
     @Override
     public Statement visitBlock(ParserGram.BlockContext ctx)
     {
-        Statement statement;
-        if(ctx.returnStatement() != null)
-        {
-            statement = visitReturnStatement(ctx.returnStatement());
+        Statement statement = null;
+        for (int i = 0; i < ctx.returnStatement().size(); i++) {
+            statement = visitReturnStatement(ctx.returnStatement(i));
         }
-        else if(ctx.printOrLogStatement() != null) {
-            statement = visitPrintOrLogStatement(ctx.printOrLogStatement());
+        for (int i = 0; i < ctx.printOrLogStatement().size(); i++) {
+            statement = visitPrintOrLogStatement(ctx.printOrLogStatement(i));
         }
-        else if(ctx.variableDeclaration() != null) {
-            statement = visitVariableDeclaration(ctx.variableDeclaration());
+        for (int i = 0; i < ctx.variableDeclaration().size(); i++) {
+            statement = visitVariableDeclaration(ctx.variableDeclaration(i));
         }
-        else{
+        for (int i = 0; i < ctx.hook().size(); i++){
             //بدو تعديل
-            statement = (Statement) visitHook(ctx.hook());
+            statement = (Statement) visitHook(ctx.hook(i));
+        }
+        for (int i = 0; i < ctx.reacctDotHooks().size(); i++){
+            statement = (Statement) visit(ctx.reacctDotHooks(i));
         }
         return new BlockOfFunction(statement);
     }
@@ -664,6 +675,10 @@ public class MyVisitor extends ParserGramBaseVisitor
         } else if (ctx.arrowFunction() != null)
         {
             returnStatement.addChild(ctx.arrowFunction().getText());
+        }
+        else if (ctx.reactDotCreateElement() != null)
+        {
+            returnStatement.addChild(ctx.reactDotCreateElement().getText());
         }else {
             returnStatement.addChild(ctx.getText());
         }
@@ -861,6 +876,102 @@ public class MyVisitor extends ParserGramBaseVisitor
     }
 
 
+    @Override
+    public Object visitCreateElement(ParserGram.CreateElementContext ctx) {
+        Statement type = (Statement) visit(ctx.type());
+        Statement createElementProp = null;
+        Statement children = null;
+        if (ctx.createElementProps() != null) {
+            createElementProp = (Statement) visitCreateElementProps(ctx.createElementProps());
+        }
+        if (ctx.children() != null) {
+            children = (Statement) visitChildren(ctx.children());
+        }
+        return new CreateElementStatement(type, createElementProp,children);
+    }
+
+    @Override
+    public Object visitChildren(ParserGram.ChildrenContext ctx) {
+
+        String string = "";
+        ArrayList<Statement> createElementStatements = new ArrayList<>();
+        if( ctx.StringLiteral()!=null){
+        string = ctx.StringLiteral().getText();
+        }else {
+
+            for (ParserGram.CreateElementContext childCtx : ctx.createElement()) {
+                Statement child = (Statement) visitCreateElement(childCtx);
+                createElementStatements.add(child);
+            }
+        }
+        return new ChildrenStatement(createElementStatements,string);
+    }
+
+    @Override
+    public Object visitCreateElementProps(ParserGram.CreateElementPropsContext ctx) {
+        Statement props;
+        if (ctx.props()!=null){
+            props = (Statement) visitProps(ctx.props());
+        }else {
+            props =  new IdNode(ctx.NULL().getText());
+        }
+
+        return new CreateElementPropsStatement(props);
+    }
+
+    @Override
+    public Object visitProps(ParserGram.PropsContext ctx) {
+        ArrayList<PropStatement> props = new ArrayList<>();
+        String propName = "";
+        for (ParserGram.PropContext propCtx : ctx.prop()) {
+            if (propCtx.ID(0)!=null){
+                propName = propCtx.ID(0).getText();
+            } else if (propCtx.JSX_CLASS()!=null){
+                propName = propCtx.JSX_CLASS().getText();
+            } else {
+                propName = propCtx.ON_CLICK().getText();
+            }
+            String propValue = "";
+            if (propCtx.StringLiteral()!=null){
+                propValue =propCtx.StringLiteral().getText() ;
+            }
+            else if (propCtx.ID(1)!=null){
+                propValue= propCtx.ID(1).getText();
+            }
+
+            props.add(new PropStatement(propName, propValue));
+
+    }
+        return new PropsStatement(props);
+    }
+
+    @Override
+    public Object visitReactDotCreateElement(ParserGram.ReactDotCreateElementContext ctx) {
+        Statement createElement;
+        createElement = (Statement) visitCreateElement(ctx.createElement());
+        return new ReactDotCreateElementStatement(createElement);
+    }
+
+    @Override
+    public Object visitType(ParserGram.TypeContext ctx) {
+        Statement type = null;
+        IdNode temp;
+        if(ctx.StringLiteral() != null )
+        {
+            type = (Statement) visit(ctx.StringLiteral());
+        }
+        else if (ctx.callFunction()!= null)
+        {
+            type =(Statement) visit(ctx.callFunction());
+        }
+        else if (ctx.ID()!= null)
+        {
+            temp =  new IdNode(ctx.ID().getText());
+            type =  temp;
+        }
+        return new TypeStatement(type);
+    }
+
 
 
 
@@ -990,7 +1101,7 @@ public class MyVisitor extends ParserGramBaseVisitor
         LinkedList<Statement> jsxChildren = new LinkedList<>();
         String jsxOpenTag = ctx.jsxOpenTag().ID().getText();
         LinkedList<Statement> attributes = new LinkedList<>();
-        LinkedList<PropNode> styleProps = new LinkedList<>();
+        LinkedList<PropStatement> styleProps = new LinkedList<>();
         Statement jsxClasse = null;
         Statement onClick = null;
 
@@ -1158,13 +1269,27 @@ public class MyVisitor extends ParserGramBaseVisitor
 
 
     @Override
-    public LinkedList<PropNode> visitStyle(ParserGram.StyleContext ctx) {
-        LinkedList<PropNode> styleProps = new LinkedList<>();
-
+    public LinkedList<PropStatement> visitStyle(ParserGram.StyleContext ctx) {
+        LinkedList<PropStatement> styleProps = new LinkedList<>();
+            String propName = "";
         for (ParserGram.PropContext propCtx : ctx.props().prop()) {
-            String propName = propCtx.ID().getText();
-            String propValue =propCtx.literal().getText() ;
-            styleProps.add(new PropNode(propName, propValue));
+            if (propCtx.ID(0)!=null){
+                 propName = propCtx.ID(0).getText();
+            } else if (propCtx.JSX_CLASS()!=null){
+                 propName = propCtx.JSX_CLASS().getText();
+            } else {
+                 propName = propCtx.ON_CLICK().getText();
+            }
+            String propValue;
+            if (propCtx.StringLiteral()!=null){
+                propValue =propCtx.StringLiteral().getText() ;
+            }
+            else{
+                propValue= propCtx.ID(1).getText();
+            }
+
+
+            styleProps.add(new PropStatement(propName, propValue));
         }
 
         return styleProps;
