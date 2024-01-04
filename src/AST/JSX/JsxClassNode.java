@@ -21,9 +21,8 @@ public class JsxClassNode extends Statement {
 
     @Override
     public String toString() {
-        return "     JsxClass|{" +
-                "className='" + className + '\'' +
-                ", value=" + value.toString() +
-                '}';
+        return "\t" +
+                "className=" + className +
+                ", value=" + value ;
     }
 }

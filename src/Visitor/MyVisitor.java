@@ -1153,7 +1153,11 @@ public class MyVisitor extends ParserGramBaseVisitor
         }
 
 
-
+        SymbolInfo info = new SymbolInfo();
+        String type = "JsxElement: OpenTag";
+        info.setType(type);
+        info.setName(jsxOpenTag);
+        symbolTable.getRow().add(info);
 
         return new JsxElementNode(jsxOpenTag, attributes, jsxClasse, jsxChildren,onClick,styleProps);
     }
@@ -1186,6 +1190,14 @@ public class MyVisitor extends ParserGramBaseVisitor
     public Statement visitAttribute(ParserGram.AttributeContext ctx) {
         String attributeName = ctx.ID().getText();
         String attributeValue = ctx.StringLiteral().getText();
+
+        SymbolInfo info = new SymbolInfo();
+        String type = "JsxAttribute: attribute";
+        info.setType(type);
+        info.setName(attributeName);
+        info.setValue(attributeValue);
+        symbolTable.getRow().add(info);
+
         return new JsxAttributeNode(attributeName, attributeValue);
     }
 
@@ -1198,6 +1210,12 @@ public class MyVisitor extends ParserGramBaseVisitor
             className = ctx.JSX_CLASS().getText();
         }
 
+        SymbolInfo info = new SymbolInfo();
+        String type = "JsxAttribute: JsxClass";
+        info.setType(type);
+        info.setName(className);
+        info.setValue(value);
+        symbolTable.getRow().add(info);
 
         return new JsxClassNode(className, value);
     }
@@ -1217,6 +1235,12 @@ public class MyVisitor extends ParserGramBaseVisitor
             Statement attribute = visitAttribute(attributeCtx);
             attributes.add(attribute);
         }
+
+        SymbolInfo info = new SymbolInfo();
+        String type = "JsxElement: OpenSelfClose ";
+        info.setType(type);
+        info.setName(tagName);
+        symbolTable.getRow().add(info);
 
         return new JsxOpenSelfCloseNode(tagName, attributes,jsxClasse);
     }
@@ -1248,6 +1272,12 @@ public class MyVisitor extends ParserGramBaseVisitor
             Statement AttributeElement = visitAttributeElementJs(AttributeCtx);
             attributes.add((AttributeElementJsNode)AttributeElement);}
 
+        SymbolInfo info = new SymbolInfo();
+        String type = "JsxElementJs: ElementJs";
+        info.setType(type);
+        info.setName(value);
+        symbolTable.getRow().add(info);
+
         return new JsxElementJsNode(value,attributes);
     }
 
@@ -1256,6 +1286,14 @@ public class MyVisitor extends ParserGramBaseVisitor
     public Statement visitAttributeElementJs(ParserGram.AttributeElementJsContext ctx) {
         String attributeName = ctx.ID().getText();
         String value = ctx.jsxExpreeion().ID().getText();
+
+        SymbolInfo info = new SymbolInfo();
+        String type = "AttributeElementJs: AttributeElementJs";
+        info.setType(type);
+        info.setName(attributeName);
+        info.setValue(value);
+        symbolTable.getRow().add(info);
+
         return new AttributeElementJsNode(attributeName,value);
     }
 
@@ -1264,6 +1302,14 @@ public class MyVisitor extends ParserGramBaseVisitor
     public Statement visitAttributeClick(ParserGram.AttributeClickContext ctx) {
         String attributeName = "ON_CLICK";
         String value = ctx.jsxExpreeion().ID().getText();
+
+        SymbolInfo info = new SymbolInfo();
+        String type = "AttributeClick: attributeClick";
+        info.setType(type);
+        info.setName(attributeName);
+        info.setValue(value);
+        symbolTable.getRow().add(info);
+
         return new JsxAttributeClickNode(attributeName, value);
     }
 

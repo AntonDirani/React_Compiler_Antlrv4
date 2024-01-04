@@ -8,14 +8,14 @@ public class JsxBlockNode extends Statement {
         this.jsxElement = jsxElement;
        // addChild(jsxElement);
     }
-//
-//    @Override
-//    protected String nodeInfo() {
-//        return String.format("%s|%s", this.getClass().getSimpleName(),"Content:JsxElement");
-//    }
 
     @Override
     public String toString() {
-        return String.format("%s|{Content:jsxElement}%S", this.getClass().getSimpleName(),jsxElement.toString());
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(String.format("%s:Content: jsxElement", this.getClass().getSimpleName()));
+        stringBuilder.append(jsxElement.toString());
+        return stringBuilder.toString();
+
     }
+
 }

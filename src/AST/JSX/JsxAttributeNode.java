@@ -21,9 +21,7 @@ public class JsxAttributeNode extends Statement {
 
     @Override
     public String toString() {
-        return "JsxAttribute|{" +
-                "attributeName='" + attributeName + '\'' +
-                ", attributeValue='" + attributeValue + '\'' +
-                '}';
+        return "\tattributeName=" + attributeName +
+                ", attributeValue=" + attributeValue ;
     }
 }

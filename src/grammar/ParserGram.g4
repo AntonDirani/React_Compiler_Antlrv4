@@ -196,13 +196,13 @@ useContext:  USE_CONTEXT OPENPAREN ID CLOSEPAREN SEMICOLON? ;
 useRef: USE_REF OPENPAREN INTEGER? CLOSEPAREN ;
 
 
-////jsx
+////         JSX
 
 jsxBlock: OPENPAREN jsxElement CLOSEPAREN;
 
 jsxElement:jsxOpenTag  jsxChildren closeTag;
 
-jsxChildren:(jsxElement | jsxOpenSelfClose | jsxExpreeion | elementJs | jsxText)*;
+jsxChildren:(jsxElement | jsxOpenSelfClose | jsxExpreeion | elementJs | jsxText)+;
 
 jsxOpenTag:LT ID (attribute)*(jsxClass | attributeClick | style)? GT;
 

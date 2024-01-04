@@ -7,30 +7,31 @@ import AST.Statement;
 import java.util.LinkedList;
 public class JsxOpenSelfCloseNode extends Statement {
     private String tagName;
-    private Statement jsxClasse ;
+    private Statement jsxClass ;
     private LinkedList<Statement> attributes;
 
     public JsxOpenSelfCloseNode(String tagName, LinkedList<Statement> attributes, Statement jsxClasse) {
         this.tagName = tagName;
-        this.jsxClasse = jsxClasse;
+        this.jsxClass = jsxClass;
         this.attributes = attributes;
     }
 
 
-    public String getTagName() {
-        return tagName;
-    }
 
-    public LinkedList<Statement> getAttributes() {
-        return attributes;
-    }
 
 
     @Override
     public String toString() {
-        return "\nJsxOpenSelfClose|{" +
-                "tagName='" + tagName + '\'' +
-                ", attributes=" + '\'' + attributes +jsxClasse.toString()+
-                '}';
-    }
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(String.format("\nJsxOpenSelfClose :TagName : %s    Attributes:", tagName));
+
+        for (Statement attribute : attributes) {
+            stringBuilder.append(attribute.toString());
+        }
+
+        if( jsxClass != null) {
+            stringBuilder.append(jsxClass.toString());
+        }
+
+        return stringBuilder.toString();}
 }

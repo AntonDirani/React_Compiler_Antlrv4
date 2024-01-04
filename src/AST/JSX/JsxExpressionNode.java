@@ -16,6 +16,6 @@ public class JsxExpressionNode extends Statement {
 
     @Override
     public String toString() {
-        return String.format("\nJsxExpression|{JsxExpression: %s }", expressionText);
+        return String.format("\nJsxExpression:JsxExpression: %s ", expressionText);
     }
 }

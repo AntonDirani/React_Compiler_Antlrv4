@@ -48,29 +48,24 @@ public class JsxElementNode extends Statement {
     private Statement onClick;
     private LinkedList<Statement> children = new LinkedList<>();
     private LinkedList<Statement> attributes = new LinkedList<>();
-    private Statement jsxClasse ;
+    private Statement jsxClass ;
     private LinkedList<PropStatement> styleProps = new LinkedList<>();
 
 
     public JsxElementNode(String tagName, LinkedList<Statement> attributes,Statement jsxClasse, LinkedList<Statement> children,Statement onClick,LinkedList<PropStatement> styleProps) {
         this.tagName = tagName;
         this.attributes = attributes;
-        this.jsxClasse = jsxClasse;
+        this.jsxClass = jsxClasse;
         this.children = children;
         this.onClick  = onClick;
         this.styleProps = styleProps;
     }
-//
-//    @Override
-//    protected String nodeInfo() {
-//        return String.format("JsxElementNode | Tag: %s", tagName);
-//    }
+
 
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(super.toString());
-        stringBuilder.append(String.format("\nJsxElementNode|{TagName: %s}    ", tagName));
+        stringBuilder.append(String.format("\nJsxElementNode:TagName: %s    Attributes:", tagName));
 
 
         for (Statement attribute : attributes) {
@@ -78,8 +73,8 @@ public class JsxElementNode extends Statement {
         }
 
 
-        if( jsxClasse != null) {
-            stringBuilder.append(jsxClasse.toString());
+        if( jsxClass != null) {
+            stringBuilder.append(jsxClass.toString());
         }
         if (onClick != null) {
             stringBuilder.append(String.format(onClick.toString()));

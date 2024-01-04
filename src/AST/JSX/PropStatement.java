@@ -14,9 +14,8 @@ public class PropStatement extends Statement {
 
     @Override
     public String toString() {
-        return "PropStatement {" +
-                "propName='" + propName + '\'' +
-                ", propValue='" + propValue + '\'' +
-                '}';
+        return "PropStatement :" +
+                "propName=" + propName +
+                ", propValue=" + propValue ;
     }
 }

@@ -92,3 +92,28 @@ while (i <= 5)
   } else {
     console.log("You are a senior citizen.");
   }
+
+
+(
+  <div className="grid-container">
+   <div className="product-details">
+  <h2>Product Name</h2>
+  <p>Product Description Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+  <p>Price: $19.99</p>
+  <p>Rating: 4.5</p>
+  </div>
+   <div className="related-products">
+   <div className="related-product">
+   <img className="thumbnail" src="https://via.placeholder.com/50" alt="Product Thumbnail" />
+   <span>Related Product 1</span>
+   </div>
+   <div className="related-product">
+   <img className="thumbnail" src="https://via.placeholder.com/50" alt="Product Thumbnail" />
+   <span>Related Product 2</span>
+   </div>
+   <div className="related-product">
+  <img className="thumbnail" src="https://via.placeholder.com/50" alt="Product Thumbnail" />
+  <span>Related Product 3</span>
+   </div>
+  </div>
+  </div>  )

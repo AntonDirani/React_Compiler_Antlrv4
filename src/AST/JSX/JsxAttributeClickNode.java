@@ -14,10 +14,9 @@ public class JsxAttributeClickNode extends Statement {
 
     @Override
     public String toString() {
-        return "      JsxAttributeClick|{" +
-                "attributeName='" + attributeName + '\'' +
-                ", attributeValue='" + attributeValue + '\'' +
-                '}';
+        return "\t" +
+                "attributeName=" + attributeName+
+                ", attributeValue=" + attributeValue ;
     }
 
 

@@ -1,3 +1,25 @@
-ImportStatement | Library Name: React, Path: 'react'
-TypeOfFunction: ArrowFunction , dataType: Const , functionName: ProductGrid , parameters:  ,  Function Block {  ReturnStatement : return  React.createElement('div',{className:'grid-container',onClick:handleClick},React.createElement('div',{className:'product-details'},React.createElement('h2',null,'Product s Name'),React.createElement('p',null,'Product Description Lorem ipsum dolor sit amet, consectetur adipiscing elit.'),React.createElement('p',null,'Price: $19.99'),React.createElement('p',null,'Rating: 4.5')),)  }
+JsxBlockNode:Content: jsxElement
+JsxElementNode:TagName: div    Attributes:	className=className, value="grid-container"
+JsxElementNode:TagName: div    Attributes:	className=className, value="product-details"
+JsxElementNode:TagName: h2    Attributes:
+JsxTextNode:	Text:ProductName
+JsxElementNode:TagName: p    Attributes:
+JsxTextNode:	Text:ProductDescriptionLoremipsumdolorsitamet,consecteturadipiscingelit.
+JsxElementNode:TagName: p    Attributes:
+JsxTextNode:	Text:Price:$19.99
+JsxElementNode:TagName: p    Attributes:
+JsxTextNode:	Text:Rating:4.5
+JsxElementNode:TagName: div    Attributes:	className=className, value="related-products"
+JsxElementNode:TagName: div    Attributes:	className=className, value="related-product"
+JsxElementNode:TagName: span    Attributes:
+JsxTextNode:	Text:RelatedProduct1
+JsxOpenSelfClose :TagName : img    Attributes:	attributeName=src, attributeValue="https://via.placeholder.com/50"	attributeName=alt, attributeValue="Product Thumbnail"	className=className, value="thumbnail"
+JsxElementNode:TagName: div    Attributes:	className=className, value="related-product"
+JsxElementNode:TagName: span    Attributes:
+JsxTextNode:	Text:RelatedProduct2
+JsxOpenSelfClose :TagName : img    Attributes:	attributeName=src, attributeValue="https://via.placeholder.com/50"	attributeName=alt, attributeValue="Product Thumbnail"	className=className, value="thumbnail"
+JsxElementNode:TagName: div    Attributes:	className=className, value="related-product"
+JsxElementNode:TagName: span    Attributes:
+JsxTextNode:	Text:RelatedProduct3
+JsxOpenSelfClose :TagName : img    Attributes:	attributeName=src, attributeValue="https://via.placeholder.com/50"	attributeName=alt, attributeValue="Product Thumbnail"	className=className, value="thumbnail"
 

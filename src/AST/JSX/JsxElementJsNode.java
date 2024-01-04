@@ -22,7 +22,6 @@ public class JsxElementJsNode extends Statement {
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(super.toString());
         stringBuilder.append(String.format("\nJsxElementJsNode|{element: %s}    ", element));
 
 
