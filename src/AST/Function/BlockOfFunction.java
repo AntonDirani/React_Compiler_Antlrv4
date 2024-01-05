@@ -2,18 +2,22 @@ package AST.Function;
 
 import AST.Statement;
 
+import java.util.ArrayList;
+
 public class BlockOfFunction extends Statement
 {
-    public Statement statement;
+    public ArrayList<Statement> statements;
 
-    public BlockOfFunction(Statement statement) {
-        this.statement = statement;
+
+    public BlockOfFunction(ArrayList<Statement> statement) {
+        this.statements = statement;
     }
 
     @Override
     public String toString() {
-        return String.format(" %s ",statement);
-
+        return "BlockOfFunction{" +
+                "statement=" + statements +
+                '}';
     }
 }
 

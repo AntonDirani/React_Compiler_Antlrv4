@@ -204,7 +204,7 @@ jsxElement:jsxOpenTag  jsxChildren closeTag;
 
 jsxChildren:(jsxElement | jsxOpenSelfClose | jsxExpreeion | elementJs | jsxText)+;
 
-jsxOpenTag:LT ID (attribute)*(jsxClass | attributeClick | style)? GT;
+jsxOpenTag:LT ID (attribute)* (jsxClass | attributeClick | style)? GT;
 
 closeTag:LT DIVIDE ID GT;
 

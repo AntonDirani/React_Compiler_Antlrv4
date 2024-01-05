@@ -66,7 +66,12 @@ public class MyVisitor extends ParserGramBaseVisitor
         else if(ctx.inheritsClassDeclaration() != null)
         {
             statement = (Statement) visit(ctx.inheritsClassDeclaration());
-        }else if(ctx.importStatement() != null)
+        }
+        else if(ctx.exportDefault() != null)
+        {
+            statement = (Statement) visit(ctx.exportDefault());
+        }
+        else if(ctx.importStatement() != null)
         {
             statement = (Statement) visit(ctx.importStatement());
         }
@@ -643,24 +648,46 @@ public class MyVisitor extends ParserGramBaseVisitor
     @Override
     public Statement visitBlock(ParserGram.BlockContext ctx)
     {
-        Statement statement = null;
-        for (int i = 0; i < ctx.returnStatement().size(); i++) {
-            statement = visitReturnStatement(ctx.returnStatement(i));
+       ArrayList <Statement> statements = new ArrayList<>();
+
+        for (int j = 0; j < ctx.printOrLogStatement().size(); j++) {
+            if (ctx.printOrLogStatement()!=null){
+            assert false;
+            statements.add( visitPrintOrLogStatement(ctx.printOrLogStatement(j)));
+            }
         }
-        for (int i = 0; i < ctx.printOrLogStatement().size(); i++) {
-            statement = visitPrintOrLogStatement(ctx.printOrLogStatement(i));
+        for (int j = 0; j < ctx.variableDeclaration().size(); j++) {
+            if (ctx.variableDeclaration()!=null){
+                assert false;
+                statements.add( visitVariableDeclaration(ctx.variableDeclaration(j)));
+            }
         }
-        for (int i = 0; i < ctx.variableDeclaration().size(); i++) {
-            statement = visitVariableDeclaration(ctx.variableDeclaration(i));
+        for (int j = 0; j < ctx.hook().size(); j++){
+            if (ctx.hook()!=null){
+                assert false;
+                statements.add( (Statement) visitHook(ctx.hook(j)));
+            }
+
         }
-        for (int i = 0; i < ctx.hook().size(); i++){
-            //بدو تعديل
-            statement = (Statement) visitHook(ctx.hook(i));
+        for (int j = 0; j < ctx.reacctDotHooks().size(); j++){
+            if (ctx.reacctDotHooks()!=null){
+                assert false;
+                statements.add( (Statement) visit(ctx.reacctDotHooks(j)));
+            }
         }
-        for (int i = 0; i < ctx.reacctDotHooks().size(); i++){
-            statement = (Statement) visit(ctx.reacctDotHooks(i));
+        for (int j = 0; j < ctx.returnStatement().size(); j++) {
+            if (ctx.returnStatement()!=null){
+                assert false;
+                statements.add( visitReturnStatement(ctx.returnStatement(j)));
+            }
         }
-        return new BlockOfFunction(statement);
+        return new BlockOfFunction(statements);
+    }
+
+    @Override
+    public Object visitExportDefault(ParserGram.ExportDefaultContext ctx) {
+        String className = ctx.ID().getText();
+        return new ExportStatement(className);
     }
 
     ///return
