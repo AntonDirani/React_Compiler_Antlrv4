@@ -696,18 +696,22 @@ public class MyVisitor extends ParserGramBaseVisitor
         // return super.visitReturnStatement(ctx);
         ReturnStatement returnStatement = new ReturnStatement();
         if (ctx.ID() != null) {
-            returnStatement.addChild(ctx.ID().getText());
+            returnStatement.addChild( new IdNode(ctx.ID().getText()));
         } else if (ctx.literal() != null) {
-            returnStatement.addChild(ctx.literal().getText());
+            returnStatement.addChild((Statement) visit( ctx.literal()));
         } else if (ctx.arrowFunction() != null)
         {
-            returnStatement.addChild(ctx.arrowFunction().getText());
+            returnStatement.addChild((Statement) visit( ctx.arrowFunction()));
         }
         else if (ctx.reactDotCreateElement() != null)
         {
-            returnStatement.addChild(ctx.reactDotCreateElement().getText());
+            returnStatement.addChild((Statement) visit( ctx.reactDotCreateElement()));
+        }
+        else if (ctx.jsxBlock() != null)
+        {
+            returnStatement.addChild( (Statement) visitJsxBlock(ctx.jsxBlock()));
         }else {
-            returnStatement.addChild(ctx.getText());
+
         }
 
         return returnStatement;

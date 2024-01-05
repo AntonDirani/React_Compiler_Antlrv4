@@ -17,7 +17,7 @@ export const ProductGrid = () => {
       React.createElement('p', null, 'Price: $19.99'),
       React.createElement('p', null, 'Rating: 4.5')
     ),
-    
+
   );
 };
 

@@ -16,7 +16,7 @@ public class BlockOfFunction extends Statement
     @Override
     public String toString() {
         return "BlockOfFunction{" +
-                "statement=" + statements +
+                "statements=" + statements +
                 '}';
     }
 }

@@ -11,11 +11,18 @@ public class JsxBlockNode extends Statement {
 
     @Override
     public String toString() {
+        return "JsxBlockNode{"  + "\n" +
+                "jsxElement=" + jsxElement +
+                '}';
+    }
+
+    /* @Override
+    public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(String.format("%s:Content: jsxElement", this.getClass().getSimpleName()));
         stringBuilder.append(jsxElement.toString());
         return stringBuilder.toString();
 
-    }
+    }*/
 
 }

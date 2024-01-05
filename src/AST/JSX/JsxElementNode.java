@@ -61,8 +61,19 @@ public class JsxElementNode extends Statement {
         this.styleProps = styleProps;
     }
 
-
     @Override
+    public String toString() {
+        return "JsxElementNode{" + "\n" +
+                "tagName='" + tagName + '\'' +
+                ", onClick=" + onClick +
+                ", children=" + children +
+                ", attributes=" + attributes +
+                ", jsxClass=" + jsxClass +
+                ", styleProps=" + styleProps +
+                 "\n" +'}';
+    }
+
+    /* @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(String.format("\nJsxElementNode:TagName: %s    Attributes:", tagName));
@@ -87,6 +98,6 @@ public class JsxElementNode extends Statement {
         }
 
         return stringBuilder.toString();
-    }
+    }*/
 }
 

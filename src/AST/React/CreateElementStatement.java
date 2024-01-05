@@ -23,10 +23,10 @@ public class CreateElementStatement extends Statement {
 
     @Override
     public String toString() {
-        return "CreateElementStatement{" +
+        return "\nCreateElementStatement{" + "\n" +
                 "type=" + type +
                 ", props=" + props +
                 ", children=" + children +
-                '}';
+                "\n" + '}';
     }
 }
