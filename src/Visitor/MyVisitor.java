@@ -1457,8 +1457,8 @@ public class MyVisitor extends ParserGramBaseVisitor
     @Override
     public Statement visitIfElseStatement(ParserGram.IfElseStatementContext ctx)
     {
-        Statement s1 = null;//= visitIfStatement(ctx.ifStatement());
-        Statement s2 = null;//=visitElseStatement(ctx.elseStatemetn());
+        Statement s1 = null;
+        Statement s2 = null;
 
         if(ctx.ifStatement() != null)
         {

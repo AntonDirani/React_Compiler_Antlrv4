@@ -18,7 +18,6 @@ public class IdExpr extends Expr
 
     @Override
     public String toString() {
-        //return ""+ booleans ;
         return String.join(", ", ids.stream().map(Object::toString).toArray(String[]::new));
     }
 

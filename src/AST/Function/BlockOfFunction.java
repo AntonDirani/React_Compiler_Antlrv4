@@ -19,5 +19,11 @@ public class BlockOfFunction extends Statement
                 "statements=" + statements +
                 '}';
     }
+/*
+    @Override
+    public String toString() {
+        return String.format(" %s ",statements);
+
+    }*/
 }
 

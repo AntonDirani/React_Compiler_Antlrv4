@@ -26,7 +26,7 @@ public class ArrowFunction extends Function
 
     @Override
     public String toString() {
-        return String.format("TypeOfFunction: %s , dataType: %s , functionName: %s , parameters: %s ,  Function Block { %s }", this.getClass().getSimpleName(),dataType, nameOfFunc,parameters, functionBlock);
+        return String.format("TypeOfFunction: %s , dataType: %s , functionName: %s , parameters: %s  block{ %s } ", this.getClass().getSimpleName(),dataType, nameOfFunc,parameters, functionBlock);
     }
 }
 

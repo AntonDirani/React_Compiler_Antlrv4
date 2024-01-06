@@ -17,7 +17,6 @@ public class FloatExpr extends  Expr
 
     @Override
     public String toString() {
-        //return "FLOAT:" + floats ;
         return String.join(", ", floats.stream().map(Object::toString).toArray(String[]::new));
 
     }
