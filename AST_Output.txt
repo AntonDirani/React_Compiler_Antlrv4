@@ -1,5 +1,5 @@
 ImportStatement | Library Name: React, Path: 'react'
-TypeOfFunction: ArrowFunction , dataType: Const , functionName: ProductGrid , parameters:  ,  Function Block { BlockOfFunction{statements=[Statement: VariableDeclarationStatement , dataType: Const , variableName: handleClick , variableValues: TypeOfFunction: ArrowFunction , dataType: null , functionName: null , parameters:  ,  Function Block { BlockOfFunction{statements=[PrintOrLogStatement : console.log(StringLiteral{, string=''ProductGrid clicked!''})]} } , ReturnStatement{
+TypeOfFunction: ArrowFunction , dataType: Const , functionName: ProductGrid , parameters:  ,  Function Block { BlockOfFunction{statements=[TypeOfFunction: ArrowFunction , dataType: Const , functionName: handleClick , parameters:  ,  Function Block { BlockOfFunction{statements=[PrintOrLogStatement : console.log(StringLiteral{, string=''ProductGrid clicked!''})]} }, ReturnStatement{
 val=[ReactDotCreateElementStatement{createElement=
 CreateElementStatement{
 type=TypeStatement{type=StringLiteral{, string=''div''}}, props=CreateElementPropsStatement{props=PropsStatement{propsList=[PropStatement :propName=className, propValue='grid-container', PropStatement :propName=handleClick, propValue=]}}, children=ChildrenStatement{createElementStatements=[

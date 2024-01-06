@@ -375,10 +375,7 @@ public class MyVisitor extends ParserGramBaseVisitor
         {
             statement =(Statement) visit(ctx.hook());
         }
-        else if (ctx.arrowFunction()!= null)
-        {
-            statement =(Statement) visit(ctx.arrowFunction());
-        }
+
         else
         {
             statement =(Statement) visit(ctx.expr());
@@ -647,7 +644,12 @@ public class MyVisitor extends ParserGramBaseVisitor
     public Statement visitBlock(ParserGram.BlockContext ctx)
     {
        ArrayList <Statement> statements = new ArrayList<>();
-
+        for (int j = 0; j < ctx.arrowFunction().size(); j++) {
+            if (ctx.arrowFunction()!=null){
+                assert false;
+                statements.add( visitArrowFunction(ctx.arrowFunction(j)));
+            }
+        }
         for (int j = 0; j < ctx.printOrLogStatement().size(); j++) {
             if (ctx.printOrLogStatement()!=null){
             assert false;

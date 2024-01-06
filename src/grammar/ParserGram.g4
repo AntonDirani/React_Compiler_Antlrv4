@@ -38,7 +38,7 @@ exportDefault: EXPORT DEFAULT ID SEMICOLON?;
 variableDeclaration: dataType ID (EQUAL variableValues )? SEMICOLON? | letDecleration | varDeclaration;
 dataType: (VAR | LET | CONST );
 //variableValues:(literal | hook | ID (DOT ID)?);
-variableValues:(literal | hook |expr| ID (DOT ID)? | arrowFunction);
+variableValues:(literal | hook |expr| ID (DOT ID)? );
 
 letDecleration: LET ID (EQUAL literal)? SEMICOLON;
 
@@ -133,7 +133,7 @@ arrowFunction: (dataType ID EQUAL)? OPENPAREN parameters CLOSEPAREN EQUAL GT blo
 
 parameters : OPENBRACE? ID (COMMA ID)* OPENBRACE? | /* Empty parameters */;
 
-block: OPENBRACE (variableDeclaration | reacctDotHooks| hook |returnStatement| printOrLogStatement)+ CLOSEBRACE;
+block: OPENBRACE (variableDeclaration | reacctDotHooks| hook |returnStatement| printOrLogStatement| arrowFunction)+ CLOSEBRACE;
 
 returnStatement : RETURN (ID | literal | jsxBlock | arrowFunction |  reactDotCreateElement)? SEMICOLON;
 
