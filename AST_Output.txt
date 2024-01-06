@@ -1,9 +1,2 @@
-Statement: NormalClass ,classKeyWord: class , className: Animal{
-
-classBody{
-
-MethodDeclaration, methodType:  ConstructorMethod{ constructorKeyWord: constructor(parameters: name){ constructorBody{ this.name = name } }
-
-}
-}
+Statement: CreateAnObject , Const myAnimal = new Animal(stringLiteral : "Buddy")
 

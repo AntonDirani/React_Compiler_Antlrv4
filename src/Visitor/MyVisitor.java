@@ -1,7 +1,6 @@
 package Visitor;
 import AST.*;
 import AST.Class.*;
-
 import AST.ComparisonExpr.GreaterThan;
 import AST.ComparisonExpr.GreaterThanOrEqual;
 import AST.ComparisonExpr.LessThan;
@@ -228,15 +227,26 @@ public class MyVisitor extends ParserGramBaseVisitor
         String nameOfMethod = ctx.ID().getText();
         Statement parameters =visitParameters(ctx.parameters());
         Statement bodyOfMethod = visitBodyOfMethod(ctx.bodyOfMethod());
+        Statement statement;
 
         if(ctx.parameters() != null) {
-            return new NormalMethod(nameOfMethod, parameters, bodyOfMethod);
+            statement = new NormalMethod(nameOfMethod, parameters, bodyOfMethod);
         }
         else
         {
-            return  new NormalMethod(nameOfMethod,bodyOfMethod);
+            statement =  new NormalMethod(nameOfMethod,bodyOfMethod);
 
         }
+
+        String s1 = "parameters is  "+parameters;
+        SymbolInfo methodInfo = new SymbolInfo();
+        methodInfo.setType("method");
+        methodInfo.setName(nameOfMethod);
+        methodInfo.setValue(nameOfMethod);
+        methodInfo.setValue(s1);
+        symbolTable.getRow().add(methodInfo);
+
+        return  statement;
     }
 
     @Override
@@ -244,6 +254,8 @@ public class MyVisitor extends ParserGramBaseVisitor
 
         String staticKeyWord = ctx.STATIC().getText();
         Statement method =  visitMethod(ctx.method());
+
+
         return new StaticMethod(staticKeyWord,method);
     }
     @Override
@@ -267,6 +279,14 @@ public class MyVisitor extends ParserGramBaseVisitor
         Statement parameter = visitParameters(ctx.parameters());
         Statement bodyOfConstructor =  visitBodyOfConstructor(ctx.bodyOfConstructor());
 
+
+        String s1 = "parameters is  "+parameter;
+        SymbolInfo constMethodInfo = new SymbolInfo();
+        constMethodInfo.setType("method");
+        constMethodInfo.setName("constructor");
+        constMethodInfo.setValue(s1);
+        symbolTable.getRow().add(constMethodInfo);
+
         return new ConstructorMethod(constructorKeyWord,parameter,bodyOfConstructor);
     }
 
@@ -288,6 +308,12 @@ public class MyVisitor extends ParserGramBaseVisitor
         String type = String.valueOf(visitDataType(ctx.dataType()));
         String var = ctx.ID().getText();
         Statement body = visitBodyOfObject(ctx.bodyOfObject());
+
+        SymbolInfo objInfo = new SymbolInfo();
+        objInfo.setType("object");
+        objInfo.setName(var);
+        symbolTable.getRow().add(objInfo);
+
         return new CreateAnObject(type,var,body);
     }
 
@@ -357,6 +383,13 @@ public class MyVisitor extends ParserGramBaseVisitor
     {
         String id = ctx.ID().getText();
         Statement value = (Statement) visit(ctx.variableValues());
+
+
+        SymbolInfo classInfo = new SymbolInfo();
+        classInfo.setType("variable");
+        classInfo.setName(id);
+        classInfo.setValue(String.valueOf(value));
+        symbolTable.getRow().add(classInfo);
         return new AssignmentStatement(id,value);
     }
 
