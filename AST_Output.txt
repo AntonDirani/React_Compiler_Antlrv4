@@ -1,5 +1,5 @@
 ImportStatement | Library Name: React, Path: 'react'
-TypeOfFunction: ArrowFunction , dataType: Const , functionName: ProductGrid , parameters:  ,  Function Block { BlockOfFunction{statements=[TypeOfFunction: ArrowFunction , dataType: Const , functionName: handleClick , parameters:  ,  Function Block { BlockOfFunction{statements=[PrintOrLogStatement : console.log(StringLiteral{, string=''ProductGrid clicked!''})]} }, ReturnStatement{
+TypeOfFunction: ArrowFunction , dataType: Const , functionName: ProductGrid , parameters:   block{ BlockOfFunction{statements=[TypeOfFunction: ArrowFunction , dataType: Const , functionName: handleClick , parameters:   block{ BlockOfFunction{statements=[PrintOrLogStatement : console.log(StringLiteral{, string=''ProductGrid clicked!''})]} } , ReturnStatement{
 val=[ReactDotCreateElementStatement{createElement=
 CreateElementStatement{
 type=TypeStatement{type=StringLiteral{, string=''div''}}, props=CreateElementPropsStatement{props=PropsStatement{propsList=[PropStatement :propName=className, propValue='grid-container', PropStatement :propName=handleClick, propValue=]}}, children=ChildrenStatement{createElementStatements=[
@@ -18,6 +18,6 @@ CreateElementStatement{
 type=TypeStatement{type=StringLiteral{, string=''p''}}, props=CreateElementPropsStatement{props={null'}}, children=ChildrenStatement{createElementStatements=[], string=''Rating: 4.5''}
 }], string=''}
 }], string=''}
-}}]}]} }
+}}]}]} } 
 ExportStatement{reactComponent='ProductGrid'}
 
