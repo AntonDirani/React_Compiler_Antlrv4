@@ -107,7 +107,9 @@ INTEGER: '0' | [1-9] [0-9]*;
 FLOAT: INTEGER '.' [0-9]+;
 
 //identifier
+ID_UPPER: [A-Z][a-zA-Z0-9_]*;
 ID: [a-zA-Z_][a-zA-Z0-9_]*;
+
 
 /*
 

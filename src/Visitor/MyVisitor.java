@@ -42,6 +42,7 @@ public class MyVisitor extends ParserGramBaseVisitor
         for(int i = 0; i < ctx.statement().size() ; i++)
         {
 
+            //  program.addChild(visitStatement(ctx.statement().get(i)));
             Statement node = (Statement) visitStatement(ctx.statement(i));
             program.addChild(node);
         }
@@ -111,15 +112,7 @@ public class MyVisitor extends ParserGramBaseVisitor
         {
             statement = (Statement) visit(ctx.stringInterpolationStatement());
         }
-        else if(ctx.returnStatement()!= null)
-        {
-            statement = (Statement) visit(ctx.returnStatement());
-        }
         //export
-        else if(ctx.jsxBlock() != null)
-        {
-            statement = (Statement) visit(ctx.jsxBlock());
-        }
         else if(ctx.assignment()!= null)
         {
             statement = (Statement) visit(ctx.assignment());
@@ -318,6 +311,109 @@ public class MyVisitor extends ParserGramBaseVisitor
     }
 
     @Override
+    public Object visitReactComponent(ParserGram.ReactComponentContext ctx) {
+
+        String dataType = "null";
+        Statement parameter= null;
+        Statement block = null;
+        if (ctx.dataType()!=null){
+            dataType = String.valueOf(visitDataType( ctx.dataType()));
+        }
+        String nameOfFunction = "null";
+        if (ctx.ID_UPPER()!=null){
+            nameOfFunction =ctx.ID_UPPER().getText();
+        }
+        if(ctx.reactComponentBlock()!=null){
+            block = (Statement) visitReactComponentBlock(ctx.reactComponentBlock());
+        }
+        if (ctx.jsxElement()!=null){
+            block = visitJsxElement(ctx.jsxElement());
+        }
+
+        Statement statement ;
+        if(ctx.parameters() != null)
+        {
+            parameter = visitParameters(ctx.parameters());
+        }
+
+
+        SymbolInfo funcInfo = new SymbolInfo();
+        String s = "React Component :  "+dataType;
+        String s1 = "parameters are  "+parameter;
+        funcInfo.setType(s);
+        funcInfo.setName(nameOfFunction);
+        funcInfo.setValue(s1);
+        symbolTable.getRow().add(funcInfo);
+        return new ReactComponentStatement(dataType,parameter,block);
+    }
+
+    @Override
+    public Object visitReactComponentBlock(ParserGram.ReactComponentBlockContext ctx) {
+
+        ArrayList <Statement> statements = new ArrayList<>();
+        for (int j = 0; j < ctx.arrowFunction().size(); j++) {
+            if (ctx.arrowFunction()!=null){
+                assert false;
+                statements.add( visitArrowFunction(ctx.arrowFunction(j)));
+            }
+        }
+        for (int j = 0; j < ctx.printOrLogStatement().size(); j++) {
+            if (ctx.printOrLogStatement()!=null){
+                assert false;
+                statements.add( visitPrintOrLogStatement(ctx.printOrLogStatement(j)));
+            }
+        }
+        for (int j = 0; j < ctx.variableDeclarationHook().size(); j++) {
+            if (ctx.variableDeclarationHook()!=null){
+                assert false;
+                statements.add( (Statement) visitVariableDeclarationHook(ctx.variableDeclarationHook(j)));
+            }
+        }
+        for (int j = 0; j < ctx.hook().size(); j++){
+            if (ctx.hook()!=null){
+                assert false;
+                statements.add( (Statement) visitHook(ctx.hook(j)));
+            }
+
+        }
+        for (int j = 0; j < ctx.reacctDotHooks().size(); j++){
+            if (ctx.reacctDotHooks()!=null){
+                assert false;
+                statements.add( (Statement) visit(ctx.reacctDotHooks(j)));
+            }
+        }
+        for (int j = 0; j < ctx.returnStatement().size(); j++) {
+            if (ctx.returnStatement()!=null){
+                assert false;
+                statements.add( visitReturnStatement(ctx.returnStatement(j)));
+            }
+        }
+        return new ReactComponentBlockStatement(statements);
+    }
+
+    @Override
+    public Object visitVariableDeclarationHook(ParserGram.VariableDeclarationHookContext ctx) {
+        Statement values = null;
+        String type = String.valueOf(visitDataType(ctx.dataType()));
+        String variableName = ctx.ID().getText();
+        if(ctx.hook() != null)
+        {
+            values = (Statement) visit(ctx.hook());
+        }
+        VariableDeclarationHookStatement var =  new VariableDeclarationHookStatement(type, variableName,values );
+
+        SymbolInfo info = new SymbolInfo();
+        String type1 = "Variable: "+type;
+        String value2 = "value is  "+values;
+        info.setType(type1);
+        info.setName(variableName);
+        info.setValue(value2);
+        symbolTable.getRow().add(info);
+
+        return var;
+    }
+
+    @Override
     public Statement visitBodyOfObject(ParserGram.BodyOfObjectContext ctx)
     {
 
@@ -340,7 +436,7 @@ public class MyVisitor extends ParserGramBaseVisitor
 
 
 
- /// variable & assignment
+    /// variable & assignment
 
     @Override
     public Statement visitVariableDeclaration(ParserGram.VariableDeclarationContext ctx)
@@ -396,7 +492,8 @@ public class MyVisitor extends ParserGramBaseVisitor
     @Override
     public Statement visitVariableValues(ParserGram.VariableValuesContext ctx)
     {
-
+        //value of variable is literal or idExpr or hook
+        //just add hook
         Statement statement;
         if(ctx.literal() != null )
         {
@@ -493,6 +590,10 @@ public class MyVisitor extends ParserGramBaseVisitor
         {
             statement = (Statement) visit(ctx.anonymousFunction());
         }
+        else if(ctx.reactComponent() != null)
+        {
+            statement = (Statement) visitReactComponent(ctx.reactComponent());
+        }
         else{
             statement = (Statement) visit(ctx.functionDeclaration());
         }
@@ -588,6 +689,21 @@ public class MyVisitor extends ParserGramBaseVisitor
     }
 
 
+    /*@Override
+    public Statement visitFunctionDeclaration(ParserGram.FunctionDeclarationContext ctx)
+    {
+        String function = ctx.FUNCTION().getText();
+        Statement parameter = visitParameters(ctx.parameters());
+        Statement block = visitBlock(ctx.block());
+        if(ctx.parameters() != null)
+        {
+            return new FunctionDeclaration(function,parameter,block);
+        }else{
+            return new FunctionDeclaration(function,block);
+        }
+
+    }*/
+
     @Override
     public Statement visitCallStatement(ParserGram.CallStatementContext ctx)
     {
@@ -659,7 +775,7 @@ public class MyVisitor extends ParserGramBaseVisitor
     @Override
     public Statement visitBlock(ParserGram.BlockContext ctx)
     {
-       ArrayList <Statement> statements = new ArrayList<>();
+        ArrayList <Statement> statements = new ArrayList<>();
         for (int j = 0; j < ctx.arrowFunction().size(); j++) {
             if (ctx.arrowFunction()!=null){
                 assert false;
@@ -668,8 +784,8 @@ public class MyVisitor extends ParserGramBaseVisitor
         }
         for (int j = 0; j < ctx.printOrLogStatement().size(); j++) {
             if (ctx.printOrLogStatement()!=null){
-            assert false;
-            statements.add( visitPrintOrLogStatement(ctx.printOrLogStatement(j)));
+                assert false;
+                statements.add( visitPrintOrLogStatement(ctx.printOrLogStatement(j)));
             }
         }
         for (int j = 0; j < ctx.variableDeclaration().size(); j++) {
@@ -678,19 +794,19 @@ public class MyVisitor extends ParserGramBaseVisitor
                 statements.add( visitVariableDeclaration(ctx.variableDeclaration(j)));
             }
         }
-        for (int j = 0; j < ctx.hook().size(); j++){
+       /* for (int j = 0; j < ctx.hook().size(); j++){
             if (ctx.hook()!=null){
                 assert false;
                 statements.add( (Statement) visitHook(ctx.hook(j)));
             }
 
-        }
-        for (int j = 0; j < ctx.reacctDotHooks().size(); j++){
+        }*/
+        /*for (int j = 0; j < ctx.reacctDotHooks().size(); j++){
             if (ctx.reacctDotHooks()!=null){
                 assert false;
                 statements.add( (Statement) visit(ctx.reacctDotHooks(j)));
             }
-        }
+        }*/
         for (int j = 0; j < ctx.returnStatement().size(); j++) {
             if (ctx.returnStatement()!=null){
                 assert false;
@@ -702,7 +818,7 @@ public class MyVisitor extends ParserGramBaseVisitor
 
     @Override
     public Object visitExportDefault(ParserGram.ExportDefaultContext ctx) {
-        String className = ctx.ID().getText();
+        String className = ctx.ID_UPPER().getText();
         return new ExportStatement(className);
     }
 
@@ -735,6 +851,7 @@ public class MyVisitor extends ParserGramBaseVisitor
 
     @Override
     public Statement visitPrintOrLogStatement(ParserGram.PrintOrLogStatementContext ctx) {
+        // return (Statement) visit(ctx.expr()); // will return the expr
         String consoleKeyWord = ctx.CONSOLE().getText();
         String logKeyWord = ctx.LOG().getText();
         Statement value;
@@ -764,8 +881,14 @@ public class MyVisitor extends ParserGramBaseVisitor
         String thisKeyWord = ctx.THIS().getText();
         String dot = ctx.DOT().getText();
         String id = ctx.ID().getText();
-
+        //if(ctx.THIS() != null)
+        //{
         return new StringInterpolation(sDollar,thisKeyWord,dot,id);
+
+       /* } else
+        {
+            return new StringInterpolation(sDollar,id);
+        }*/
     }
 
     ///Expr
@@ -936,7 +1059,7 @@ public class MyVisitor extends ParserGramBaseVisitor
         String string = "";
         ArrayList<Statement> createElementStatements = new ArrayList<>();
         if( ctx.StringLiteral()!=null){
-        string = ctx.StringLiteral().getText();
+            string = ctx.StringLiteral().getText();
         }else {
 
             for (ParserGram.CreateElementContext childCtx : ctx.createElement()) {
@@ -981,7 +1104,7 @@ public class MyVisitor extends ParserGramBaseVisitor
 
             props.add(new PropStatement(propName, propValue));
 
-    }
+        }
         return new PropsStatement(props);
     }
 
@@ -1022,24 +1145,24 @@ public class MyVisitor extends ParserGramBaseVisitor
         Statement pairValue = new PairValue("","");
         Statement contructorValue = null;
 
-           if (!ctx.pairValue().isEmpty()){
+        if (!ctx.pairValue().isEmpty()){
 
-               pairValue = (Statement) visit(ctx.pairValue());
+            pairValue = (Statement) visit(ctx.pairValue());
 
-           }
-           if (
-                   ctx.INTEGER()!=null
-           ){
-               IntegerLiteral integerLiteral = new IntegerLiteral();
-               integerLiteral.addChild(Integer.parseInt(ctx.INTEGER().getText()));
-               contructorValue = integerLiteral;
-           }
-           else if(ctx.parameters()!= null) {
-               contructorValue = (Statement) visitParameters(ctx.parameters());
-           }
-           else {
-               contructorValue = (Statement) visitArrowFunction(ctx.arrowFunction());
-           }
+        }
+        if (
+                ctx.INTEGER()!=null
+        ){
+            IntegerLiteral integerLiteral = new IntegerLiteral();
+            integerLiteral.addChild(Integer.parseInt(ctx.INTEGER().getText()));
+            contructorValue = integerLiteral;
+        }
+        else if(ctx.parameters()!= null) {
+            contructorValue = (Statement) visitParameters(ctx.parameters());
+        }
+        else {
+            contructorValue = (Statement) visitArrowFunction(ctx.arrowFunction());
+        }
 
         return new UseStateStatement(pairValue, contructorValue);
 
@@ -1357,14 +1480,14 @@ public class MyVisitor extends ParserGramBaseVisitor
     @Override
     public LinkedList<PropStatement> visitStyle(ParserGram.StyleContext ctx) {
         LinkedList<PropStatement> styleProps = new LinkedList<>();
-            String propName = "";
+        String propName = "";
         for (ParserGram.PropContext propCtx : ctx.props().prop()) {
             if (propCtx.ID(0)!=null){
-                 propName = propCtx.ID(0).getText();
+                propName = propCtx.ID(0).getText();
             } else if (propCtx.JSX_CLASS()!=null){
-                 propName = propCtx.JSX_CLASS().getText();
+                propName = propCtx.JSX_CLASS().getText();
             } else {
-                 propName = propCtx.ON_CLICK().getText();
+                propName = propCtx.ON_CLICK().getText();
             }
             String propValue;
             if (propCtx.StringLiteral()!=null){
@@ -1490,8 +1613,8 @@ public class MyVisitor extends ParserGramBaseVisitor
     @Override
     public Statement visitIfElseStatement(ParserGram.IfElseStatementContext ctx)
     {
-        Statement s1 = null;
-        Statement s2 = null;
+        Statement s1 = null;//= visitIfStatement(ctx.ifStatement());
+        Statement s2 = null;//=visitElseStatement(ctx.elseStatemetn());
 
         if(ctx.ifStatement() != null)
         {
