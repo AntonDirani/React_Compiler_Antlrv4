@@ -21,14 +21,8 @@ public class StringLiteral extends Literal
 
     @Override
     public String toString() {
-        return "StringLiteral{" +
-                ", string='" + string + '\'' +
-                '}';
+       return "stringLiteral : " + string ;
+
     }
 
-    /*@Override
-    public String toString() {
-        // return "stringLiteral:" + strings ;
-        return String.join(", ", strings.stream().map(Object::toString).toArray(String[]::new));
-    }*/
 }

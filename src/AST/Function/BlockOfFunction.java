@@ -13,17 +13,11 @@ public class BlockOfFunction extends Statement
         this.statements = statement;
     }
 
-    @Override
-    public String toString() {
-        return "BlockOfFunction{" +
-                "statements=" + statements +
-                '}';
-    }
-/*
+
     @Override
     public String toString() {
         return String.format(" %s ",statements);
 
-    }*/
+    }
 }
 

@@ -1,24 +1,18 @@
-import React from 'react';
+class Animal {
+     constructor(name)
+      {
+       this.name = name;
 
-export const ProductGrid = () => {
-  const handleClick = () => {
-    console.log('ProductGrid clicked!');
-    // Handle the click event, e.g., navigate to a different page or perform an action
-  };
+     }
 
-  return React.createElement(
-    'div',
-    { className: 'grid-container', onClick: handleClick },
-    React.createElement(
-      'div',
-      { className: 'product-details' },
-      React.createElement('h2', null, 'Product s Name'),
-      React.createElement('p', null, 'Product Description Lorem ipsum dolor sit amet, consectetur adipiscing elit.'),
-      React.createElement('p', null, 'Price: $19.99'),
-      React.createElement('p', null, 'Rating: 4.5')
-    ),
-    
-  );
-};
 
-export default ProductGrid;
+   }
+
+
+
+
+
+
+
+
+

@@ -1,5 +1,8 @@
-
+//////import
 import Something from "dsdadas";
+
+
+//////react
 
 useEffect(() => {
   console.log('Effect executed!');
@@ -12,66 +15,21 @@ useRef(6);
   console.log('Button clicked!');
 });
 
-var i  = 10;
-const myFunction = function(i) {
-    return 9;
-                               };
+///javaScript
 
-console.log(9);
+  var i  = 10;
+
    i = 9;
    i = i;
 
-   var anonymousFunction = () =>
-   {
-    console.log("jjjj");
-   };
-
-   var anonymousFunction = function() {
-   return 9;
-
-   };
+   console.log(9);
 
 
 
-   class Animal {
-     constructor(name, age) {
-       this.name = name;
-       this.age = age;
-     }
-
-     getInfo() {
-      return '${this.name} is ${this.age} years old.';
-     }
-
-     static greet() {
-       console.log("Hello from the Animal class!");
-     }
-   }
-
-
-
-   {this.id}
-
-   class B{}
-   class A extends B {}
-
-   getName(i,y,o);
-   const myAnimal = new Animal("Buddy", 3);
-
-   console.log(myAnimal.getInfo());
-
-   Animal.greet();
-
-   myAnimal.getInfo(i);
-
-   console.log(myAnimal.getInfo(i));
-
-
- (
-  <div className="grid-container">
- </div>
- )
-
+  for(let i = 0; i< 8; i++)
+  {
+          console.log("for loop");
+  }
 
 
 while (i <= 5)
@@ -82,6 +40,8 @@ while (i <= 5)
      }
     i++;
   }
+
+
   if (true) {
     console.log("You are a minor.");
   } else if (age >= 18 && age <= 24 )
@@ -92,6 +52,87 @@ while (i <= 5)
   } else {
     console.log("You are a senior citizen.");
   }
+
+
+////anonymous
+const myFunction = function(i) {
+    return 9;
+                               };
+
+
+
+   var anonymousFunction = function() {
+   return 9;
+
+   };
+
+
+
+
+////arrow
+   var anonymousFunction = () =>
+   {
+    console.log("MY COMPILER");
+   };
+
+
+
+
+
+
+
+
+   class Animal
+    {
+     constructor(name)
+      {
+       this.name = name;
+
+     }
+
+     getInfo() {
+      return "hi google";
+     }
+
+     static greet() {
+       console.log("Hello from the Animal class!");
+     }
+   }
+
+
+
+
+    ${this.id}
+
+   class B{}
+   class A extends B {}
+
+   i(i);
+
+   getName(i,y,o);
+
+   Animal.greet();
+
+   myAnimal.getInfo(i);
+
+   console.log(myAnimal.getInfo(i));
+
+   const myAnimal = new Animal("Buddy");
+
+
+
+
+
+
+
+
+
+////jsx
+
+ (
+  <div className="grid-container">
+ </div>
+ )
 
 
 (

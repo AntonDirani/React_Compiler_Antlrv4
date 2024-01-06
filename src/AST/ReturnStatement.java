@@ -17,17 +17,8 @@ public class ReturnStatement extends Statement
 
     @Override
     public String toString() {
-        return "ReturnStatement{" + "\n" +
-                "val=" + val +
-                '}';
+        return String.format("\n%s { %s }", this.getClass().getSimpleName(),String.join(", ", val.stream().map(Object::toString).toArray(String[]::new)));
     }
-
-
-
-    /*@Override
-    public String toString() {
-        return String.format("%s : return  %s", this.getClass().getSimpleName(), String.join(", ", val.stream().map(Object::toString).toArray(String[]::new)));
-    }*/
 
 }
 

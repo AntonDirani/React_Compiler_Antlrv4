@@ -17,7 +17,6 @@ public class IntegerLiteral extends Literal
 
     @Override
     public String toString() {
-        // return "INTEGER:" + integers ;
         return String.join(", ", integers.stream().map(Object::toString).toArray(String[]::new));
 
     }

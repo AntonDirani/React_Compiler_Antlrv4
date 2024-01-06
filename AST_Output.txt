@@ -1,23 +1,9 @@
-ImportStatement | Library Name: React, Path: 'react'
-TypeOfFunction: ArrowFunction , dataType: Const , functionName: ProductGrid , parameters:   block{ BlockOfFunction{statements=[TypeOfFunction: ArrowFunction , dataType: Const , functionName: handleClick , parameters:   block{ BlockOfFunction{statements=[PrintOrLogStatement : console.log(StringLiteral{, string=''ProductGrid clicked!''})]} } , ReturnStatement{
-val=[ReactDotCreateElementStatement{createElement=
-CreateElementStatement{
-type=TypeStatement{type=StringLiteral{, string=''div''}}, props=CreateElementPropsStatement{props=PropsStatement{propsList=[PropStatement :propName=className, propValue='grid-container', PropStatement :propName=handleClick, propValue=]}}, children=ChildrenStatement{createElementStatements=[
-CreateElementStatement{
-type=TypeStatement{type=StringLiteral{, string=''div''}}, props=CreateElementPropsStatement{props=PropsStatement{propsList=[PropStatement :propName=className, propValue='product-details']}}, children=ChildrenStatement{createElementStatements=[
-CreateElementStatement{
-type=TypeStatement{type=StringLiteral{, string=''h2''}}, props=CreateElementPropsStatement{props={null'}}, children=ChildrenStatement{createElementStatements=[], string=''Product s Name''}
-}, 
-CreateElementStatement{
-type=TypeStatement{type=StringLiteral{, string=''p''}}, props=CreateElementPropsStatement{props={null'}}, children=ChildrenStatement{createElementStatements=[], string=''Product Description Lorem ipsum dolor sit amet, consectetur adipiscing elit.''}
-}, 
-CreateElementStatement{
-type=TypeStatement{type=StringLiteral{, string=''p''}}, props=CreateElementPropsStatement{props={null'}}, children=ChildrenStatement{createElementStatements=[], string=''Price: $19.99''}
-}, 
-CreateElementStatement{
-type=TypeStatement{type=StringLiteral{, string=''p''}}, props=CreateElementPropsStatement{props={null'}}, children=ChildrenStatement{createElementStatements=[], string=''Rating: 4.5''}
-}], string=''}
-}], string=''}
-}}]}]} } 
-ExportStatement{reactComponent='ProductGrid'}
+Statement: NormalClass ,classKeyWord: class , className: Animal{
+
+classBody{
+
+MethodDeclaration, methodType:  ConstructorMethod{ constructorKeyWord: constructor(parameters: name){ constructorBody{ this.name = name } }
+
+}
+}
 
