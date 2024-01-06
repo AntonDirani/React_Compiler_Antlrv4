@@ -31,7 +31,7 @@ statement:classDeclaration
 
 //accessModifiers: PUBLIC|PRIVATE|PROTECTED;
 
-importStatement: IMPORT OPENBRACE? (ID | hook | REACT)? CLOSEBRACE? FROM? StringLiteral  SEMICOLON? ;
+importStatement: IMPORT OPENBRACE? (ID | REACT)? CLOSEBRACE? FROM? StringLiteral  SEMICOLON? ;
 exportDefault: EXPORT DEFAULT ID SEMICOLON?;
 
 //Variable declaration rule
@@ -173,7 +173,7 @@ reactDotCreateElement: REACT DOT createElement;
 createElement: CREATE_ELEMENT OPENPAREN type COMMA createElementProps? (COMMA children)? CLOSEPAREN ;
 
 type:(  StringLiteral  | callFunction | ID);
-createElementProps:( NULL  | props  );
+createElementProps:( NULL  | props | OPENBRACE CLOSEBRACE );
 props: OPENBRACE+ prop (COMMA prop)* CLOSEBRACE+;
 
 prop: (ID | JSX_CLASS | ON_CLICK) COLON (StringLiteral | ID);

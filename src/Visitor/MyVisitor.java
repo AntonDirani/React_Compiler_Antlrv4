@@ -398,9 +398,6 @@ public class MyVisitor extends ParserGramBaseVisitor
         if (ctx.REACT()!=null){
             libraryName = ctx.REACT().getText();
         }
-        //TODO: call hook here
-
-
         return new ImportStatement(importPath,libraryName);
     }
 
@@ -430,13 +427,14 @@ public class MyVisitor extends ParserGramBaseVisitor
     @Override
     public Literal visitStringLiteral(ParserGram.StringLiteralContext ctx)
     {
-        StringLiteral stringLiteral = new StringLiteral();
+
+        String string = "";
         for( int i = 0 ; i < ctx.children.size();i++)
         {
-            stringLiteral.addChild(ctx.StringLiteral().getText());
+            string = ctx.StringLiteral().getText();
 
         }
-        return stringLiteral;
+        return new StringLiteral(string);
     }
     @Override
     public Literal visitBoolLiteral(ParserGram.BoolLiteralContext ctx)
@@ -989,7 +987,7 @@ public class MyVisitor extends ParserGramBaseVisitor
         IdNode temp;
         if(ctx.StringLiteral() != null )
         {
-            type = (Statement) visit(ctx.StringLiteral());
+            type = new StringLiteral(ctx.StringLiteral().getText());
         }
         else if (ctx.callFunction()!= null)
         {

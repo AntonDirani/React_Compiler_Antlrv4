@@ -1,21 +1,21 @@
 ImportStatement | Library Name: React, Path: 'react'
-TypeOfFunction: ArrowFunction , dataType: Const , functionName: ProductGrid , parameters:  ,  Function Block { BlockOfFunction{statements=[Statement: VariableDeclarationStatement , dataType: Const , variableName: handleClick , variableValues: TypeOfFunction: ArrowFunction , dataType: null , functionName: null , parameters:  ,  Function Block { BlockOfFunction{statements=[PrintOrLogStatement : console.log('ProductGrid clicked!')]} } , ReturnStatement{
+TypeOfFunction: ArrowFunction , dataType: Const , functionName: ProductGrid , parameters:  ,  Function Block { BlockOfFunction{statements=[Statement: VariableDeclarationStatement , dataType: Const , variableName: handleClick , variableValues: TypeOfFunction: ArrowFunction , dataType: null , functionName: null , parameters:  ,  Function Block { BlockOfFunction{statements=[PrintOrLogStatement : console.log(StringLiteral{, string=''ProductGrid clicked!''})]} } , ReturnStatement{
 val=[ReactDotCreateElementStatement{createElement=
 CreateElementStatement{
-type=TypeStatement{type=null}, props=CreateElementPropsStatement{props=PropsStatement{propsList=[PropStatement :propName=className, propValue='grid-container', PropStatement :propName=handleClick, propValue=]}}, children=ChildrenStatement{createElementStatements=[
+type=TypeStatement{type=StringLiteral{, string=''div''}}, props=CreateElementPropsStatement{props=PropsStatement{propsList=[PropStatement :propName=className, propValue='grid-container', PropStatement :propName=handleClick, propValue=]}}, children=ChildrenStatement{createElementStatements=[
 CreateElementStatement{
-type=TypeStatement{type=null}, props=CreateElementPropsStatement{props=PropsStatement{propsList=[PropStatement :propName=className, propValue='product-details']}}, children=ChildrenStatement{createElementStatements=[
+type=TypeStatement{type=StringLiteral{, string=''div''}}, props=CreateElementPropsStatement{props=PropsStatement{propsList=[PropStatement :propName=className, propValue='product-details']}}, children=ChildrenStatement{createElementStatements=[
 CreateElementStatement{
-type=TypeStatement{type=null}, props=CreateElementPropsStatement{props={null'}}, children=ChildrenStatement{createElementStatements=[], string=''Product s Name''}
+type=TypeStatement{type=StringLiteral{, string=''h2''}}, props=CreateElementPropsStatement{props={null'}}, children=ChildrenStatement{createElementStatements=[], string=''Product s Name''}
 }, 
 CreateElementStatement{
-type=TypeStatement{type=null}, props=CreateElementPropsStatement{props={null'}}, children=ChildrenStatement{createElementStatements=[], string=''Product Description Lorem ipsum dolor sit amet, consectetur adipiscing elit.''}
+type=TypeStatement{type=StringLiteral{, string=''p''}}, props=CreateElementPropsStatement{props={null'}}, children=ChildrenStatement{createElementStatements=[], string=''Product Description Lorem ipsum dolor sit amet, consectetur adipiscing elit.''}
 }, 
 CreateElementStatement{
-type=TypeStatement{type=null}, props=CreateElementPropsStatement{props={null'}}, children=ChildrenStatement{createElementStatements=[], string=''Price: $19.99''}
+type=TypeStatement{type=StringLiteral{, string=''p''}}, props=CreateElementPropsStatement{props={null'}}, children=ChildrenStatement{createElementStatements=[], string=''Price: $19.99''}
 }, 
 CreateElementStatement{
-type=TypeStatement{type=null}, props=CreateElementPropsStatement{props={null'}}, children=ChildrenStatement{createElementStatements=[], string=''Rating: 4.5''}
+type=TypeStatement{type=StringLiteral{, string=''p''}}, props=CreateElementPropsStatement{props={null'}}, children=ChildrenStatement{createElementStatements=[], string=''Rating: 4.5''}
 }], string=''}
 }], string=''}
 }}]}]} }
