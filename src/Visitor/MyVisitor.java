@@ -43,7 +43,6 @@ public class MyVisitor extends ParserGramBaseVisitor
         for(int i = 0; i < ctx.statement().size() ; i++)
         {
 
-            //  program.addChild(visitStatement(ctx.statement().get(i)));
             Statement node = (Statement) visitStatement(ctx.statement(i));
             program.addChild(node);
         }
@@ -364,8 +363,7 @@ public class MyVisitor extends ParserGramBaseVisitor
     @Override
     public Statement visitVariableValues(ParserGram.VariableValuesContext ctx)
     {
-        //value of variable is literal or idExpr or hook
-        //just add hook
+
         Statement statement;
         if(ctx.literal() != null )
         {
@@ -557,21 +555,6 @@ public class MyVisitor extends ParserGramBaseVisitor
     }
 
 
-    /*@Override
-    public Statement visitFunctionDeclaration(ParserGram.FunctionDeclarationContext ctx)
-    {
-        String function = ctx.FUNCTION().getText();
-        Statement parameter = visitParameters(ctx.parameters());
-        Statement block = visitBlock(ctx.block());
-        if(ctx.parameters() != null)
-        {
-            return new FunctionDeclaration(function,parameter,block);
-        }else{
-            return new FunctionDeclaration(function,block);
-        }
-
-    }*/
-
     @Override
     public Statement visitCallStatement(ParserGram.CallStatementContext ctx)
     {
@@ -719,7 +702,6 @@ public class MyVisitor extends ParserGramBaseVisitor
 
     @Override
     public Statement visitPrintOrLogStatement(ParserGram.PrintOrLogStatementContext ctx) {
-        // return (Statement) visit(ctx.expr()); // will return the expr
         String consoleKeyWord = ctx.CONSOLE().getText();
         String logKeyWord = ctx.LOG().getText();
         Statement value;
@@ -749,14 +731,8 @@ public class MyVisitor extends ParserGramBaseVisitor
         String thisKeyWord = ctx.THIS().getText();
         String dot = ctx.DOT().getText();
         String id = ctx.ID().getText();
-        //if(ctx.THIS() != null)
-        //{
-        return new StringInterpolation(sDollar,thisKeyWord,dot,id);
 
-       /* } else
-        {
-            return new StringInterpolation(sDollar,id);
-        }*/
+        return new StringInterpolation(sDollar,thisKeyWord,dot,id);
     }
 
     ///Expr
