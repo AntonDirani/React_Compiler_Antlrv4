@@ -107,6 +107,7 @@ block: OPENBRACE (reacctDotHooks| statement| hook |returnStatement| printOrLogSt
 
 returnStatement : RETURN (ID | literal | jsxBlock | arrowFunction |  reactDotCreateElement)? SEMICOLON;
 
+
 ////class
 
 classDeclaration: class+ | class inheritsClass*;
@@ -116,6 +117,8 @@ class : CLASS ID OPENBRACE bodyOfClass CLOSEBRACE ;
 inheritsClass : CLASS ID  EXTENDS ID OPENBRACE bodyOfClass CLOSEBRACE ;
 
 bodyOfClass:  constructorMethod methodDeclaration* | statement*;
+
+
 ////method in class
 methodDeclaration : method | staticMethod;
 
